@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">"ABB "</string>
+    <string name="app_name">ABB</string>
+    <string name="setting">Settings</string>
+    <string name="event">Events</string>
+    <string name="solution">Power Solutions</string>
+    <string name="contact">Contact Us</string>
 </resources>

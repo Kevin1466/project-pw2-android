@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">ABB</string>
+    <string name="setting">设置</string>
+    <string name="event">精彩活动</string>
+    <string name="solution">电力解决方案</string>
+    <string name="contact">联系我们</string>
+</resources>
