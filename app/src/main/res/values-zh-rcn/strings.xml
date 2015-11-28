@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ABB中国电力世界</string>
+    <string name="app_name">电力世界</string>
     <string name="setting">设置</string>
     <string name="event">精彩活动</string>
     <string name="solution">电力解决方案</string>
@@ -13,4 +13,8 @@
     <string name="version">当前版本</string>
     <string name="cancel">取消</string>
     <string name="business">业务介绍</string>
+    <string name="business1">ABB中国介绍</string>
+    <string name="business2">ABB中国电力业务介绍</string>
+    <string name="business3">本地企业介绍</string>
+    <string name="business4">成功案例</string>
 </resources>

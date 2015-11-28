@@ -66,7 +66,7 @@ public class BusinessActivity extends AppCompatActivity {
             super(fm);
         }
 
-        private final String[] titles = {"ABB中国介绍", "ABB中国电力业务介绍", "本地企业介绍", "成功案例"};
+        private final String[] titles = {getString(R.string.business1), getString(R.string.business2), getString(R.string.business3), getString(R.string.business4)};
 
         @Override
         public CharSequence getPageTitle(int position) {

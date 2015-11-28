@@ -13,4 +13,8 @@
     <string name="version">Version</string>
     <string name="cancel">Cancel</string>
     <string name="business">Business</string>
+    <string name="business1">ABB China Introduction</string>
+    <string name="business2">ABB China Power Business</string>
+    <string name="business3">Local Companies Introduction</string>
+    <string name="business4">Business Highlight</string>
 </resources>
