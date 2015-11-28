@@ -4,4 +4,12 @@
     <string name="event">Events</string>
     <string name="solution">Power Solutions</string>
     <string name="contact">Contact Us</string>
+    <string name="download">Download Center</string>
+    <string name="mail_sign">Signature</string>
+    <string name="label_language_setting">Language Setting</string>
+    <string name="label_chinese">Chinese</string>
+    <string name="label_clear_cache">Clear Cache</string>
+    <string name="signature">Signature</string>
+    <string name="version">Version</string>
+    <string name="cancel">Cancel</string>
 </resources>

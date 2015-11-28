@@ -2,18 +2,25 @@ package com.ivymobi.abb.pw;
 
 import android.app.ActionBar;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.VideoView;
+
+import com.ivymobi.abb.pw.util.PreferenceUtil;
 
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
+
+import java.util.Locale;
+
 
 @EActivity
 public class MainActivity extends AppCompatActivity {
@@ -42,6 +49,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        PreferenceUtil.init(this);
+        switchLanguage(PreferenceUtil.getString("language", "chinese"));
+
         setContentView(R.layout.activity_main);
 
         ActionBar actionBar = getActionBar();
@@ -97,12 +108,27 @@ public class MainActivity extends AppCompatActivity {
 
                 startActivity(new Intent(this, SettingActivity_.class));
 
-                // Todo
                 break;
             default:
                 break;
         }
 
-        return true;
+        return super.onOptionsItemSelected(item);
     }
+
+
+    private void switchLanguage(String language) {
+        Resources resources = getResources();
+        Configuration config = resources.getConfiguration();
+        DisplayMetrics dm = resources.getDisplayMetrics();
+
+        if (language.equals("chinese")) {
+            config.locale = Locale.SIMPLIFIED_CHINESE;
+        } else {
+            config.locale = Locale.ENGLISH;
+        }
+
+        resources.updateConfiguration(config, dm);
+    }
+
 }

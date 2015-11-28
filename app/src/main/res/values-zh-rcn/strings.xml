@@ -4,4 +4,12 @@
     <string name="event">精彩活动</string>
     <string name="solution">电力解决方案</string>
     <string name="contact">联系我们</string>
+    <string name="download">资料下载</string>
+    <string name="mail_sign">邮件签名</string>
+    <string name="label_language_setting">语言设置</string>
+    <string name="label_chinese">中文</string>
+    <string name="label_clear_cache">清空缓存</string>
+    <string name="signature">邮件签名</string>
+    <string name="version">当前版本</string>
+    <string name="cancel">取消</string>
 </resources>
