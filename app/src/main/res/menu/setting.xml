@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.ivymobi.abb.pw.activity.MainActivity">
+
     <item
         android:id="@+id/action_setting"
         android:icon="@mipmap/icon_setting"
-        android:title="@string/setting"
         android:showAsAction="always"
-        />
+        android:title="@string/setting"
+        app:showAsAction="always" />
 </menu>

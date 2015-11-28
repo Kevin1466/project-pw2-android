@@ -53,7 +53,7 @@ public class BusinessActivity extends AppCompatActivity {
         tabs.setIndicatorHeight((int) TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP, 1, dm));
         tabs.setTextSize((int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_SP, 12, dm));
+                TypedValue.COMPLEX_UNIT_SP, 14, dm));
         tabs.setIndicatorColor(Color.parseColor("#0174bd"));
         tabs.setSelectedTextColor(Color.parseColor("#0174bd"));
         tabs.setTextColor(Color.parseColor("#999999"));

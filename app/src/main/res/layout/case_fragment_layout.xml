@@ -15,7 +15,7 @@
             android:id="@+id/imageView"
             android:src="@mipmap/cgal"
             android:layout_marginRight="12dp"
-            android:scaleType="fitCenter" />
+            android:scaleType="fitXY" />
     </ScrollView>
 
 </RelativeLayout>

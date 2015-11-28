@@ -24,6 +24,7 @@ public class WebActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
+        webView.getSettings().setJavaScriptEnabled(true);
         webView.loadUrl(intent.getStringExtra("url"));
 
         webView.setWebViewClient(new WebViewClient() {

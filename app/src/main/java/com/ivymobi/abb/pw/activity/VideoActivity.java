@@ -1,9 +1,11 @@
 package com.ivymobi.abb.pw.activity;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
@@ -13,15 +15,23 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
 @EActivity
-public class VideoActivity extends AppCompatActivity {
+public class VideoActivity extends Activity {
 
     @ViewById
     VideoView videoView;
+
+    ProgressDialog pDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video);
+
+        pDialog = new ProgressDialog(VideoActivity.this);
+        pDialog.setIndeterminate(false);
+        pDialog.setCancelable(false);
+        pDialog.setMessage("Buffering...");
+        pDialog.show();
 
         Intent intent = getIntent();
 
@@ -30,6 +40,12 @@ public class VideoActivity extends AppCompatActivity {
         videoView.setMediaController(new MediaController(this));
         videoView.setVideoURI(uri);
         videoView.requestFocus();
-        videoView.start();
+
+        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            public void onPrepared(MediaPlayer mp) {
+                pDialog.dismiss();
+                videoView.start();
+            }
+        });
     }
 }
