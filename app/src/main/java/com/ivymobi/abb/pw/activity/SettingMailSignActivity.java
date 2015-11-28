@@ -1,10 +1,11 @@
-package com.ivymobi.abb.pw;
+package com.ivymobi.abb.pw.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.EditText;
 
+import com.ivymobi.abb.pw.R;
 import com.ivymobi.abb.pw.util.PreferenceUtil;
 
 import org.androidannotations.annotations.EActivity;

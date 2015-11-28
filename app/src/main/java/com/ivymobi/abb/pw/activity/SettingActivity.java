@@ -1,4 +1,4 @@
-package com.ivymobi.abb.pw;
+package com.ivymobi.abb.pw.activity;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -14,6 +14,7 @@ import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.ivymobi.abb.pw.R;
 import com.ivymobi.abb.pw.util.PreferenceUtil;
 
 import org.androidannotations.annotations.Click;
@@ -40,7 +41,7 @@ public class SettingActivity extends AppCompatActivity {
 
         PreferenceUtil.init(this);
         currentVersion.setText(getVersion());
-        currentLanguage.setText(PreferenceUtil.getString("language", "chinese"));
+        currentLanguage.setText(PreferenceUtil.getString("language", "Chinese"));
     }
 
     @Click
@@ -62,10 +63,10 @@ public class SettingActivity extends AppCompatActivity {
 
                         switch (which) {
                             case 0:
-                                switchLanguage("chinese");
+                                switchLanguage("Chinese");
                                 break;
                             default:
-                                switchLanguage("english");
+                                switchLanguage("English");
                                 break;
                         }
                     }
@@ -83,7 +84,7 @@ public class SettingActivity extends AppCompatActivity {
         Configuration config = resources.getConfiguration();
         DisplayMetrics dm = resources.getDisplayMetrics();
 
-        if (language.equals("chinese")) {
+        if (language.equals("Chinese")) {
             config.locale = Locale.SIMPLIFIED_CHINESE;
         } else {
             config.locale = Locale.ENGLISH;

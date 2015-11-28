@@ -1,4 +1,4 @@
-package com.ivymobi.abb.pw;
+package com.ivymobi.abb.pw.activity;
 
 import android.app.ActionBar;
 import android.content.Intent;
@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.VideoView;
 
+import com.ivymobi.abb.pw.R;
 import com.ivymobi.abb.pw.util.PreferenceUtil;
 
 import org.androidannotations.annotations.Click;
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         PreferenceUtil.init(this);
-        switchLanguage(PreferenceUtil.getString("language", "chinese"));
+        switchLanguage(PreferenceUtil.getString("language", "Chinese"));
 
         setContentView(R.layout.activity_main);
 
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         videoView.setVideoURI(Uri.parse("android.resource://com.ivymobi.abb.pw/" + R.raw.abb_first));
+        videoView.requestFocus();
         videoView.start();
     }
 
@@ -122,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
         Configuration config = resources.getConfiguration();
         DisplayMetrics dm = resources.getDisplayMetrics();
 
-        if (language.equals("chinese")) {
+        if (language.equals("Chinese")) {
             config.locale = Locale.SIMPLIFIED_CHINESE;
         } else {
             config.locale = Locale.ENGLISH;

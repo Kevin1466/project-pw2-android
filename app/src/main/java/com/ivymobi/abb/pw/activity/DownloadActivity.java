@@ -1,9 +1,11 @@
-package com.ivymobi.abb.pw;
+package com.ivymobi.abb.pw.activity;
 
 import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TabHost;
+
+import com.ivymobi.abb.pw.R;
 
 import org.androidannotations.annotations.EActivity;
 

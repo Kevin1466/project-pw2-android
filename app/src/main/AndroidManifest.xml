@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ivymobi.abb.pw">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:hardwareAccelerated="false"
@@ -10,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity_"
+            android:name=".activity.MainActivity_"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,36 +21,43 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SettingActivity_"
+            android:name=".activity.SettingActivity_"
             android:label="@string/setting"
             android:screenOrientation="portrait" />
-        <activity android:name=".BusinessActivity_" />
         <activity
-            android:name=".TourActivity_"
+            android:name=".activity.BusinessActivity_"
+            android:label="@string/business"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.TourActivity_"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".EventActivity_"
+            android:name=".activity.EventActivity_"
             android:label="@string/event"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".DownloadActivity_"
+            android:name=".activity.DownloadActivity_"
             android:label="@string/download"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".SolutionActivity_"
+            android:name=".activity.SolutionActivity_"
             android:label="@string/solution"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ContactActivity_"
+            android:name=".activity.ContactActivity_"
             android:label="@string/contact"
             android:screenOrientation="portrait" />
-        <activity android:name=".CloudActivity_" />
-        <activity android:name=".LocalActivity_" />
-        <activity android:name=".FavoriteActivity_" />
+        <activity android:name=".activity.CloudActivity_" />
+        <activity android:name=".activity.LocalActivity_" />
+        <activity android:name=".activity.FavoriteActivity_" />
         <activity
-            android:name=".SettingMailSignActivity_"
+            android:name=".activity.SettingMailSignActivity_"
             android:label="@string/mail_sign" />
+        <activity
+            android:name=".activity.VideoActivity_"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity android:name=".activity.WebActivity_"></activity>
     </application>
 
 </manifest>

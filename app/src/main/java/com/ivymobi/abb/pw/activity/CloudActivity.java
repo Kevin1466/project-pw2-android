@@ -1,16 +1,18 @@
-package com.ivymobi.abb.pw;
+package com.ivymobi.abb.pw.activity;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+
+import com.ivymobi.abb.pw.R;
 
 import org.androidannotations.annotations.EActivity;
 
 @EActivity
-public class BusinessActivity extends AppCompatActivity {
+public class CloudActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_business);
+        setContentView(R.layout.activity_cloud);
     }
 }
