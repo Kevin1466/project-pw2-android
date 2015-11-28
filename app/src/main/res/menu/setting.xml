@@ -4,6 +4,6 @@
         android:id="@+id/action_setting"
         android:icon="@mipmap/icon_setting"
         android:title="@string/setting"
-        android:showAsAction="never"
+        android:showAsAction="always"
         />
 </menu>

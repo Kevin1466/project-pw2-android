@@ -2,7 +2,6 @@ package com.ivymobi.abb.pw.fragment;
 
 import android.content.Intent;
 import android.graphics.Rect;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,9 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.ivymobi.abb.pw.R;
-import com.ivymobi.abb.pw.activity.BusinessActivity_;
 import com.ivymobi.abb.pw.activity.VideoActivity_;
-import com.ivymobi.abb.pw.activity.WebActivity;
 import com.ivymobi.abb.pw.activity.WebActivity_;
 
 public class FragmentContent extends Fragment implements View.OnTouchListener {
@@ -64,7 +61,7 @@ public class FragmentContent extends Fragment implements View.OnTouchListener {
                             startActivity(intent);
                         } else if (x > 572 && x < 702 && y > 390 && y < 440) {
                             Intent intent = new Intent(getActivity(), WebActivity_.class);
-                            intent.putExtra("url", "http://www.baidu.com");
+                            intent.putExtra("url", "http://ivymobi-storage.qiniudn.com/abbpw/PDF_file/abb_instruction/ABB+in+China_CN_2014.pdf");
                             startActivity(intent);
                         }
 
@@ -79,7 +76,7 @@ public class FragmentContent extends Fragment implements View.OnTouchListener {
                             startActivity(intent);
                         } else if (x > 572 && x < 702 && y > 390 && y < 440) {
                             Intent intent = new Intent(getActivity(), WebActivity_.class);
-                            intent.putExtra("url", "http://www.baidu.com");
+                            intent.putExtra("url", "http://ivymobi-storage.qiniudn.com/abbpw/PDF_file/abb_power/ABB_power_cn.pdf");
                             startActivity(intent);
                         }
 

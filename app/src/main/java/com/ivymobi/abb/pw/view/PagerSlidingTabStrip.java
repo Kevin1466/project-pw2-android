@@ -351,7 +351,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
                             tab.setAllCaps(true);
                         } else {
-                            tab.setText(tab.getText().toString().toUpperCase(locale));
+                            tab.setText(tab.getText().toString());
                         }
                     }
                     if (i == selectedPosition) {
@@ -757,7 +757,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         return Math.abs(positionOffset) < 0.0001;
     }
 
-    private static final float ZOOM_MAX = 0.3f;
+    private static final float ZOOM_MAX = 0;
     private State mState;
 
     private enum State {

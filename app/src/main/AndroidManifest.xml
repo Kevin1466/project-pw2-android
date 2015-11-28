@@ -57,7 +57,12 @@
         <activity
             android:name=".activity.VideoActivity_"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <activity android:name=".activity.WebActivity_"></activity>
+        <activity
+            android:name=".activity.WebActivity_"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ImageActivity_"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

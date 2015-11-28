@@ -31,11 +31,5 @@ public class CaseFragmentContent extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        initView(view);
-    }
-
-    private void initView(View view) {
-        Integer position = getArguments().getInt("position");
     }
 }
