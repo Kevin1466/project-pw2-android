@@ -12,8 +12,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.ivymobi.abb.pw.R;
+import com.ivymobi.abb.pw.activity.PDFActivity_;
 import com.ivymobi.abb.pw.activity.VideoActivity_;
-import com.ivymobi.abb.pw.activity.WebActivity_;
 
 public class FragmentContent extends Fragment implements View.OnTouchListener {
     public static Fragment getInstance(Bundle bundle) {
@@ -60,8 +60,8 @@ public class FragmentContent extends Fragment implements View.OnTouchListener {
                             intent.putExtra("url", "http://ivymobi-storage.qiniudn.com/abbpw/Video/ABB_Instruction.mp4");
                             startActivity(intent);
                         } else if (x > 572 && x < 702 && y > 390 && y < 440) {
-                            Intent intent = new Intent(getActivity(), WebActivity_.class);
-                            intent.putExtra("url", "http://ivymobi-storage.qiniudn.com/abbpw/PDF_file/abb_instruction/ABB+in+China_CN_2014.pdf");
+                            Intent intent = new Intent(getActivity(), PDFActivity_.class);
+                            intent.putExtra("url", "http://ivymobi-storage.qiniudn.com/abbpw/PDF_file/abb_instruction/ABB%2bin%2bChina_CN_2014.pdf");
                             startActivity(intent);
                         }
 
@@ -75,7 +75,7 @@ public class FragmentContent extends Fragment implements View.OnTouchListener {
                             intent.putExtra("url", "http://ivymobi-storage.qiniudn.com/abbpw/Video/ABB_Power.mp4");
                             startActivity(intent);
                         } else if (x > 572 && x < 702 && y > 390 && y < 440) {
-                            Intent intent = new Intent(getActivity(), WebActivity_.class);
+                            Intent intent = new Intent(getActivity(), PDFActivity_.class);
                             intent.putExtra("url", "http://ivymobi-storage.qiniudn.com/abbpw/PDF_file/abb_power/ABB_power_cn.pdf");
                             startActivity(intent);
                         }

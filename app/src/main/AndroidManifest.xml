@@ -63,6 +63,7 @@
         <activity
             android:name=".activity.ImageActivity_"
             android:screenOrientation="portrait" />
+        <activity android:name=".activity.PDFActivity_" />
     </application>
 
 </manifest>
