@@ -29,6 +29,8 @@ public class BusinessActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle(R.string.business);
+
         setContentView(R.layout.activity_business);
 
         dm = getResources().getDisplayMetrics();

@@ -17,4 +17,10 @@
     <string name="business2">ABB中国电力业务介绍</string>
     <string name="business3">本地企业介绍</string>
     <string name="business4">成功案例</string>
+    <string name="action_download">下载</string>
+    <string name="action_share">分享</string>
+    <string name="action_collect">收藏</string>
+    <string name="select_the_action">Select The Action</string>
+    <string name="download_success">下载完成</string>
+    <string name="download_failed">下载失败</string>
 </resources>

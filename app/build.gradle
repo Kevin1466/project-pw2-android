@@ -33,9 +33,12 @@ dependencies {
     testCompile 'junit:junit:4.12'
     apt "org.androidannotations:androidannotations:$AAVersion"
     compile "org.androidannotations:androidannotations-api:$AAVersion"
+    compile files('libs/master-nineoldandroids-library.jar')
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:support-v4:23.1.1'
-    compile files('libs/master-nineoldandroids-library.jar')
     compile 'com.joanzapata.pdfview:android-pdfview:1.0.4@aar'
     compile 'com.loopj.android:android-async-http:1.4.9'
+    compile 'com.android.support:recyclerview-v7:23.1.1'
+    compile 'cn.trinea.android.common:trinea-android-common:4.2.15'
+    compile 'com.mani:ThinDownloadManager:1.2.0'
 }

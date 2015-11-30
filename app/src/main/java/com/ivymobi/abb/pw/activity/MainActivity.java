@@ -55,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
         PreferenceUtil.init(this);
         switchLanguage(PreferenceUtil.getString("language", "Chinese"));
 
+        setTitle(R.string.app_name);
+
         setContentView(R.layout.activity_main);
 
         ActionBar actionBar = getActionBar();
