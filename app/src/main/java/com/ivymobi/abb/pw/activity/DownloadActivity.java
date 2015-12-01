@@ -6,8 +6,8 @@ import android.support.v4.app.FragmentTabHost;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TabHost;
-import android.widget.TextView;
 
 import com.ivymobi.abb.pw.R;
 import com.ivymobi.abb.pw.fragment.CloudFragment_;
@@ -24,12 +24,12 @@ public class DownloadActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_download);
 
-        FragmentTabHost tabHost = (FragmentTabHost)findViewById(android.R.id.tabhost);
+        FragmentTabHost tabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
         tabHost.setup(this, getSupportFragmentManager(), R.id.content);
 
-        View tabView1 = createTabView(tabHost.getContext(), getString(R.string.tab_sample_list));
-        View tabView2 = createTabView(tabHost.getContext(), getString(R.string.tab_downloaded));
-        View tabView3 = createTabView(tabHost.getContext(), getString(R.string.tab_favorited));
+        View tabView1 = createTabView(tabHost.getContext(), 0);
+        View tabView2 = createTabView(tabHost.getContext(), 1);
+        View tabView3 = createTabView(tabHost.getContext(), 2);
 
         TabHost.TabSpec tab1 = tabHost.newTabSpec("tab1");
         tab1.setIndicator(tabView1);
@@ -44,10 +44,24 @@ public class DownloadActivity extends AppCompatActivity {
         tabHost.addTab(tab3, FavoriteFragment_.class, null);
     }
 
-    private static View createTabView(final Context context, final String text) {
+    private static View createTabView(final Context context, final Integer position) {
         View view = LayoutInflater.from(context).inflate(R.layout.tabs_bg, null);
-        TextView tv = (TextView) view.findViewById(R.id.tabsText);
-        tv.setText(text);
+        LinearLayout tabsLayout = (LinearLayout) view.findViewById(R.id.tabsLayout);
+
+        switch (position) {
+            case 0:
+                tabsLayout.setBackgroundResource(R.drawable.tab_bg_1);
+                break;
+            case 1:
+                tabsLayout.setBackgroundResource(R.drawable.tab_bg_2);
+                break;
+            default:
+                tabsLayout.setBackgroundResource(R.drawable.tab_bg_3);
+                break;
+        }
+
+        tabsLayout.setBackgroundResource(R.drawable.tab_bg_3);
+
         return view;
     }
 }

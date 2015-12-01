@@ -12,20 +12,27 @@ import android.view.ViewGroup;
 import com.activeandroid.query.Select;
 import com.ivymobi.abb.pw.R;
 import com.ivymobi.abb.pw.activity.LocalPDFActivity_;
+import com.ivymobi.abb.pw.activity.PDFActivity_;
 import com.ivymobi.abb.pw.adapter.DownloadedRecyclerAdapter;
 import com.ivymobi.abb.pw.beans.File;
 import com.ivymobi.abb.pw.listener.OnLocalItemRecyclerListener;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.androidannotations.annotations.EFragment;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
+
+import cz.msebera.android.httpclient.Header;
 
 
 @EFragment
 public class DownloadedFragment extends Fragment implements OnLocalItemRecyclerListener {
     private View mView;
     private RecyclerView mRecyclerView = null;
-    private List<File> files;
+    public List<File> files;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -48,15 +55,40 @@ public class DownloadedFragment extends Fragment implements OnLocalItemRecyclerL
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        files = new Select().from(File.class).execute();
+        if (files == null) {
+            files = new Select().from(File.class).execute();
+        }
 
         mRecyclerView.setAdapter(new DownloadedRecyclerAdapter(getActivity(), files, DownloadedFragment.this));
     }
 
     @Override
     public void onItemRecyclerClicked(View v, File file) {
-        Intent intent = new Intent(getActivity(), LocalPDFActivity_.class);
-        intent.putExtra("fileName", file.getLocalPath());
-        startActivity(intent);
+
+        if (file.getLocalPath() == null) {
+            final AsyncHttpClient client = new AsyncHttpClient();
+            client.get("http://yangbentong.com/api/7a94881a-df96-429d-9e01-dece4f46fee2/storage/" + file.getUuid(), new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    try {
+
+                        String fileUrl = response.getString("url");
+
+                        Intent intent = new Intent(getActivity(), PDFActivity_.class);
+                        intent.putExtra("url", fileUrl);
+
+                        startActivity(intent);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } else {
+            Intent intent = new Intent(getActivity(), LocalPDFActivity_.class);
+            intent.putExtra("fileName", file.getLocalPath());
+
+            startActivity(intent);
+        }
     }
 }

@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.ivymobi.abb.pw.R;
 import com.ivymobi.abb.pw.beans.Catalog;
 import com.ivymobi.abb.pw.listener.OnFolderRecyclerListener;
+import com.ivymobi.abb.pw.util.PreferenceUtil;
 
 import java.util.ArrayList;
 
@@ -18,23 +19,32 @@ public class FolderRecyclerAdapter extends RecyclerView.Adapter<FolderRecyclerAd
     private LayoutInflater mInflater;
     private Catalog mData;
     private OnFolderRecyclerListener mListener;
+    private String language;
 
     public FolderRecyclerAdapter(Context context, Catalog data, OnFolderRecyclerListener listener) {
         mInflater = LayoutInflater.from(context);
         mData = data;
         mListener = listener;
+
+        PreferenceUtil.init(context);
+        language = PreferenceUtil.getString("language", "Chinese");
     }
 
     @Override
     public FolderRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        return new ViewHolder(mInflater.inflate(R.layout.cloud_folder_list, viewGroup, false));
+        return new ViewHolder(mInflater.inflate(R.layout.folder_list, viewGroup, false));
     }
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int i) {
 
         ArrayList<Catalog> children = mData.getChildren();
-        viewHolder.nameTextView.setText(children.get(i).getName());
+
+        if (language.equals("English")) {
+            viewHolder.nameTextView.setText(children.get(i).getEnName());
+        } else {
+            viewHolder.nameTextView.setText(children.get(i).getName());
+        }
 
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

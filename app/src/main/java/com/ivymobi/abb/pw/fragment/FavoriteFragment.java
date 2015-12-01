@@ -4,20 +4,18 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 
 import com.activeandroid.query.Select;
 import com.ivymobi.abb.pw.R;
-import com.ivymobi.abb.pw.adapter.DownloadedRecyclerAdapter;
 import com.ivymobi.abb.pw.adapter.FavoriteRecyclerAdapter;
 import com.ivymobi.abb.pw.beans.Collection;
-import com.ivymobi.abb.pw.beans.File;
 import com.ivymobi.abb.pw.listener.OnFavoriteRecyclerListener;
 
 import org.androidannotations.annotations.Click;
@@ -63,7 +61,13 @@ public class FavoriteFragment extends Fragment implements OnFavoriteRecyclerList
 
     @Override
     public void onItemRecyclerClicked(View v, Collection collection) {
+        DownloadedFragment downloadedFragment = new DownloadedFragment();
+        downloadedFragment.files = collection.files();
 
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.container_framelayout, downloadedFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     @Click

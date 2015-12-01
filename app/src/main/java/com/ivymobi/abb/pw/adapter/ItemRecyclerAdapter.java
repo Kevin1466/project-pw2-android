@@ -15,6 +15,7 @@ import com.ivymobi.abb.pw.beans.Catalog;
 import com.ivymobi.abb.pw.beans.File;
 import com.ivymobi.abb.pw.listener.OnItemRecyclerListener;
 import com.ivymobi.abb.pw.listener.OnMenuItemClickListener;
+import com.ivymobi.abb.pw.util.PreferenceUtil;
 
 import java.util.ArrayList;
 
@@ -28,16 +29,19 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapte
     private OnItemRecyclerListener mListener;
     private OnMenuItemClickListener onMenuItemClickListener;
     public static final ImageCache IMAGE_CACHE = CacheManager.getImageCache();
+    private String language;
 
     public ItemRecyclerAdapter(Context context, Catalog data, OnItemRecyclerListener listener) {
         mInflater = LayoutInflater.from(context);
         mData = data;
         mListener = listener;
+        PreferenceUtil.init(context);
+        language = PreferenceUtil.getString("language", "Chinese");
     }
 
     @Override
     public ItemRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        return new ViewHolder(mInflater.inflate(R.layout.cloud_item_list, viewGroup, false));
+        return new ViewHolder(mInflater.inflate(R.layout.item_list, viewGroup, false));
     }
 
     @Override
@@ -46,7 +50,12 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapte
         ArrayList<File> files = mData.getFiles();
         File file = files.get(i);
 
-        viewHolder.nameTextView.setText(file.getTitle());
+        if (language.equals("English")) {
+            viewHolder.nameTextView.setText(file.getTitle());
+        } else {
+            viewHolder.nameTextView.setText(file.getEnTitle());
+        }
+
         viewHolder.file = file;
 
         IMAGE_CACHE.setCacheFolder(mInflater.getContext().getExternalCacheDir() + "/images");

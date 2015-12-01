@@ -96,6 +96,10 @@ public class File extends Model {
         return localPath;
     }
 
+    public boolean isDownload() {
+        return localPath != null;
+    }
+
     public void setLocalPath(String localPath) {
         this.localPath = localPath;
     }
