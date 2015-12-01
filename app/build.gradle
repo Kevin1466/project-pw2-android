@@ -39,6 +39,13 @@ dependencies {
     apt "org.androidannotations:androidannotations:$AAVersion"
     compile "org.androidannotations:androidannotations-api:$AAVersion"
     compile files('libs/master-nineoldandroids-library.jar')
+    compile files('libs/MobCommons.jar')
+    compile files('libs/MobTools.jar')
+    compile files('libs/ShareSDK-Core-2.6.5.jar')
+    compile files('libs/ShareSDK-Email-2.6.5.jar')
+    compile files('libs/ShareSDK-Wechat-2.6.5.jar')
+    compile files('libs/ShareSDK-Wechat-Core-2.6.5.jar')
+    compile files('libs/ShareSDK-Wechat-Moments-2.6.5.jar')
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:support-v4:23.1.1'
     compile 'com.joanzapata.pdfview:android-pdfview:1.0.4@aar'

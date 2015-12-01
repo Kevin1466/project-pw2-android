@@ -39,6 +39,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.onekeyshare.OnekeyShare;
 import cz.msebera.android.httpclient.Header;
 
 import static java.lang.System.err;
@@ -218,6 +220,8 @@ public class CloudFragment extends Fragment implements OnFolderRecyclerListener,
 
                 break;
             case 1:
+
+                shareFile(file);
                 break;
 
             case 2:
@@ -227,6 +231,28 @@ public class CloudFragment extends Fragment implements OnFolderRecyclerListener,
                 break;
         }
 
+    }
+
+    private void shareFile(final File file) {
+        final AsyncHttpClient client = new AsyncHttpClient();
+        client.get("http://yangbentong.com/api/7a94881a-df96-429d-9e01-dece4f46fee2/storage/" + file.getUuid(), new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+
+                    String fileUrl = response.getString("url");
+
+                    ShareSDK.initSDK(getContext());
+                    OnekeyShare oks = new OnekeyShare();
+                    oks.setText(file.getTitle());
+                    oks.setUrl(fileUrl);
+                    oks.show(getContext());
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     private void collectionFile(final File file) {
