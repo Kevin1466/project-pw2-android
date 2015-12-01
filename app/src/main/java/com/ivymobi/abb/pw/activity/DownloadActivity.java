@@ -27,9 +27,9 @@ public class DownloadActivity extends AppCompatActivity {
         FragmentTabHost tabHost = (FragmentTabHost)findViewById(android.R.id.tabhost);
         tabHost.setup(this, getSupportFragmentManager(), R.id.content);
 
-        View tabView1 = createTabView(tabHost.getContext(), "Sample list");
-        View tabView2 = createTabView(tabHost.getContext(), "Downloaded");
-        View tabView3 = createTabView(tabHost.getContext(), "Favorited");
+        View tabView1 = createTabView(tabHost.getContext(), getString(R.string.tab_sample_list));
+        View tabView2 = createTabView(tabHost.getContext(), getString(R.string.tab_downloaded));
+        View tabView3 = createTabView(tabHost.getContext(), getString(R.string.tab_favorited));
 
         TabHost.TabSpec tab1 = tabHost.newTabSpec("tab1");
         tab1.setIndicator(tabView1);

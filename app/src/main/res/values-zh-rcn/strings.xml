@@ -20,7 +20,12 @@
     <string name="action_download">下载</string>
     <string name="action_share">分享</string>
     <string name="action_collect">收藏</string>
-    <string name="select_the_action">Select The Action</string>
+    <string name="select_the_action">选择操作</string>
     <string name="download_success">下载完成</string>
     <string name="download_failed">下载失败</string>
+    <string name="tab_sample_list">云资料</string>
+    <string name="tab_downloaded">已下载</string>
+    <string name="tab_favorited">收藏夹</string>
+    <string name="action_cancel">取消</string>
+    <string name="action_ok">确定</string>
 </resources>

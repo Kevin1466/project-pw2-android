@@ -26,4 +26,9 @@
     <string name="select_the_action">Select The Action</string>
     <string name="download_success">下载完成</string>
     <string name="download_failed">下载失败</string>
+    <string name="tab_sample_list">Sample list</string>
+    <string name="tab_downloaded">Downloaded</string>
+    <string name="tab_favorited">Favorited</string>
+    <string name="action_cancel">取消</string>
+    <string name="action_ok">确定</string>
 </resources>

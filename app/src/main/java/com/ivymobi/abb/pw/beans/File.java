@@ -1,13 +1,40 @@
 package com.ivymobi.abb.pw.beans;
 
-public class File {
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Select;
+
+import java.util.List;
+
+@Table(name = "Files")
+public class File extends Model {
+    @Column(name = "uuid")
     private String uuid;
+
+    @Column(name = "title")
     private String title;
+
+    @Column(name = "enTitle")
     private String enTitle;
+
+    @Column(name = "size")
     private Integer size;
+
+    @Column(name = "thumbnail")
     private String thumbnail;
+
+    @Column(name = "cover")
     private String cover;
+
+    @Column(name = "tag")
     private String tag;
+
+    @Column(name = "localPath")
+    private String localPath;
+
+    @Column(name = "collection")
+    private Collection collection;
 
     public String getUuid() {
         return uuid;
@@ -63,5 +90,36 @@ public class File {
 
     public void setTag(String tag) {
         this.tag = tag;
+    }
+
+    public String getLocalPath() {
+        return localPath;
+    }
+
+    public void setLocalPath(String localPath) {
+        this.localPath = localPath;
+    }
+
+    public Collection getCollectio() {
+        return collection;
+    }
+
+    public void setCollection(Collection collection) {
+        this.collection = collection;
+    }
+
+    public static List<File> getAll(Collection collection) {
+        return new Select()
+                .from(File.class)
+                .where("collection = ?", collection.getId())
+                .orderBy("Id ASC")
+                .execute();
+    }
+
+    public static File findByUuid(String uuid) {
+        return new Select()
+                .from(File.class)
+                .where("uuid = ?", uuid)
+                .executeSingle();
     }
 }

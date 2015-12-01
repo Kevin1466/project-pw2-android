@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
+        android:name=".app.MyApplication"
         android:allowBackup="true"
         android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
@@ -62,6 +63,10 @@
             android:name=".activity.ImageActivity_"
             android:screenOrientation="portrait" />
         <activity android:name=".activity.PDFActivity_" />
+        <activity android:name=".activity.LocalPDFActivity_" />
+        <activity
+            android:name=".activity.CollectionActivity_"
+            android:theme="@style/Theme.AppCompat.Dialog" />
     </application>
 
 </manifest>

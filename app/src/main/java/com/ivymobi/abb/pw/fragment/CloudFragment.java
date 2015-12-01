@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.ivymobi.abb.pw.R;
+import com.ivymobi.abb.pw.activity.CollectionActivity_;
 import com.ivymobi.abb.pw.activity.PDFActivity_;
 import com.ivymobi.abb.pw.adapter.FolderRecyclerAdapter;
 import com.ivymobi.abb.pw.adapter.ItemRecyclerAdapter;
@@ -47,10 +48,10 @@ public class CloudFragment extends Fragment implements OnFolderRecyclerListener,
 
     private View mView;
 
+    public Catalog root;
     private RecyclerView mRecyclerView = null;
     private HashMap<String, File> filesMap = new HashMap<>();
-    public Catalog root;
-    ProgressDialog pDialog;
+    private ProgressDialog pDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -94,7 +95,16 @@ public class CloudFragment extends Fragment implements OnFolderRecyclerListener,
                         file.setUuid(jsonObject.getString("uuid"));
                         file.setTag(jsonObject.getJSONArray("tags").getString(0));
 
-                        filesMap.put(jsonObject.getString("uuid"), file);
+                        File old = File.findByUuid(jsonObject.getString("uuid"));
+
+                        if (old == null) {
+                            file.save();
+
+                            filesMap.put(jsonObject.getString("uuid"), file);
+                        } else {
+                            filesMap.put(jsonObject.getString("uuid"), old);
+                        }
+
                     }
 
                 } catch (JSONException e) {
@@ -199,26 +209,36 @@ public class CloudFragment extends Fragment implements OnFolderRecyclerListener,
     }
 
     @Override
-    public void onMenuItemClick(MenuItem item, String uuid) {
+    public void onMenuItemClick(MenuItem item, File file) {
 
         switch (item.getItemId()) {
             case 0:
 
-                downloadFile(uuid);
+                downloadFile(file);
 
                 break;
             case 1:
                 break;
 
             case 2:
+
+                collectionFile(file);
+
                 break;
         }
 
     }
 
-    private void downloadFile(String uuid) {
+    private void collectionFile(final File file) {
+
+        Intent intent = new Intent(getActivity(), CollectionActivity_.class);
+        intent.putExtra("uuid", file.getUuid());
+        startActivity(intent);
+    }
+
+    private void downloadFile(final File file) {
         final AsyncHttpClient client = new AsyncHttpClient();
-        client.get("http://yangbentong.com/api/7a94881a-df96-429d-9e01-dece4f46fee2/storage/" + uuid, new JsonHttpResponseHandler() {
+        client.get("http://yangbentong.com/api/7a94881a-df96-429d-9e01-dece4f46fee2/storage/" + file.getUuid(), new JsonHttpResponseHandler() {
             @Override
             public void onStart() {
                 if (pDialog != null) {
@@ -228,7 +248,8 @@ public class CloudFragment extends Fragment implements OnFolderRecyclerListener,
                 pDialog = new ProgressDialog(getActivity());
                 pDialog.setIndeterminate(false);
                 pDialog.setCancelable(false);
-                pDialog.setMessage("Buffering...");
+                pDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                pDialog.setMessage("Download...");
                 pDialog.show();
             }
 
@@ -237,7 +258,7 @@ public class CloudFragment extends Fragment implements OnFolderRecyclerListener,
                 try {
 
                     String fileUrl = response.getString("url");
-                    String fileName = response.getString("file_key");
+                    final String fileName = response.getString("file_key");
 
                     Uri downloadUri = Uri.parse(fileUrl);
                     Uri destinationUri = Uri.parse(getContext().getExternalCacheDir().toString() + "/" + fileName);
@@ -250,6 +271,9 @@ public class CloudFragment extends Fragment implements OnFolderRecyclerListener,
                                 public void onDownloadComplete(int id) {
                                     pDialog.dismiss();
                                     Toast.makeText(getContext(), R.string.download_success, Toast.LENGTH_SHORT).show();
+
+                                    file.setLocalPath(fileName);
+                                    file.save();
                                 }
 
                                 @Override
@@ -260,7 +284,7 @@ public class CloudFragment extends Fragment implements OnFolderRecyclerListener,
 
                                 @Override
                                 public void onProgress(int id, long totalBytes, long downlaodedBytes, int progress) {
-
+                                    pDialog.setProgress(progress);
                                 }
                             });
 

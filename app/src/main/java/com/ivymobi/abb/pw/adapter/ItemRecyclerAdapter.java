@@ -47,7 +47,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapte
         File file = files.get(i);
 
         viewHolder.nameTextView.setText(file.getTitle());
-        viewHolder.uuid = file.getUuid();
+        viewHolder.file = file;
 
         IMAGE_CACHE.setCacheFolder(mInflater.getContext().getExternalCacheDir() + "/images");
         IMAGE_CACHE.get(file.getThumbnail(), viewHolder.itemImageView);
@@ -75,7 +75,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapte
 
         TextView nameTextView;
         ImageView itemImageView;
-        String uuid;
+        File file;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -88,7 +88,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapte
         @Override
         public boolean onMenuItemClick(MenuItem item) {
             if (onMenuItemClickListener != null) {
-                onMenuItemClickListener.onMenuItemClick(item, uuid);
+                onMenuItemClickListener.onMenuItemClick(item, file);
             }
 
             return false;
