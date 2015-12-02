@@ -9,13 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.activeandroid.query.Select;
 import com.ivymobi.abb.pw.R;
 import com.ivymobi.abb.pw.activity.LocalPDFActivity_;
 import com.ivymobi.abb.pw.activity.PDFActivity_;
-import com.ivymobi.abb.pw.adapter.DownloadedRecyclerAdapter;
+import com.ivymobi.abb.pw.adapter.ItemRecyclerAdapter;
 import com.ivymobi.abb.pw.beans.File;
-import com.ivymobi.abb.pw.listener.OnLocalItemRecyclerListener;
+import com.ivymobi.abb.pw.listener.OnItemRecyclerListener;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -29,24 +28,17 @@ import cz.msebera.android.httpclient.Header;
 
 
 @EFragment
-public class DownloadedFragment extends Fragment implements OnLocalItemRecyclerListener {
+public class DownloadedFragment extends Fragment implements OnItemRecyclerListener {
     private View mView;
     private RecyclerView mRecyclerView = null;
     public List<File> files;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (mView == null) {
-            mView = inflater.inflate(R.layout.fragment_downloaded, container, false);
+        mView = inflater.inflate(R.layout.fragment_downloaded, container, false);
 
-            mRecyclerView = (RecyclerView) mView.findViewById(R.id.cloud_list_rv);
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        }
-
-        ViewGroup parent = (ViewGroup) mView.getParent();
-        if (parent != null) {
-            parent.removeView(mView);
-        }
+        mRecyclerView = (RecyclerView) mView.findViewById(R.id.cloud_list_rv);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         return mView;
     }
@@ -59,11 +51,13 @@ public class DownloadedFragment extends Fragment implements OnLocalItemRecyclerL
             files = File.getAllDownloadedFiles();
         }
 
-        mRecyclerView.setAdapter(new DownloadedRecyclerAdapter(getActivity(), files, DownloadedFragment.this));
+        mRecyclerView.setAdapter(new ItemRecyclerAdapter(getActivity(), files, DownloadedFragment.this));
     }
 
     @Override
-    public void onItemRecyclerClicked(View v, File file) {
+    public void onItemRecyclerClicked(View v, int position) {
+
+        File file = files.get(position);
 
         if (file.getLocalPath() == null) {
             final AsyncHttpClient client = new AsyncHttpClient();

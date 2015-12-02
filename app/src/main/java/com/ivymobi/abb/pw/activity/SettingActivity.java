@@ -66,6 +66,7 @@ public class SettingActivity extends AppCompatActivity {
 
         File[] files;
         Long size = 0l;
+
         if (filePath != null && filePath.exists()) {
             files = filePath.listFiles();
 

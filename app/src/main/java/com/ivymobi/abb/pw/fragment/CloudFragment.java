@@ -184,7 +184,7 @@ public class CloudFragment extends Fragment implements OnFolderRecyclerListener,
 
             mRecyclerView.setAdapter(new FolderRecyclerAdapter(getActivity(), root, CloudFragment.this));
         } else if (root.hasFiles()) {
-            ItemRecyclerAdapter itemRecyclerAdapter = new ItemRecyclerAdapter(getActivity(), root, CloudFragment.this);
+            ItemRecyclerAdapter itemRecyclerAdapter = new ItemRecyclerAdapter(getActivity(), root.getFiles(), CloudFragment.this);
             itemRecyclerAdapter.setOnMenuItemClickListener(this);
             mRecyclerView.setAdapter(itemRecyclerAdapter);
         }
