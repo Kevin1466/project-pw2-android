@@ -17,6 +17,7 @@ import com.ivymobi.abb.pw.fragment.FragmentContent;
 import com.ivymobi.abb.pw.fragment.LocalFragmentContent;
 import com.ivymobi.abb.pw.view.MyJazzyViewPager;
 import com.ivymobi.abb.pw.view.PagerSlidingTabStrip;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.androidannotations.annotations.EActivity;
 

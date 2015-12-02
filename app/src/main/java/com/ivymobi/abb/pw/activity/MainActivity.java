@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.VideoView;
@@ -54,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.mipmap.icon_setting);
-//        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.mipmap.logo));
 
         PreferenceUtil.init(this);
         switchLanguage(PreferenceUtil.getString("language", "Chinese"));
@@ -124,8 +122,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void switchLanguage(String language) {
-
-        System.out.println("switch language");
 
         Resources resources = getResources();
         Configuration config = resources.getConfiguration();

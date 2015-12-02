@@ -11,11 +11,14 @@ import android.widget.ImageView;
 
 import com.ivymobi.abb.pw.R;
 import com.ivymobi.abb.pw.activity.ImageActivity_;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.androidannotations.annotations.EFragment;
 
 @EFragment
 public class LocalFragmentContent extends Fragment {
+
+    private ImageLoader imageLoader = ImageLoader.getInstance();
 
     public static Fragment getInstance(Bundle bundle) {
         LocalFragmentContent fragment = new LocalFragmentContent();

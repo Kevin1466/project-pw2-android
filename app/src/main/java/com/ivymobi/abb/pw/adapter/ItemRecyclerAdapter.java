@@ -16,13 +16,13 @@ import com.ivymobi.abb.pw.R;
 import com.ivymobi.abb.pw.beans.File;
 import com.ivymobi.abb.pw.listener.OnItemRecyclerListener;
 import com.ivymobi.abb.pw.listener.OnMenuItemClickListener;
-import com.ivymobi.abb.pw.util.PreferenceUtil;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import java.util.List;
+import java.util.Locale;
 
 public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapter.ViewHolder> {
 
@@ -30,15 +30,14 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapte
     private List<File> mData;
     private OnItemRecyclerListener mListener;
     private OnMenuItemClickListener onMenuItemClickListener;
-    private String language;
+    private Locale locale;
     private ImageLoader imageLoader = ImageLoader.getInstance();
 
     public ItemRecyclerAdapter(Context context, List<File> data, OnItemRecyclerListener listener) {
         mInflater = LayoutInflater.from(context);
         mData = data;
         mListener = listener;
-        PreferenceUtil.init(context);
-        language = PreferenceUtil.getString("language", "Chinese");
+        locale = context.getResources().getConfiguration().locale;
     }
 
     @Override
@@ -51,7 +50,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapte
 
         File file = mData.get(i);
 
-        if (language.equals("English")) {
+        if (locale == Locale.ENGLISH) {
             viewHolder.nameTextView.setText(file.getTitle());
         } else {
             viewHolder.nameTextView.setText(file.getEnTitle());

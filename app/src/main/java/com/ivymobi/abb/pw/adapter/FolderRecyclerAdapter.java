@@ -13,21 +13,21 @@ import com.ivymobi.abb.pw.listener.OnFolderRecyclerListener;
 import com.ivymobi.abb.pw.util.PreferenceUtil;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class FolderRecyclerAdapter extends RecyclerView.Adapter<FolderRecyclerAdapter.ViewHolder> {
 
     private LayoutInflater mInflater;
     private Catalog mData;
     private OnFolderRecyclerListener mListener;
-    private String language;
+    private Locale locale;
 
     public FolderRecyclerAdapter(Context context, Catalog data, OnFolderRecyclerListener listener) {
         mInflater = LayoutInflater.from(context);
         mData = data;
         mListener = listener;
 
-        PreferenceUtil.init(context);
-        language = PreferenceUtil.getString("language", "Chinese");
+        locale = context.getResources().getConfiguration().locale;
     }
 
     @Override
@@ -40,7 +40,7 @@ public class FolderRecyclerAdapter extends RecyclerView.Adapter<FolderRecyclerAd
 
         ArrayList<Catalog> children = mData.getChildren();
 
-        if (language.equals("English")) {
+        if (locale == Locale.ENGLISH) {
             viewHolder.nameTextView.setText(children.get(i).getEnName());
         } else {
             viewHolder.nameTextView.setText(children.get(i).getName());

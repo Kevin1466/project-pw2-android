@@ -14,8 +14,16 @@ import android.widget.ImageView;
 import com.ivymobi.abb.pw.R;
 import com.ivymobi.abb.pw.activity.PDFActivity_;
 import com.ivymobi.abb.pw.activity.VideoActivity_;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+
+import java.util.Locale;
 
 public class FragmentContent extends Fragment implements View.OnTouchListener {
+    private ImageLoader imageLoader = ImageLoader.getInstance();
+    private Locale locale;
+
     public static Fragment getInstance(Bundle bundle) {
         FragmentContent fragment = new FragmentContent();
         fragment.setArguments(bundle);
@@ -36,6 +44,9 @@ public class FragmentContent extends Fragment implements View.OnTouchListener {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        locale = getContext().getResources().getConfiguration().locale;
+
         initView(view);
     }
 
@@ -97,14 +108,28 @@ public class FragmentContent extends Fragment implements View.OnTouchListener {
         ImageView imageView = (ImageView) view.findViewById(R.id.imageView);
         imageView.setOnTouchListener(this);
 
+        DisplayImageOptions options = new DisplayImageOptions.Builder().cacheOnDisk(true).imageScaleType(ImageScaleType.NONE).build();
+
+        String file = "icon_dlywjs@2x.png";
+        String file2 = "icon_zgjs@2x.png";
+
+        if (locale == Locale.ENGLISH) {
+            file = "EN_icon_dlywjs@2x.png";
+            file2 = "EN_icon_zgjs@2x.png";
+        }
+
         switch (position) {
             case 1:
                 imageView.setImageResource(R.mipmap.dlywjs);
+
+                imageLoader.displayImage("http://ivymobi-storage.qiniudn.com/abbpw/Business/" + file, imageView, options);
+
                 break;
             default: // 0
                 imageView.setImageResource(R.mipmap.zgjs);
-                break;
 
+                imageLoader.displayImage("http://ivymobi-storage.qiniudn.com/abbpw/Business/" + file2, imageView, options);
+                break;
         }
 
     }

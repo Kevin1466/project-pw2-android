@@ -8,6 +8,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import java.io.File;
+import java.util.Locale;
 
 public class MyApplication extends Application {
     @Override
@@ -22,5 +23,9 @@ public class MyApplication extends Application {
                 .diskCacheSize(50 * 1024 * 1024)
                 .build();
         ImageLoader.getInstance().init(config);
+    }
+
+    public Locale getLocale() {
+        return getResources().getConfiguration().locale;
     }
 }
