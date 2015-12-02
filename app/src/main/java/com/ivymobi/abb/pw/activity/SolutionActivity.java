@@ -14,6 +14,8 @@ public class SolutionActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle(R.string.solution);
+
         setContentView(R.layout.activity_solution);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

@@ -23,6 +23,9 @@ public class DownloadActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setTitle(R.string.download);
+
         setContentView(R.layout.activity_download);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

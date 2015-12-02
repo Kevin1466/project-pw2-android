@@ -24,6 +24,8 @@ public class EventActivity extends AppCompatActivity implements View.OnTouchList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle(R.string.event);
+
         setContentView(R.layout.activity_event);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

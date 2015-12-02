@@ -24,6 +24,8 @@ public class ContactActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle(R.string.contact);
+
         setContentView(R.layout.activity_contact);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
