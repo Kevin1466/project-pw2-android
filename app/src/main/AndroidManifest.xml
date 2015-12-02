@@ -68,7 +68,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.ImageActivity_"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity android:name=".activity.PDFActivity_" />
         <activity android:name=".activity.LocalPDFActivity_" />
         <activity

@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.MenuItem;
 import android.view.ViewGroup;
 
 import com.ivymobi.abb.pw.R;
@@ -33,6 +34,9 @@ public class BusinessActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_business);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.mipmap.icon_home);
+
         dm = getResources().getDisplayMetrics();
         pager = (MyJazzyViewPager) findViewById(R.id.pager);
         tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
@@ -43,6 +47,17 @@ public class BusinessActivity extends AppCompatActivity {
 
         tabs.setFadeEnabled(true);
         pager.setCurrentItem(0);
+    }
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     /**

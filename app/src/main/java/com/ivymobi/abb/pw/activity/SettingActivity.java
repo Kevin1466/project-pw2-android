@@ -21,6 +21,8 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
+import java.io.File;
+import java.util.List;
 import java.util.Locale;
 
 @EActivity
@@ -32,6 +34,9 @@ public class SettingActivity extends AppCompatActivity {
     @ViewById
     TextView currentLanguage;
 
+    @ViewById
+    TextView cacheSize;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,15 +45,92 @@ public class SettingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_setting);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.mipmap.icon_home);
 
+        String language = PreferenceUtil.getString("language", "Chinese");
         PreferenceUtil.init(this);
         currentVersion.setText(getVersion());
-        currentLanguage.setText(PreferenceUtil.getString("language", "Chinese"));
+        currentLanguage.setText(getResources().getIdentifier(language, "string", getPackageName()));
+
+        getCacheSize();
     }
 
     @Click
     public void actionMailSignClicked() {
         startActivity(new Intent(this, SettingMailSignActivity_.class));
+    }
+
+    private void getCacheSize() {
+        File filePath = getExternalCacheDir();
+        File imagePath = new File(getExternalCacheDir() + "/images");
+
+        File[] files;
+        Long size = 0l;
+        if (filePath != null && filePath.exists()) {
+            files = filePath.listFiles();
+
+            for (File f : files) {
+                size = size + f.length();
+            }
+        }
+
+        if (imagePath.exists()) {
+            files = imagePath.listFiles();
+            for (File f : files) {
+                size = size + f.length();
+            }
+        }
+
+        cacheSize.setText(String.format("%.2f MB", Float.parseFloat((size / 1024 / 1024) + "")));
+    }
+
+    @Click
+    public void actionCacheClearClicked() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(SettingActivity.this);
+        builder.setMessage(R.string.dialog_title_clear_cache);
+        builder.setPositiveButton(R.string.action_cancel, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        builder.setNegativeButton(R.string.action_ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                File filePath = getExternalCacheDir();
+                File imagePath = new File(getExternalCacheDir() + "/images");
+
+                File[] files;
+                if (filePath != null && filePath.exists()) {
+                    files = filePath.listFiles();
+
+                    for (File f : files) {
+                        f.delete();
+                    }
+                }
+
+                if (imagePath.exists()) {
+                    files = imagePath.listFiles();
+                    for (File f : files) {
+                        f.delete();
+                    }
+                }
+
+                List<com.ivymobi.abb.pw.beans.File> downloadedFiles = com.ivymobi.abb.pw.beans.File.getAllDownloadedFiles();
+                for (com.ivymobi.abb.pw.beans.File f : downloadedFiles) {
+                    f.setLocalPath(null);
+                    f.save();
+                }
+
+                cacheSize.setText("0.00 MB");
+
+                dialog.dismiss();
+            }
+        });
+
+        builder.show();
     }
 
 
@@ -57,7 +139,7 @@ public class SettingActivity extends AppCompatActivity {
         final String[] arrayFruit = new String[]{"中文", "English"};
 
         Dialog alertDialog = new AlertDialog.Builder(this).
-                setTitle(R.string.label_chinese)
+                setTitle(R.string.label_language_setting)
                 .setItems(arrayFruit, new DialogInterface.OnClickListener() {
 
                     @Override
@@ -93,19 +175,22 @@ public class SettingActivity extends AppCompatActivity {
         }
 
         resources.updateConfiguration(config, dm);
-
         PreferenceUtil.commitString("language", language);
 
         finish();
 
         Intent intent = new Intent(this, MainActivity_.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
+
             finish();
+
             return true;
         }
         return super.onOptionsItemSelected(item);

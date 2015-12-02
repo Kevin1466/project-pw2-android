@@ -52,10 +52,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.mipmap.icon_setting);
+//        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.mipmap.logo));
+
         PreferenceUtil.init(this);
         switchLanguage(PreferenceUtil.getString("language", "Chinese"));
 
-        setTitle(R.string.app_name);
+        setTitle(getString(R.string.activity_main));
 
         setContentView(R.layout.activity_main);
 
@@ -68,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
         videoView.requestFocus();
         videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             public void onPrepared(MediaPlayer mp) {
+                mp.setLooping(true);
                 videoView.start();
             }
         });
@@ -104,18 +109,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.setting, menu);
-
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_setting:
+            case android.R.id.home:
 
-                startActivity(new Intent(this, SettingActivity_.class));
+                startActivityForResult(new Intent(this, SettingActivity_.class), 0);
 
                 break;
             default:
@@ -125,8 +123,10 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
     private void switchLanguage(String language) {
+
+        System.out.println("switch language");
+
         Resources resources = getResources();
         Configuration config = resources.getConfiguration();
         DisplayMetrics dm = resources.getDisplayMetrics();

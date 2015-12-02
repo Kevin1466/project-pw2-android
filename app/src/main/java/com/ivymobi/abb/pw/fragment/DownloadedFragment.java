@@ -56,7 +56,7 @@ public class DownloadedFragment extends Fragment implements OnLocalItemRecyclerL
         super.onActivityCreated(savedInstanceState);
 
         if (files == null) {
-            files = new Select().from(File.class).execute();
+            files = File.getAllDownloadedFiles();
         }
 
         mRecyclerView.setAdapter(new DownloadedRecyclerAdapter(getActivity(), files, DownloadedFragment.this));

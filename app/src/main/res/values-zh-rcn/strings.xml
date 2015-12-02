@@ -8,6 +8,8 @@
     <string name="mail_sign">邮件签名</string>
     <string name="label_language_setting">语言设置</string>
     <string name="label_chinese">中文</string>
+    <string name="Chinese">中文</string>
+    <string name="English">English</string>
     <string name="label_clear_cache">清空缓存</string>
     <string name="signature">邮件签名</string>
     <string name="version">当前版本</string>
@@ -28,4 +30,6 @@
     <string name="tab_favorited">收藏夹</string>
     <string name="action_cancel">取消</string>
     <string name="action_ok">确定</string>
+    <string name="activity_main">ABB中国电力世界</string>
+    <string name="dialog_title_clear_cache">将清空所有已下载样本，是否继续？</string>
 </resources>

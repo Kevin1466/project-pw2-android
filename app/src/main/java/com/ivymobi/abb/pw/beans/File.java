@@ -120,6 +120,14 @@ public class File extends Model {
                 .execute();
     }
 
+    public static List<File> getAllDownloadedFiles() {
+        return new Select()
+                .from(File.class)
+                .where("localPath is not null")
+                .orderBy("Id ASC")
+                .execute();
+    }
+
     public static File findByUuid(String uuid) {
         return new Select()
                 .from(File.class)
