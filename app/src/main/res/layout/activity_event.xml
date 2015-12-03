@@ -6,18 +6,26 @@
     android:background="@mipmap/bg"
     tools:context=".activity.EventActivity">
 
+
     <ScrollView
         android:id="@+id/scrollView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/hdhg"
-            android:layout_margin="12dp"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="fitXY"
-            android:src="@mipmap/hdhg" />
+            android:orientation="vertical"
+            android:gravity="center|top">
+
+            <ImageView
+                android:id="@+id/hdhg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                android:scaleType="fitXY"
+                android:src="@mipmap/hdhg" />
+        </LinearLayout>
     </ScrollView>
 
 </RelativeLayout>

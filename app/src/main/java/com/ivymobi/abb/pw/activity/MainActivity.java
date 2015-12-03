@@ -111,7 +111,10 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
 
-                startActivityForResult(new Intent(this, SettingActivity_.class), 0);
+                Intent intent = new Intent(this, SettingActivity_.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+
+                startActivity(intent);
 
                 break;
             default:

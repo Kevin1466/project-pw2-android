@@ -108,7 +108,7 @@ public class FragmentContent extends Fragment implements View.OnTouchListener {
         ImageView imageView = (ImageView) view.findViewById(R.id.imageView);
         imageView.setOnTouchListener(this);
 
-        DisplayImageOptions options = new DisplayImageOptions.Builder().cacheOnDisk(true).imageScaleType(ImageScaleType.NONE).build();
+        DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).imageScaleType(ImageScaleType.NONE).build();
 
         String file = "icon_dlywjs@2x.png";
         String file2 = "icon_zgjs@2x.png";

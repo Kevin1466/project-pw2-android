@@ -11,6 +11,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.widget.TextView;
 
@@ -180,10 +181,10 @@ public class SettingActivity extends AppCompatActivity {
 
         finish();
 
-        Intent intent = new Intent(this, MainActivity_.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        Intent intent = new Intent(this, SettingActivity_.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     @Override
@@ -191,10 +192,30 @@ public class SettingActivity extends AppCompatActivity {
         if (item.getItemId() == android.R.id.home) {
 
             finish();
+            back();
 
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void back() {
+        Intent intent = new Intent(this, MainActivity_.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            finish();
+            back();
+        }
+
+        return super.onKeyDown(keyCode, event);
     }
 
     private String getVersion() {
