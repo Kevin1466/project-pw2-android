@@ -1,6 +1,5 @@
 package com.ivymobi.abb.pw.listener;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.widget.Toast;
@@ -29,7 +28,6 @@ import cz.msebera.android.httpclient.Header;
 public class OnSwipeMenuItemClickListener implements SwipeMenuListView.OnMenuItemClickListener {
     List<File> files;
     DownloadedFragment fragment;
-    private ProgressDialog pDialog;
 
     public OnSwipeMenuItemClickListener(DownloadedFragment fragment, List<File> files) {
         this.files = files;
@@ -85,20 +83,6 @@ public class OnSwipeMenuItemClickListener implements SwipeMenuListView.OnMenuIte
         final AsyncHttpClient client = new AsyncHttpClient();
         client.get("http://yangbentong.com/api/7a94881a-df96-429d-9e01-dece4f46fee2/storage/" + file.getUuid(), new JsonHttpResponseHandler() {
             @Override
-            public void onStart() {
-                if (pDialog != null) {
-                    return;
-                }
-
-                pDialog = new ProgressDialog(fragment.getActivity());
-                pDialog.setIndeterminate(false);
-                pDialog.setCancelable(false);
-                pDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                pDialog.setMessage("Download...");
-                pDialog.show();
-            }
-
-            @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
 
@@ -114,25 +98,22 @@ public class OnSwipeMenuItemClickListener implements SwipeMenuListView.OnMenuIte
 
                                 @Override
                                 public void onDownloadComplete(int id) {
-                                    pDialog.dismiss();
                                     Toast.makeText(fragment.getContext(), R.string.download_success, Toast.LENGTH_SHORT).show();
 
                                     file.setLocalPath(fileName);
                                     file.save();
 
-//                                    fragment.files = files;
-//                                    fragment.refreshData();
+                                    fragment.files = files;
+                                    fragment.refreshData();
                                 }
 
                                 @Override
                                 public void onDownloadFailed(int id, int errorCode, String errorMessage) {
-                                    pDialog.dismiss();
                                     Toast.makeText(fragment.getContext(), R.string.download_failed, Toast.LENGTH_SHORT).show();
                                 }
 
                                 @Override
                                 public void onProgress(int id, long totalBytes, long downlaodedBytes, int progress) {
-                                    pDialog.setProgress(progress);
                                 }
                             });
 

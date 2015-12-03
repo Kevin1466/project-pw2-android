@@ -55,40 +55,27 @@ public class DownloadedFragment extends Fragment {
             files = File.getAllDownloadedFiles();
         }
 
-        System.out.println("xxxxx");
-        System.out.println(files.size());
-
         SwipeMenuCreator creator = new SwipeMenuCreator() {
 
             @Override
             public void create(SwipeMenu menu) {
-                // create "open" item
-                SwipeMenuItem openItem = new SwipeMenuItem(getActivity().getApplicationContext());
-                // set item background
-                openItem.setBackground(new ColorDrawable(Color.rgb(0xC9, 0xC9,
-                        0xCE)));
-                // set item width
-                openItem.setWidth(120);
-                // set item title
-                openItem.setTitle("Open");
-                // set item title fontsize
-                openItem.setTitleSize(18);
-                // set item title font color
-                openItem.setTitleColor(Color.WHITE);
-                // add to menu
-                menu.addMenuItem(openItem);
+                SwipeMenuItem downloadItem = new SwipeMenuItem(getActivity().getApplicationContext());
+                downloadItem.setBackground(new ColorDrawable(Color.parseColor("#f2f2f2")));
+                downloadItem.setWidth(120);
+                downloadItem.setIcon(R.mipmap.icon_download_blue);
+                menu.addMenuItem(downloadItem);
 
-                // create "delete" item
-                SwipeMenuItem deleteItem = new SwipeMenuItem(getActivity().getApplicationContext());
-                // set item background
-                deleteItem.setBackground(new ColorDrawable(Color.rgb(0xF9,
-                        0x3F, 0x25)));
-                // set item width
-                deleteItem.setWidth(120);
-                // set a icon
-                deleteItem.setIcon(R.mipmap.icon_downloaded);
-                // add to menu
-                menu.addMenuItem(deleteItem);
+                SwipeMenuItem shareItem = new SwipeMenuItem(getActivity().getApplicationContext());
+                shareItem.setBackground(new ColorDrawable(Color.parseColor("#f2f2f2")));
+                shareItem.setWidth(120);
+                shareItem.setIcon(R.mipmap.icon_share);
+                menu.addMenuItem(shareItem);
+
+                SwipeMenuItem favoriteItem = new SwipeMenuItem(getActivity().getApplicationContext());
+                favoriteItem.setBackground(new ColorDrawable(Color.parseColor("#f2f2f2")));
+                favoriteItem.setWidth(120);
+                favoriteItem.setIcon(R.mipmap.icon_heart_empty);
+                menu.addMenuItem(favoriteItem);
             }
         };
 
@@ -132,5 +119,10 @@ public class DownloadedFragment extends Fragment {
 
             startActivity(intent);
         }
+    }
+
+    public void refreshData() {
+        listView.setAdapter(new ListItemAdapter(getContext(), files));
+        listView.invalidateViews();
     }
 }
