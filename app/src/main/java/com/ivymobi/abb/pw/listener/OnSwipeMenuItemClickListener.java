@@ -1,5 +1,7 @@
 package com.ivymobi.abb.pw.listener;
 
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.widget.Toast;
@@ -16,6 +18,14 @@ import com.thin.downloadmanager.DefaultRetryPolicy;
 import com.thin.downloadmanager.DownloadRequest;
 import com.thin.downloadmanager.DownloadStatusListener;
 import com.thin.downloadmanager.ThinDownloadManager;
+import com.umeng.socialize.bean.CustomPlatform;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.bean.SocializeEntity;
+import com.umeng.socialize.controller.UMServiceFactory;
+import com.umeng.socialize.controller.UMSocialService;
+import com.umeng.socialize.controller.listener.SocializeListeners;
+import com.umeng.socialize.sso.UMQQSsoHandler;
+import com.umeng.socialize.weixin.controller.UMWXHandler;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,6 +38,7 @@ import cz.msebera.android.httpclient.Header;
 public class OnSwipeMenuItemClickListener implements SwipeMenuListView.OnMenuItemClickListener {
     List<File> files;
     DownloadedFragment fragment;
+    UMSocialService umSocialService = UMServiceFactory.getUMSocialService("com.umeng.share");
 
     public OnSwipeMenuItemClickListener(DownloadedFragment fragment, List<File> files) {
         this.files = files;
@@ -65,6 +76,41 @@ public class OnSwipeMenuItemClickListener implements SwipeMenuListView.OnMenuIte
                 try {
 
                     String fileUrl = response.getString("url");
+
+                    UMWXHandler wxHandler = new UMWXHandler(fragment.getContext(), "wx508bd5b1879c3b8e", "f0c9758ef8a2775f21c6e977aa06e5a3");
+                    wxHandler.addToSocialSDK();
+
+                    UMWXHandler wxCircleHandler = new UMWXHandler(fragment.getContext(), "wx508bd5b1879c3b8e", "f0c9758ef8a2775f21c6e977aa06e5a3");
+                    wxCircleHandler.setToCircle(true);
+                    wxCircleHandler.addToSocialSDK();
+
+                    UMQQSsoHandler qqSsoHandler = new UMQQSsoHandler(fragment.getActivity(), "100424468", "c7394704798a158208a74ab60104f0ba");
+                    qqSsoHandler.addToSocialSDK();
+
+                    CustomPlatform customPlatform = new CustomPlatform("复制链接", R.mipmap.icon_albums);
+                    customPlatform.mClickListener = new SocializeListeners.OnSnsPlatformClickListener() {
+                        @Override
+                        public void onClick(Context context, SocializeEntity socializeEntity, SocializeListeners.SnsPostListener snsPostListener) {
+                            ClipboardManager cmb = (ClipboardManager)context.getSystemService(Context.CLIPBOARD_SERVICE);
+                            cmb.setText("xxxxx");
+                        }
+                    };
+
+                    umSocialService.getConfig().setPlatforms(SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE, SHARE_MEDIA.EMAIL);
+                    umSocialService.getConfig().addCustomPlatform(customPlatform);
+                    umSocialService.setShareContent(file.getTitle());
+                    umSocialService.openShare(fragment.getActivity(), false);
+                    umSocialService.registerListener(new SocializeListeners.SnsPostListener() {
+                        @Override
+                        public void onStart() {
+
+                        }
+
+                        @Override
+                        public void onComplete(SHARE_MEDIA share_media, int i, SocializeEntity socializeEntity) {
+
+                        }
+                    });
 
                 } catch (JSONException e) {
                     e.printStackTrace();

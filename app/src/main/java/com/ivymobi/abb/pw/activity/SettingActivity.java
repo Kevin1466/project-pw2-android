@@ -90,7 +90,7 @@ public class SettingActivity extends AppCompatActivity {
     public void actionCacheClearClicked() {
         AlertDialog.Builder builder = new AlertDialog.Builder(SettingActivity.this);
         builder.setMessage(R.string.dialog_title_clear_cache);
-        builder.setPositiveButton(R.string.action_cancel, new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.action_cancel, new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -98,7 +98,7 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
-        builder.setNegativeButton(R.string.action_ok, new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.action_ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 File filePath = getExternalCacheDir();

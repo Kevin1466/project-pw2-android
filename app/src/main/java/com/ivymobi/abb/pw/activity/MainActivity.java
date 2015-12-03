@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.ivymobi.abb.pw.R;
@@ -57,14 +58,11 @@ public class MainActivity extends AppCompatActivity {
         PreferenceUtil.init(this);
         switchLanguage(PreferenceUtil.getString("language", "Chinese"));
 
+        getSupportActionBar().setCustomView(R.layout.actionbar);
+        getSupportActionBar().setDisplayShowCustomEnabled(true);
         setTitle(getString(R.string.activity_main));
 
         setContentView(R.layout.activity_main);
-
-        ActionBar actionBar = getActionBar();
-        if (actionBar != null) {
-            actionBar.show();
-        }
 
         videoView.setVideoURI(Uri.parse("android.resource://com.ivymobi.abb.pw/" + R.raw.abb_first));
         videoView.requestFocus();

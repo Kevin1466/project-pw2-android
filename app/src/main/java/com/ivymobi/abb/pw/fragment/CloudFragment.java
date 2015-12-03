@@ -180,6 +180,7 @@ public class CloudFragment extends Fragment implements OnFolderRecyclerListener 
             downloadedFragment.files = root.getChildren().get(position).getFiles();
 
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             transaction.replace(R.id.container_framelayout, downloadedFragment);
             transaction.addToBackStack(null);
             transaction.commit();
@@ -188,6 +189,7 @@ public class CloudFragment extends Fragment implements OnFolderRecyclerListener 
             cloudFragment.root = root.getChildren().get(position);
 
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             transaction.replace(R.id.container_framelayout, cloudFragment);
             transaction.addToBackStack(null);
             transaction.commit();

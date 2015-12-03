@@ -75,6 +75,18 @@
         <activity
             android:name=".activity.CollectionActivity_"
             android:theme="@style/Theme.AppCompat.Dialog" />
+
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="5644114967e58ef4b00013ec" >
+        </meta-data>
+
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
