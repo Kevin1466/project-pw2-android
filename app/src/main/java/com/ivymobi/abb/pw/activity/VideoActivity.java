@@ -32,7 +32,7 @@ public class VideoActivity extends Activity {
         pDialog = new ProgressDialog(VideoActivity.this);
         pDialog.setIndeterminate(false);
         pDialog.setCancelable(false);
-        pDialog.setMessage("Buffering...");
+        pDialog.setMessage(getResources().getString(R.string.buffering));
         pDialog.show();
 
         Intent intent = getIntent();

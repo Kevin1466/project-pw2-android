@@ -60,13 +60,16 @@ public class ListItemFragment extends Fragment {
             @Override
             public void create(SwipeMenu menu) {
 
-                File file = files.get(menu.getViewType());
+                File file = null;
+                if (menu.getViewType() >= 0) {
+                    file = files.get(menu.getViewType());
+                }
 
                 SwipeMenuItem downloadItem = new SwipeMenuItem(getContext());
                 downloadItem.setBackground(new ColorDrawable(Color.parseColor("#f2f2f2")));
                 downloadItem.setWidth(120);
 
-                if (file.isDownload()) {
+                if (file != null && file.isDownload()) {
                     downloadItem.setIcon(R.mipmap.icon_download_gray);
                 } else {
                     downloadItem.setIcon(R.mipmap.icon_download_blue);

@@ -37,29 +37,6 @@ public class FragmentContent extends Fragment implements View.OnTouchListener {
     }
 
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (getUserVisibleHint()) {
-            onLoad();
-        } else {
-            notLoad();
-        }
-    }
-
-    protected void onLoad() {
-
-        View view = View.inflate(getContext(), R.layout.fragment_layout, null);
-
-        locale = getContext().getResources().getConfiguration().locale;
-        imageView = (ImageView) view.findViewById(R.id.imageView);
-
-        initView();
-    }
-
-    protected void notLoad() {
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
@@ -68,6 +45,16 @@ public class FragmentContent extends Fragment implements View.OnTouchListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_layout, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        locale = getContext().getResources().getConfiguration().locale;
+        imageView = (ImageView) view.findViewById(R.id.imageView);
+
+        initView();
     }
 
     @Override

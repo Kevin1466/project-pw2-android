@@ -35,4 +35,5 @@
     <string name="action_create">新建</string>
     <string name="action_edit">编辑</string>
     <string name="loading">加载中...</string>
+    <string name="buffering">正在缓冲...</string>
 </resources>
