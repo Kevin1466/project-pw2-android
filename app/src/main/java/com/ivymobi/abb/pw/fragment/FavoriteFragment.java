@@ -14,7 +14,7 @@ import android.widget.EditText;
 
 import com.activeandroid.query.Select;
 import com.ivymobi.abb.pw.R;
-import com.ivymobi.abb.pw.adapter.FavoriteRecyclerAdapter;
+import com.ivymobi.abb.pw.adapter.ListFavoriteAdapter;
 import com.ivymobi.abb.pw.beans.Collection;
 import com.ivymobi.abb.pw.listener.OnFavoriteRecyclerListener;
 
@@ -56,7 +56,7 @@ public class FavoriteFragment extends Fragment implements OnFavoriteRecyclerList
     private void updateData() {
         List<Collection> collections = new Select().from(Collection.class).execute();
 
-        mRecyclerView.setAdapter(new FavoriteRecyclerAdapter(getActivity(), collections, FavoriteFragment.this));
+        mRecyclerView.setAdapter(new ListFavoriteAdapter(getActivity(), collections, FavoriteFragment.this));
     }
 
     @Override
@@ -72,10 +72,10 @@ public class FavoriteFragment extends Fragment implements OnFavoriteRecyclerList
 
     @Click
     public void addButtonClicked() {
-        LayoutInflater li = LayoutInflater.from(getContext());
+        LayoutInflater li = LayoutInflater.from(getActivity().getApplicationContext());
         View promptsView = li.inflate(R.layout.prompts, null);
 
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity().getApplicationContext());
         alertDialogBuilder.setView(promptsView);
         alertDialogBuilder.setTitle("新建分组");
 

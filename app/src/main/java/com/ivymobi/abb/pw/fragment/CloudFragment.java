@@ -1,35 +1,22 @@
 package com.ivymobi.abb.pw.fragment;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.ivymobi.abb.pw.R;
-import com.ivymobi.abb.pw.activity.CollectionActivity_;
-import com.ivymobi.abb.pw.activity.PDFActivity_;
-import com.ivymobi.abb.pw.adapter.FolderRecyclerAdapter;
-import com.ivymobi.abb.pw.adapter.ItemRecyclerAdapter;
+import com.ivymobi.abb.pw.adapter.ListFolderAdapter;
 import com.ivymobi.abb.pw.beans.Catalog;
 import com.ivymobi.abb.pw.beans.File;
 import com.ivymobi.abb.pw.listener.OnFolderRecyclerListener;
-import com.ivymobi.abb.pw.listener.OnItemRecyclerListener;
-import com.ivymobi.abb.pw.listener.OnMenuItemClickListener;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.thin.downloadmanager.DefaultRetryPolicy;
-import com.thin.downloadmanager.DownloadRequest;
-import com.thin.downloadmanager.DownloadStatusListener;
-import com.thin.downloadmanager.ThinDownloadManager;
 
 import org.androidannotations.annotations.EFragment;
 import org.json.JSONArray;
@@ -39,14 +26,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.onekeyshare.OnekeyShare;
 import cz.msebera.android.httpclient.Header;
 
 import static java.lang.System.err;
 
 @EFragment
-public class CloudFragment extends Fragment implements OnFolderRecyclerListener, OnItemRecyclerListener, OnMenuItemClickListener {
+public class CloudFragment extends Fragment implements OnFolderRecyclerListener {
 
     private View mView;
 
@@ -128,7 +113,7 @@ public class CloudFragment extends Fragment implements OnFolderRecyclerListener,
                             ArrayList<Catalog> catalogList = fetchCatalog(list.getJSONArray("subs"));
                             root.setChildren(catalogList);
 
-                            mRecyclerView.setAdapter(new FolderRecyclerAdapter(getActivity(), root, CloudFragment.this));
+                            mRecyclerView.setAdapter(new ListFolderAdapter(getActivity(), root, CloudFragment.this));
 
                         } catch (JSONException e) {
                             err.println(e);
@@ -181,146 +166,31 @@ public class CloudFragment extends Fragment implements OnFolderRecyclerListener,
         if (root == null) {
             getCatalog();
         } else if (root.hasChildren()) {
-
-            mRecyclerView.setAdapter(new FolderRecyclerAdapter(getActivity(), root, CloudFragment.this));
-        } else if (root.hasFiles()) {
-            ItemRecyclerAdapter itemRecyclerAdapter = new ItemRecyclerAdapter(getActivity(), root.getFiles(), CloudFragment.this);
-            itemRecyclerAdapter.setOnMenuItemClickListener(this);
-            mRecyclerView.setAdapter(itemRecyclerAdapter);
+            mRecyclerView.setAdapter(new ListFolderAdapter(getActivity(), root, CloudFragment.this));
         }
     }
 
     @Override
     public void onFolderRecyclerClicked(View v, int position) {
-        CloudFragment cloudFragment = new CloudFragment();
-        cloudFragment.root = root.getChildren().get(position);
 
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.container_framelayout, cloudFragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
-    }
+        if (root.getChildren().get(position).hasFiles()) {
+            System.out.println("has files");
 
-    @Override
-    public void onItemRecyclerClicked(View v, int position) {
-        File file = root.getFiles().get(position);
+            DownloadedFragment downloadedFragment = new DownloadedFragment();
+            downloadedFragment.files = root.getChildren().get(position).getFiles();
 
-        Intent intent = new Intent(getActivity(), PDFActivity_.class);
-        intent.putExtra("url", "http://ivymobi-storage.qiniudn.com/abbpw/PDF_file/abb_instruction/ABB%2bin%2bChina_CN_2014.pdf");
-        startActivity(intent);
-    }
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transaction.replace(R.id.container_framelayout, downloadedFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        } else {
+            CloudFragment cloudFragment = new CloudFragment();
+            cloudFragment.root = root.getChildren().get(position);
 
-    @Override
-    public void onMenuItemClick(MenuItem item, File file) {
-
-        switch (item.getItemId()) {
-            case 0:
-
-                downloadFile(file);
-
-                break;
-            case 1:
-
-                shareFile(file);
-                break;
-
-            case 2:
-
-                collectionFile(file);
-
-                break;
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transaction.replace(R.id.container_framelayout, cloudFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
         }
-
-    }
-
-    private void shareFile(final File file) {
-        final AsyncHttpClient client = new AsyncHttpClient();
-        client.get("http://yangbentong.com/api/7a94881a-df96-429d-9e01-dece4f46fee2/storage/" + file.getUuid(), new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                try {
-
-                    String fileUrl = response.getString("url");
-
-                    ShareSDK.initSDK(getContext());
-                    OnekeyShare oks = new OnekeyShare();
-                    oks.setText(file.getTitle());
-                    oks.setUrl(fileUrl);
-                    oks.show(getContext());
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-    private void collectionFile(final File file) {
-
-        Intent intent = new Intent(getActivity(), CollectionActivity_.class);
-        intent.putExtra("uuid", file.getUuid());
-        startActivity(intent);
-    }
-
-    private void downloadFile(final File file) {
-        final AsyncHttpClient client = new AsyncHttpClient();
-        client.get("http://yangbentong.com/api/7a94881a-df96-429d-9e01-dece4f46fee2/storage/" + file.getUuid(), new JsonHttpResponseHandler() {
-            @Override
-            public void onStart() {
-                if (pDialog != null) {
-                    return;
-                }
-
-                pDialog = new ProgressDialog(getActivity());
-                pDialog.setIndeterminate(false);
-                pDialog.setCancelable(false);
-                pDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                pDialog.setMessage("Download...");
-                pDialog.show();
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                try {
-
-                    String fileUrl = response.getString("url");
-                    final String fileName = response.getString("file_key");
-
-                    Uri downloadUri = Uri.parse(fileUrl);
-                    Uri destinationUri = Uri.parse(getContext().getExternalCacheDir().toString() + "/" + fileName);
-                    DownloadRequest downloadRequest = new DownloadRequest(downloadUri)
-                            .setRetryPolicy(new DefaultRetryPolicy())
-                            .setDestinationURI(destinationUri).setPriority(DownloadRequest.Priority.HIGH)
-                            .setDownloadListener(new DownloadStatusListener() {
-
-                                @Override
-                                public void onDownloadComplete(int id) {
-                                    pDialog.dismiss();
-                                    Toast.makeText(getContext(), R.string.download_success, Toast.LENGTH_SHORT).show();
-
-                                    file.setLocalPath(fileName);
-                                    file.save();
-                                }
-
-                                @Override
-                                public void onDownloadFailed(int id, int errorCode, String errorMessage) {
-                                    pDialog.dismiss();
-                                    Toast.makeText(getContext(), R.string.download_failed, Toast.LENGTH_SHORT).show();
-                                }
-
-                                @Override
-                                public void onProgress(int id, long totalBytes, long downlaodedBytes, int progress) {
-                                    pDialog.setProgress(progress);
-                                }
-                            });
-
-                    ThinDownloadManager downloadManager = new ThinDownloadManager();
-                    int downloadId = downloadManager.add(downloadRequest);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
     }
 }

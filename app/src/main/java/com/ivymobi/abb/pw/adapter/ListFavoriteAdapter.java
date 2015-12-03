@@ -8,55 +8,44 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.ivymobi.abb.pw.R;
-import com.ivymobi.abb.pw.beans.Catalog;
-import com.ivymobi.abb.pw.listener.OnFolderRecyclerListener;
-import com.ivymobi.abb.pw.util.PreferenceUtil;
+import com.ivymobi.abb.pw.beans.Collection;
+import com.ivymobi.abb.pw.listener.OnFavoriteRecyclerListener;
 
-import java.util.ArrayList;
-import java.util.Locale;
+import java.util.List;
 
-public class FolderRecyclerAdapter extends RecyclerView.Adapter<FolderRecyclerAdapter.ViewHolder> {
+public class ListFavoriteAdapter extends RecyclerView.Adapter<ListFavoriteAdapter.ViewHolder> {
 
     private LayoutInflater mInflater;
-    private Catalog mData;
-    private OnFolderRecyclerListener mListener;
-    private Locale locale;
+    private List<Collection> mData;
+    private OnFavoriteRecyclerListener mListener;
 
-    public FolderRecyclerAdapter(Context context, Catalog data, OnFolderRecyclerListener listener) {
+    public ListFavoriteAdapter(Context context, List<Collection> data, OnFavoriteRecyclerListener listener) {
         mInflater = LayoutInflater.from(context);
         mData = data;
         mListener = listener;
-
-        locale = context.getResources().getConfiguration().locale;
     }
 
     @Override
-    public FolderRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public ListFavoriteAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         return new ViewHolder(mInflater.inflate(R.layout.folder_list, viewGroup, false));
     }
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int i) {
 
-        ArrayList<Catalog> children = mData.getChildren();
-
-        if (locale == Locale.ENGLISH) {
-            viewHolder.nameTextView.setText(children.get(i).getEnName());
-        } else {
-            viewHolder.nameTextView.setText(children.get(i).getName());
-        }
+        viewHolder.nameTextView.setText(mData.get(i).getName());
 
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onFolderRecyclerClicked(v, i);
+                mListener.onItemRecyclerClicked(v, mData.get(i));
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return mData.getChildren().size();
+        return mData.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
