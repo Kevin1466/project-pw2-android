@@ -52,8 +52,6 @@ public class ListItemAdapter extends BaseAdapter {
         final ViewHolder viewHolder;
         File file = beans.get(position);
 
-        System.out.println(file.getTitle());
-
         if (convertView == null) {
             convertView = View.inflate(context, R.layout.item_list, null);
             viewHolder = new ViewHolder(convertView);
