@@ -33,6 +33,16 @@ public class ListItemAdapter extends BaseAdapter {
     }
 
     @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
+    @Override
+    public int getViewTypeCount() {
+        return beans.size();
+    }
+
+    @Override
     public int getCount() {
         return beans.size();
     }

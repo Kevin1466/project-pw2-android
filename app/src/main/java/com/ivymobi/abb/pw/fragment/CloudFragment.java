@@ -4,17 +4,13 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.ivymobi.abb.pw.R;
-import com.ivymobi.abb.pw.adapter.ListFolderAdapter;
 import com.ivymobi.abb.pw.beans.Catalog;
 import com.ivymobi.abb.pw.beans.File;
-import com.ivymobi.abb.pw.listener.OnFolderRecyclerListener;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -31,29 +27,19 @@ import cz.msebera.android.httpclient.Header;
 import static java.lang.System.err;
 
 @EFragment
-public class CloudFragment extends Fragment implements OnFolderRecyclerListener {
+public class CloudFragment extends Fragment {
 
     private View mView;
 
-    public Catalog root;
-    private RecyclerView mRecyclerView = null;
     private HashMap<String, File> filesMap = new HashMap<>();
     private ProgressDialog pDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        if (mView == null) {
-            mView = inflater.inflate(R.layout.fragment_cloud, container, false);
+        mView = inflater.inflate(R.layout.fragment_cloud, container, false);
 
-            mRecyclerView = (RecyclerView) mView.findViewById(R.id.cloud_list_rv);
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        }
-
-        ViewGroup parent = (ViewGroup) mView.getParent();
-        if (parent != null) {
-            parent.removeView(mView);
-        }
+        getCatalog();
 
         return mView;
     }
@@ -107,13 +93,18 @@ public class CloudFragment extends Fragment implements OnFolderRecyclerListener 
 
                         try {
                             JSONObject list = response.getJSONObject(0);
-                            root = new Catalog();
+                            Catalog root = new Catalog();
                             root.setName(list.getString("name"));
 
                             ArrayList<Catalog> catalogList = fetchCatalog(list.getJSONArray("subs"));
                             root.setChildren(catalogList);
 
-                            mRecyclerView.setAdapter(new ListFolderAdapter(getActivity(), root, CloudFragment.this));
+                            ListFolderFragment listFolderFragment = new ListFolderFragment();
+                            listFolderFragment.root = root;
+
+                            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                            transaction.replace(R.id.container_framelayout, listFolderFragment);
+                            transaction.commit();
 
                         } catch (JSONException e) {
                             err.println(e);
@@ -157,42 +148,5 @@ public class CloudFragment extends Fragment implements OnFolderRecyclerListener 
         }
 
         return catalogList;
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        if (root == null) {
-            getCatalog();
-        } else if (root.hasChildren()) {
-            mRecyclerView.setAdapter(new ListFolderAdapter(getActivity(), root, CloudFragment.this));
-        }
-    }
-
-    @Override
-    public void onFolderRecyclerClicked(View v, int position) {
-
-        if (root.getChildren().get(position).hasFiles()) {
-            System.out.println("has files");
-
-            DownloadedFragment downloadedFragment = new DownloadedFragment();
-            downloadedFragment.files = root.getChildren().get(position).getFiles();
-
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            transaction.replace(R.id.container_framelayout, downloadedFragment);
-            transaction.addToBackStack(null);
-            transaction.commit();
-        } else {
-            CloudFragment cloudFragment = new CloudFragment();
-            cloudFragment.root = root.getChildren().get(position);
-
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            transaction.replace(R.id.container_framelayout, cloudFragment);
-            transaction.addToBackStack(null);
-            transaction.commit();
-        }
     }
 }

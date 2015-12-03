@@ -61,11 +61,11 @@ public class FavoriteFragment extends Fragment implements OnFavoriteRecyclerList
 
     @Override
     public void onItemRecyclerClicked(View v, Collection collection) {
-        DownloadedFragment downloadedFragment = new DownloadedFragment();
-        downloadedFragment.files = collection.files();
+        ListItemFragment listItemFragment = new ListItemFragment();
+        listItemFragment.files = collection.files();
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.container_framelayout, downloadedFragment);
+        transaction.replace(R.id.container_framelayout, listItemFragment);
         transaction.addToBackStack(null);
         transaction.commit();
     }

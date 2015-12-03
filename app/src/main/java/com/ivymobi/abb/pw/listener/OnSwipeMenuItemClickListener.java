@@ -11,7 +11,7 @@ import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.ivymobi.abb.pw.R;
 import com.ivymobi.abb.pw.activity.CollectionActivity_;
 import com.ivymobi.abb.pw.beans.File;
-import com.ivymobi.abb.pw.fragment.DownloadedFragment;
+import com.ivymobi.abb.pw.fragment.ListItemFragment;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.thin.downloadmanager.DefaultRetryPolicy;
@@ -37,10 +37,10 @@ import cz.msebera.android.httpclient.Header;
 
 public class OnSwipeMenuItemClickListener implements SwipeMenuListView.OnMenuItemClickListener {
     List<File> files;
-    DownloadedFragment fragment;
+    ListItemFragment fragment;
     UMSocialService umSocialService = UMServiceFactory.getUMSocialService("com.umeng.share");
 
-    public OnSwipeMenuItemClickListener(DownloadedFragment fragment, List<File> files) {
+    public OnSwipeMenuItemClickListener(ListItemFragment fragment, List<File> files) {
         this.files = files;
         this.fragment = fragment;
     }
@@ -91,7 +91,7 @@ public class OnSwipeMenuItemClickListener implements SwipeMenuListView.OnMenuIte
                     customPlatform.mClickListener = new SocializeListeners.OnSnsPlatformClickListener() {
                         @Override
                         public void onClick(Context context, SocializeEntity socializeEntity, SocializeListeners.SnsPostListener snsPostListener) {
-                            ClipboardManager cmb = (ClipboardManager)context.getSystemService(Context.CLIPBOARD_SERVICE);
+                            ClipboardManager cmb = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
                             cmb.setText("xxxxx");
                         }
                     };
