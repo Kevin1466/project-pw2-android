@@ -11,9 +11,12 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.ivymobi.abb.pw.R;
+import com.ivymobi.abb.pw.app.MyApplication;
 
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
+
+import java.util.Locale;
 
 @EActivity
 public class EventActivity extends AppCompatActivity implements View.OnTouchListener {
@@ -21,12 +24,16 @@ public class EventActivity extends AppCompatActivity implements View.OnTouchList
     @ViewById(R.id.hdhg)
     ImageView imageView;
 
+    private Locale locale;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle(R.string.event);
 
         setContentView(R.layout.activity_event);
+
+        locale = getResources().getConfiguration().locale;
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.mipmap.icon_home);
@@ -48,27 +55,46 @@ public class EventActivity extends AppCompatActivity implements View.OnTouchList
         final Rect rect = new Rect();
         v.getHitRect(rect);
 
-        float x = event.getX();
-        float y = event.getY();
+        if (locale == Locale.ENGLISH) {
 
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_UP:
-                if (x > 300 && x < 400 && y > 160 && y < 260) {
-                    Intent intent = new Intent(this, VideoActivity_.class);
-                    intent.putExtra("url", "http://ivymobi-storage.qiniudn.com/abbpw/Video/abb_pw_2014_en.mp4");
-                    startActivity(intent);
-                } else if (x > 0 && x < 248 && y > 576 && y < 626) {
-                    Uri uri = Uri.parse("http://new.abb.com/cn/power-world-2014/seminars-ppt-sharing");
-                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                    startActivity(intent);
-                } else if (x > 0 && x < 352 && y > 4826 && y < 5068) {
-                    Intent intent = new Intent(this, VideoActivity_.class);
-                    intent.putExtra("url", "http://ivymobi-storage.qiniudn.com/abbpw/Video/ABB_PW_2011_cn.mp4");
-                    startActivity(intent);
-                }
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_UP:
+                    if (MyApplication.clickHit(imageView, event, 300, 400, 160, 260)) {
+                        Intent intent = new Intent(this, VideoActivity_.class);
+                        intent.putExtra("url", "http://ivymobi-storage.qiniudn.com/abbpw/Video/abb_pw_2014_en.mp4");
+                        startActivity(intent);
+                    } else if (MyApplication.clickHit(imageView, event, 0, 358, 617, 667)) {
+                        Uri uri = Uri.parse("http://new.abb.com/cn/power-world-2014/seminars-ppt-sharing");
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        startActivity(intent);
+                    } else if (MyApplication.clickHit(imageView, event, 0, 352, 5299, 5541)) {
+                        Intent intent = new Intent(this, VideoActivity_.class);
+                        intent.putExtra("url", "http://ivymobi-storage.qiniudn.com/abbpw/Video/ABB_PW_2011_cn.mp4");
+                        startActivity(intent);
+                    }
 
-                break;
+                    break;
+            }
+        } else {
 
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_UP:
+                    if (MyApplication.clickHit(imageView, event, 300, 400, 160, 260)) {
+                        Intent intent = new Intent(this, VideoActivity_.class);
+                        intent.putExtra("url", "http://ivymobi-storage.qiniudn.com/abbpw/Video/abb_pw_2014_en.mp4");
+                        startActivity(intent);
+                    } else if (MyApplication.clickHit(imageView, event, 0, 248, 576, 626)) {
+                        Uri uri = Uri.parse("http://new.abb.com/cn/power-world-2014/seminars-ppt-sharing");
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        startActivity(intent);
+                    } else if (MyApplication.clickHit(imageView, event, 0, 352, 4826, 5068)) {
+                        Intent intent = new Intent(this, VideoActivity_.class);
+                        intent.putExtra("url", "http://ivymobi-storage.qiniudn.com/abbpw/Video/ABB_PW_2011_cn.mp4");
+                        startActivity(intent);
+                    }
+
+                    break;
+            }
         }
         return true;
     }

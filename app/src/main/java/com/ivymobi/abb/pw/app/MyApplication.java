@@ -1,5 +1,8 @@
 package com.ivymobi.abb.pw.app;
 
+import android.view.MotionEvent;
+import android.widget.ImageView;
+
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Configuration;
 import com.activeandroid.app.Application;
@@ -25,7 +28,18 @@ public class MyApplication extends Application {
         ImageLoader.getInstance().init(config);
     }
 
-    public Locale getLocale() {
-        return getResources().getConfiguration().locale;
+    public static boolean clickHit(ImageView imageView, MotionEvent event, float minX, float maxX, float minY, float maxY) {
+        float widthScale = imageView.getDrawable().getIntrinsicWidth() / imageView.getWidth();
+        float heightScale = imageView.getDrawable().getIntrinsicHeight() / imageView.getHeight();
+
+        float x = event.getX();
+        float y = event.getY();
+
+        minX *= widthScale;
+        maxX *= widthScale;
+        minY *= heightScale;
+        maxY *= heightScale;
+
+        return x > minX && x < maxX && y > minY && y < maxY;
     }
 }

@@ -14,15 +14,21 @@ import android.widget.ImageView;
 import com.ivymobi.abb.pw.R;
 import com.ivymobi.abb.pw.activity.PDFActivity_;
 import com.ivymobi.abb.pw.activity.VideoActivity_;
+import com.ivymobi.abb.pw.app.MyApplication;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 
+import org.androidannotations.annotations.EFragment;
+
 import java.util.Locale;
 
+@EFragment
 public class FragmentContent extends Fragment implements View.OnTouchListener {
     private ImageLoader imageLoader = ImageLoader.getInstance();
     private Locale locale;
+
+    ImageView imageView;
 
     public static Fragment getInstance(Bundle bundle) {
         FragmentContent fragment = new FragmentContent();
@@ -46,8 +52,9 @@ public class FragmentContent extends Fragment implements View.OnTouchListener {
         super.onViewCreated(view, savedInstanceState);
 
         locale = getContext().getResources().getConfiguration().locale;
+        imageView = (ImageView) view.findViewById(R.id.imageView);
 
-        initView(view);
+        initView();
     }
 
     @Override
@@ -57,40 +64,59 @@ public class FragmentContent extends Fragment implements View.OnTouchListener {
 
         Integer position = getArguments().getInt("position");
 
-        float x = event.getX();
-        float y = event.getY();
-
         switch (event.getAction()) {
             case MotionEvent.ACTION_UP:
 
                 switch (position) {
                     case 0:
 
-                        if (x > 0 && x < 700 && y > 0 && y < 336) {
-                            Intent intent = new Intent(getActivity(), VideoActivity_.class);
-                            intent.putExtra("url", "http://ivymobi-storage.qiniudn.com/abbpw/Video/ABB_Instruction.mp4");
-                            startActivity(intent);
-                        } else if (x > 572 && x < 702 && y > 390 && y < 440) {
-                            Intent intent = new Intent(getActivity(), PDFActivity_.class);
-                            intent.putExtra("url", "http://ivymobi-storage.qiniudn.com/abbpw/PDF_file/abb_instruction/ABB%2bin%2bChina_CN_2014.pdf");
-                            startActivity(intent);
+                        if (locale == Locale.ENGLISH) {
+                            if (MyApplication.clickHit(imageView, event, 0, 702, 0, 336)) {
+                                Intent intent = new Intent(getActivity(), VideoActivity_.class);
+                                intent.putExtra("url", "http://ivymobi-storage.qiniudn.com/abbpw/Video/ABB_Instruction.mp4");
+                                startActivity(intent);
+                            } else if (MyApplication.clickHit(imageView, event, 572, 702, 419, 469)) {
+                                Intent intent = new Intent(getActivity(), PDFActivity_.class);
+                                intent.putExtra("url", "http://ivymobi-storage.qiniudn.com/abbpw/PDF_file/abb_instruction/ABB%2bin%2bChina_EN_2014.pdf");
+                                startActivity(intent);
+                            }
+                        } else {
+                            if (MyApplication.clickHit(imageView, event, 0, 700, 0, 336)) {
+                                Intent intent = new Intent(getActivity(), VideoActivity_.class);
+                                intent.putExtra("url", "http://ivymobi-storage.qiniudn.com/abbpw/Video/ABB_Instruction.mp4");
+                                startActivity(intent);
+                            } else if (MyApplication.clickHit(imageView, event, 572, 702, 390, 440)) {
+                                Intent intent = new Intent(getActivity(), PDFActivity_.class);
+                                intent.putExtra("url", "http://ivymobi-storage.qiniudn.com/abbpw/PDF_file/abb_instruction/ABB%2bin%2bChina_CN_2014.pdf");
+                                startActivity(intent);
+                            }
                         }
-
 
                         break;
 
                     case 1:
 
-                        if (x > 0 && x < 700 && y > 0 && y < 336) {
-                            Intent intent = new Intent(getActivity(), VideoActivity_.class);
-                            intent.putExtra("url", "http://ivymobi-storage.qiniudn.com/abbpw/Video/ABB_Power.mp4");
-                            startActivity(intent);
-                        } else if (x > 572 && x < 702 && y > 390 && y < 440) {
-                            Intent intent = new Intent(getActivity(), PDFActivity_.class);
-                            intent.putExtra("url", "http://ivymobi-storage.qiniudn.com/abbpw/PDF_file/abb_power/ABB_power_cn.pdf");
-                            startActivity(intent);
+                        if (locale == Locale.ENGLISH) {
+                            if (MyApplication.clickHit(imageView, event, 0, 700, 0, 336)) {
+                                Intent intent = new Intent(getActivity(), VideoActivity_.class);
+                                intent.putExtra("url", "http://ivymobi-storage.qiniudn.com/abbpw/Video/ABB_Power.mp4");
+                                startActivity(intent);
+                            } else if (MyApplication.clickHit(imageView, event, 572, 702, 419, 469)) {
+                                Intent intent = new Intent(getActivity(), PDFActivity_.class);
+                                intent.putExtra("url", "http://ivymobi-storage.qiniudn.com/abbpw/PDF_file/abb_power/ABB_power_en.pdf");
+                                startActivity(intent);
+                            }
+                        } else {
+                            if (MyApplication.clickHit(imageView, event, 0, 700, 0, 336)) {
+                                Intent intent = new Intent(getActivity(), VideoActivity_.class);
+                                intent.putExtra("url", "http://ivymobi-storage.qiniudn.com/abbpw/Video/ABB_Power.mp4");
+                                startActivity(intent);
+                            } else if (MyApplication.clickHit(imageView, event, 572, 702, 390, 440)) {
+                                Intent intent = new Intent(getActivity(), PDFActivity_.class);
+                                intent.putExtra("url", "http://ivymobi-storage.qiniudn.com/abbpw/PDF_file/abb_power/ABB_power_cn.pdf");
+                                startActivity(intent);
+                            }
                         }
-
 
                         break;
                 }
@@ -102,10 +128,9 @@ public class FragmentContent extends Fragment implements View.OnTouchListener {
         return true;
     }
 
-    private void initView(View view) {
+    private void initView() {
 
         Integer position = getArguments().getInt("position");
-        ImageView imageView = (ImageView) view.findViewById(R.id.imageView);
         imageView.setOnTouchListener(this);
 
         DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).imageScaleType(ImageScaleType.NONE).build();

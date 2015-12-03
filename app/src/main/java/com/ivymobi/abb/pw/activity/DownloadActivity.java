@@ -80,8 +80,6 @@ public class DownloadActivity extends AppCompatActivity {
                 break;
         }
 
-        tabsLayout.setBackgroundResource(R.drawable.tab_bg_3);
-
         return view;
     }
 }

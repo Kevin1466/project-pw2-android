@@ -32,4 +32,6 @@
     <string name="action_ok">确定</string>
     <string name="activity_main">ABB中国电力世界</string>
     <string name="dialog_title_clear_cache">将清空所有已下载样本，是否继续？</string>
+    <string name="action_create">新建</string>
+    <string name="action_edit">编辑</string>
 </resources>

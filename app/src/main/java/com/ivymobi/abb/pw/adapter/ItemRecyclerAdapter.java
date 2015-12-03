@@ -51,9 +51,9 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapte
         File file = mData.get(i);
 
         if (locale == Locale.ENGLISH) {
-            viewHolder.nameTextView.setText(file.getTitle());
-        } else {
             viewHolder.nameTextView.setText(file.getEnTitle());
+        } else {
+            viewHolder.nameTextView.setText(file.getTitle());
         }
 
         if (!file.isDownload()) {

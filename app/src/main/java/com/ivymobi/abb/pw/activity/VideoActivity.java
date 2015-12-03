@@ -25,6 +25,8 @@ public class VideoActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle(R.string.activity_main);
+
         setContentView(R.layout.activity_video);
 
         pDialog = new ProgressDialog(VideoActivity.this);

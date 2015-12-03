@@ -35,4 +35,6 @@
     <string name="action_ok">OK</string>
     <string name="activity_main">ABB Power World China</string>
     <string name="dialog_title_clear_cache">All downloaded samples will be removed!</string>
+    <string name="action_create">Create</string>
+    <string name="action_edit">Edit</string>
 </resources>

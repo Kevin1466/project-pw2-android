@@ -22,14 +22,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="新建" />
+                android:text="@string/action_create" />
 
             <Button
                 android:id="@+id/edit_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="编辑" />
+                android:text="@string/action_edit" />
         </LinearLayout>
 
         <View

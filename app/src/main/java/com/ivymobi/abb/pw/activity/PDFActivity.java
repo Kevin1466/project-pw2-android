@@ -25,6 +25,7 @@ public class PDFActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle(R.string.activity_main);
         setContentView(R.layout.activity_pdf);
 
         Intent intent = getIntent();

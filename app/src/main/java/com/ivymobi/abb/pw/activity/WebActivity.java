@@ -20,6 +20,8 @@ public class WebActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle(R.string.activity_main);
+
         setContentView(R.layout.activity_web);
 
         Intent intent = getIntent();

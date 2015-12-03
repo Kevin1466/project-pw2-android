@@ -21,9 +21,11 @@
 
         <TextView
             android:id="@+id/list_item_text"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="text" />
+            android:text="text"
+            android:layout_marginRight="50dp"
+            android:maxLines="1" />
 
         <Space
             android:layout_width="0dp"
