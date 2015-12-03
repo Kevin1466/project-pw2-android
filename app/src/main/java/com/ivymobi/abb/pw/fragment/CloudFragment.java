@@ -48,7 +48,7 @@ public class CloudFragment extends Fragment {
         pDialog = new ProgressDialog(getActivity());
         pDialog.setIndeterminate(false);
         pDialog.setCancelable(false);
-        pDialog.setMessage("Buffering...");
+        pDialog.setMessage(getResources().getString(R.string.loading));
         pDialog.show();
 
         final AsyncHttpClient client = new AsyncHttpClient();
