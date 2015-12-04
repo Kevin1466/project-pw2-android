@@ -34,7 +34,7 @@ public class PDFActivity extends AppCompatActivity {
         pDialog = new ProgressDialog(PDFActivity.this);
         pDialog.setIndeterminate(false);
         pDialog.setCancelable(false);
-        pDialog.setMessage("Loading...");
+        pDialog.setMessage(getResources().getString(R.string.loading));
         pDialog.show();
 
         AsyncHttpClient client = new AsyncHttpClient();
