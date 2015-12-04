@@ -24,7 +24,8 @@ import com.umeng.socialize.bean.SocializeEntity;
 import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
 import com.umeng.socialize.controller.listener.SocializeListeners;
-import com.umeng.socialize.sso.UMQQSsoHandler;
+import com.umeng.socialize.media.UMWebPage;
+import com.umeng.socialize.sso.EmailHandler;
 import com.umeng.socialize.weixin.controller.UMWXHandler;
 
 import org.json.JSONException;
@@ -75,7 +76,7 @@ public class OnSwipeMenuItemClickListener implements SwipeMenuListView.OnMenuIte
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
 
-                    String fileUrl = response.getString("url");
+                    final String fileUrl = response.getString("url");
 
                     UMWXHandler wxHandler = new UMWXHandler(fragment.getContext(), "wx508bd5b1879c3b8e", "f0c9758ef8a2775f21c6e977aa06e5a3");
                     wxHandler.addToSocialSDK();
@@ -84,33 +85,25 @@ public class OnSwipeMenuItemClickListener implements SwipeMenuListView.OnMenuIte
                     wxCircleHandler.setToCircle(true);
                     wxCircleHandler.addToSocialSDK();
 
-                    UMQQSsoHandler qqSsoHandler = new UMQQSsoHandler(fragment.getActivity(), "100424468", "c7394704798a158208a74ab60104f0ba");
-                    qqSsoHandler.addToSocialSDK();
+                    EmailHandler emailHandler = new EmailHandler();
+                    emailHandler.addToSocialSDK();
 
-                    CustomPlatform customPlatform = new CustomPlatform("复制链接", R.mipmap.icon_albums);
+                    CustomPlatform customPlatform = new CustomPlatform("COPY_LINK", fragment.getResources().getString(R.string.copy_link), R.mipmap.icon_albums);
                     customPlatform.mClickListener = new SocializeListeners.OnSnsPlatformClickListener() {
                         @Override
                         public void onClick(Context context, SocializeEntity socializeEntity, SocializeListeners.SnsPostListener snsPostListener) {
                             ClipboardManager cmb = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                            cmb.setText("xxxxx");
+                            cmb.setText(fileUrl);
+                            Toast.makeText(fragment.getContext(), R.string.copy_success, Toast.LENGTH_SHORT).show();
                         }
                     };
 
-                    umSocialService.getConfig().setPlatforms(SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE, SHARE_MEDIA.EMAIL);
                     umSocialService.getConfig().addCustomPlatform(customPlatform);
+                    umSocialService.getConfig().removePlatform(SHARE_MEDIA.SINA, SHARE_MEDIA.QZONE, SHARE_MEDIA.QQ, SHARE_MEDIA.TENCENT);
+                    umSocialService.getConfig().setPlatformOrder(SHARE_MEDIA.EMAIL.toString(), SHARE_MEDIA.WEIXIN.toString(), SHARE_MEDIA.WEIXIN_CIRCLE.toString(), customPlatform.mKeyword);
                     umSocialService.setShareContent(file.getTitle());
+                    umSocialService.setShareMedia(new UMWebPage(fileUrl));
                     umSocialService.openShare(fragment.getActivity(), false);
-                    umSocialService.registerListener(new SocializeListeners.SnsPostListener() {
-                        @Override
-                        public void onStart() {
-
-                        }
-
-                        @Override
-                        public void onComplete(SHARE_MEDIA share_media, int i, SocializeEntity socializeEntity) {
-
-                        }
-                    });
 
                 } catch (JSONException e) {
                     e.printStackTrace();
