@@ -88,7 +88,16 @@ public class OnSwipeMenuItemClickListener implements SwipeMenuListView.OnMenuIte
                     EmailHandler emailHandler = new EmailHandler();
                     emailHandler.addToSocialSDK();
 
-                    CustomPlatform customPlatform = new CustomPlatform("COPY_LINK", fragment.getResources().getString(R.string.copy_link), R.mipmap.icon_albums);
+                    wxHandler.mCustomPlatform.mIcon = R.mipmap.icon_wenxin;
+                    wxHandler.mCustomPlatform.mShowWord = fragment.getResources().getString(R.string.weixin);
+
+                    wxCircleHandler.mCustomPlatform.mIcon = R.mipmap.icon_friends;
+                    wxCircleHandler.mCustomPlatform.mShowWord = fragment.getResources().getString(R.string.moments);
+
+                    emailHandler.mCustomPlatform.mIcon = R.mipmap.icon_email;
+                    emailHandler.mCustomPlatform.mShowWord = fragment.getResources().getString(R.string.email);
+
+                    CustomPlatform customPlatform = new CustomPlatform("COPY_LINK", fragment.getResources().getString(R.string.copy_link), R.mipmap.icon_copy);
                     customPlatform.mClickListener = new SocializeListeners.OnSnsPlatformClickListener() {
                         @Override
                         public void onClick(Context context, SocializeEntity socializeEntity, SocializeListeners.SnsPostListener snsPostListener) {

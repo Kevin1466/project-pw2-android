@@ -41,4 +41,7 @@
     <string name="buffering">Buffering...</string>
     <string name="copy_link">Copy URL</string>
     <string name="copy_success">Copy succeeded</string>
+    <string name="email">Friends</string>
+    <string name="moments">Moments</string>
+    <string name="weixin">Friends</string>
 </resources>
