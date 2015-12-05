@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.activeandroid.query.Select;
 import com.ivymobi.abb.pw.R;
@@ -31,6 +31,9 @@ import java.util.List;
 public class FavoriteFragment extends Fragment implements OnFavoriteRecyclerListener {
     private View mView;
     private RecyclerView mRecyclerView = null;
+
+    protected ListFavoriteAdapter adapter = null;
+    protected long itemCount = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -53,7 +56,13 @@ public class FavoriteFragment extends Fragment implements OnFavoriteRecyclerList
     private void updateData() {
         List<Collection> collections = new Select().from(Collection.class).execute();
 
-        mRecyclerView.setAdapter(new ListFavoriteAdapter(getActivity(), collections, FavoriteFragment.this));
+        adapter = new ListFavoriteAdapter(getActivity(), collections, FavoriteFragment.this);
+
+        adapter.setHasStableIds(true);
+
+        itemCount = adapter.getItemCount();
+
+        mRecyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -72,6 +81,12 @@ public class FavoriteFragment extends Fragment implements OnFavoriteRecyclerList
         transaction.replace(R.id.container_framelayout, listItemFragment);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    @Override
+    public void onDeleteImageClicked(View v, Collection collection) {
+        //TODO:delete item current click
+        Toast.makeText(this.getContext(),"delete"+ collection.getName(),Toast.LENGTH_LONG).show();
     }
 
     @Click
@@ -109,5 +124,13 @@ public class FavoriteFragment extends Fragment implements OnFavoriteRecyclerList
 
         // show it
         alertDialog.show();
+    }
+
+    @Click
+    public void editButtonClicked() {
+        for (int i = 0; i < itemCount; i++) {
+            RecyclerView.ViewHolder viewHolder = mRecyclerView.findViewHolderForItemId(i);
+            adapter.SwitchToEditStyle(viewHolder, this.getContext());
+        }
     }
 }

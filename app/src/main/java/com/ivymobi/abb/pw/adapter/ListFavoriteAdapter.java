@@ -1,11 +1,14 @@
 package com.ivymobi.abb.pw.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.ivymobi.abb.pw.R;
 import com.ivymobi.abb.pw.beans.Collection;
@@ -41,6 +44,13 @@ public class ListFavoriteAdapter extends RecyclerView.Adapter<ListFavoriteAdapte
                 mListener.onItemRecyclerClicked(v, mData.get(i));
             }
         });
+
+        viewHolder.deleteImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onDeleteImageClicked(v, mData.get(i));
+            }
+        });
     }
 
     @Override
@@ -48,13 +58,35 @@ public class ListFavoriteAdapter extends RecyclerView.Adapter<ListFavoriteAdapte
         return mData.size();
     }
 
+    @Override
+    public long getItemId(int position){
+        return position;
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView nameTextView;
+        EditText nameTextView;
+        ImageView deleteImageView;
+        ImageView arrowImageView;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            nameTextView = (TextView) itemView.findViewById(R.id.list_item_text);
+            nameTextView = (EditText) itemView.findViewById(R.id.list_item_text);
+            deleteImageView = (ImageView) itemView.findViewById(R.id.list_item_image);
+            arrowImageView = (ImageView) itemView.findViewById(R.id.list_item_arrow_image);
         }
+    }
+
+    public void SwitchToEditStyle(RecyclerView.ViewHolder holder, Context context){
+
+        ViewHolder viewHolder = (ViewHolder)holder;
+        viewHolder.deleteImageView.setVisibility(View.VISIBLE);
+        viewHolder.arrowImageView.setVisibility(View.GONE);
+
+        viewHolder.nameTextView.setEnabled(true);
+        viewHolder.nameTextView.setFocusableInTouchMode(true);
+        Drawable drawable = ContextCompat.getDrawable(context, R.drawable.bg_edittext);
+        viewHolder.nameTextView.setBackground(drawable);
+
     }
 }

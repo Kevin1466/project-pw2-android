@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:gravity="center_vertical"
@@ -17,28 +17,43 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="12dp"
-            android:src="@mipmap/icon_albums" />
-
-        <TextView
-            android:id="@+id/list_item_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="text"
-            android:layout_marginRight="50dp"
-            android:maxLines="1" />
-
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-
+            android:src="@mipmap/icon_delete"
+            android:visibility="gone"/>
         <ImageView
+            android:id="@+id/list_item_folder_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/list_item_image"
+            android:layout_marginRight="12dp"
+            android:src="@mipmap/icon_albums" />
+        <EditText
+            android:id="@+id/list_item_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/list_item_folder_image"
+            android:text="text"
+            android:layout_marginRight="50dp"
+            android:maxLines="1"
+            android:enabled="false"
+            android:textColor="@color/black"
+            android:textCursorDrawable="@color/black"
+            android:background="@color/white"
+            android:minWidth="50dp"/>
+
+        <!--<Space-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1" />-->
+
+        <ImageView
+            android:id="@+id/list_item_arrow_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
             android:src="@mipmap/icon_cell_arrow" />
 
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <View
         android:layout_width="match_parent"
