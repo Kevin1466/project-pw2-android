@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.ivymobi.abb.pw.R;
 import com.ivymobi.abb.pw.beans.Collection;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ListViewAdapter extends BaseAdapter {
@@ -19,7 +18,7 @@ public class ListViewAdapter extends BaseAdapter {
     private Context context;
     private List<Collection> beans;
 
-    private List<Integer> selectedList = new ArrayList<>();
+    public List<Integer> selectedList;
 
     class ViewHolder {
 
@@ -27,9 +26,10 @@ public class ListViewAdapter extends BaseAdapter {
         CheckBox cb;
     }
 
-    public ListViewAdapter(Context context, List<Collection> collections) {
+    public ListViewAdapter(Context context, List<Collection> collections, List<Integer> selectedList) {
         this.beans = collections;
         this.context = context;
+        this.selectedList = selectedList;
     }
 
     @Override
@@ -62,20 +62,22 @@ public class ListViewAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
+        final Integer collectionId = beans.get(position).getId().intValue();
+
         holder.tvName.setText(bean.getName());
         holder.cb.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
 
-                if (selectedList.contains(position)) {
-                    selectedList.remove(position);
+                if (selectedList.contains(collectionId)) {
+                    selectedList.remove(collectionId);
                 } else {
-                    selectedList.add(position);
+                    selectedList.add(collectionId);
                 }
             }
         });
 
-        holder.cb.setChecked(selectedList.contains(position));
+        holder.cb.setChecked(selectedList.contains(collectionId));
         return convertView;
     }
 

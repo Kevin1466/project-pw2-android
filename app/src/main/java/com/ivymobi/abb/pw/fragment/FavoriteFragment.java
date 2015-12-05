@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,11 +17,14 @@ import com.activeandroid.query.Select;
 import com.ivymobi.abb.pw.R;
 import com.ivymobi.abb.pw.adapter.ListFavoriteAdapter;
 import com.ivymobi.abb.pw.beans.Collection;
+import com.ivymobi.abb.pw.beans.CollectionFile;
+import com.ivymobi.abb.pw.beans.File;
 import com.ivymobi.abb.pw.listener.OnFavoriteRecyclerListener;
 
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @EFragment
@@ -30,17 +34,10 @@ public class FavoriteFragment extends Fragment implements OnFavoriteRecyclerList
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (mView == null) {
-            mView = inflater.inflate(R.layout.fragment_favorite, container, false);
+        mView = inflater.inflate(R.layout.fragment_favorite, container, false);
 
-            mRecyclerView = (RecyclerView) mView.findViewById(R.id.cloud_list_rv);
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        }
-
-        ViewGroup parent = (ViewGroup) mView.getParent();
-        if (parent != null) {
-            parent.removeView(mView);
-        }
+        mRecyclerView = (RecyclerView) mView.findViewById(R.id.cloud_list_rv);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         return mView;
     }
@@ -61,8 +58,15 @@ public class FavoriteFragment extends Fragment implements OnFavoriteRecyclerList
 
     @Override
     public void onItemRecyclerClicked(View v, Collection collection) {
+
+        List<CollectionFile> collectionFiles = CollectionFile.findByCollection(collection);
+        List<File> files = new ArrayList<>();
+        for (CollectionFile cf : collectionFiles) {
+            files.add(cf.file);
+        }
+
         ListItemFragment listItemFragment = new ListItemFragment();
-        listItemFragment.files = collection.files();
+        listItemFragment.files = files;
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.container_framelayout, listItemFragment);
@@ -72,18 +76,18 @@ public class FavoriteFragment extends Fragment implements OnFavoriteRecyclerList
 
     @Click
     public void addButtonClicked() {
-        LayoutInflater li = LayoutInflater.from(getActivity().getApplicationContext());
+        LayoutInflater li = LayoutInflater.from(getContext());
         View promptsView = li.inflate(R.layout.prompts, null);
 
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity().getApplicationContext());
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
         alertDialogBuilder.setView(promptsView);
-        alertDialogBuilder.setTitle("新建分组");
+        alertDialogBuilder.setTitle(R.string.new_group);
 
         final EditText inputEditText = (EditText) promptsView.findViewById(R.id.input_edit_text);
 
         alertDialogBuilder
                 .setCancelable(false)
-                .setPositiveButton("确定",
+                .setPositiveButton(R.string.action_ok,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 Collection collection = new Collection();
@@ -93,7 +97,7 @@ public class FavoriteFragment extends Fragment implements OnFavoriteRecyclerList
                                 updateData();
                             }
                         })
-                .setNegativeButton("取消",
+                .setNegativeButton(R.string.action_cancel,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
