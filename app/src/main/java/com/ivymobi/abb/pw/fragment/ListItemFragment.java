@@ -154,7 +154,7 @@ public class ListItemFragment extends Fragment {
     }
 
     public void refreshData() {
+        listView.setAdapter(listItemAdapter);
         listItemAdapter.notifyDataSetChanged();
-        listView.setMenuCreator(swipeMenuCreator());
     }
 }
