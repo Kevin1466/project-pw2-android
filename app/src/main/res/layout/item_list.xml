@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
@@ -19,9 +20,9 @@
         <ProgressBar
             android:id="@+id/list_item_progress_bar"
             android:layout_width="50dp"
-            android:visibility="gone"
             android:layout_height="70dp"
-            android:layout_marginRight="12dp" />
+            android:layout_marginRight="12dp"
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/list_item_image"
@@ -30,8 +31,9 @@
             android:layout_marginRight="12dp" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:gravity="center|left"
             android:orientation="vertical">
 
@@ -47,8 +49,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:maxLines="1"
                     android:ellipsize="end"
+                    android:maxLines="1"
                     android:text="New Text" />
 
             </LinearLayout>
@@ -78,10 +80,23 @@
 
         </LinearLayout>
 
-        <ProgressBar
+        <com.mikhaellopez.circularprogressbar.CircularProgressBar
+            android:id="@+id/list_item_download_progress"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:id="@+id/list_item_download_progress" />
+            android:visibility="gone"
+            app:background_progressbar_color="#dedede"
+            app:background_progressbar_width="5dp"
+            app:progressbar_color="#0098ed"
+            app:progressbar_width="5dp" />
+
+        <!--<ProgressBar-->
+        <!--android:id="@+id/list_item_download_progress"-->
+        <!--style="@style/Widget.AppCompat.ProgressBar"-->
+        <!--android:layout_width="40dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:max="100"-->
+        <!--android:visibility="gone" />-->
 
 
     </LinearLayout>

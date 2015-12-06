@@ -35,7 +35,7 @@ public class ListFolderAdapter extends RecyclerView.Adapter<ListFolderAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, final int i) {
+    public void onBindViewHolder(final ViewHolder viewHolder, final int i) {
 
         ArrayList<Catalog> children = mData.getChildren();
 
@@ -51,6 +51,15 @@ public class ListFolderAdapter extends RecyclerView.Adapter<ListFolderAdapter.Vi
                 mListener.onFolderRecyclerClicked(v, i);
             }
         });
+        viewHolder.nameTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!viewHolder.nameTextView.isFocusable()){
+                    mListener.onFolderRecyclerClicked(v, i);
+                }
+            }
+        });
+
     }
 
     @Override
@@ -60,7 +69,7 @@ public class ListFolderAdapter extends RecyclerView.Adapter<ListFolderAdapter.Vi
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView nameTextView;
+        public TextView nameTextView;
 
         public ViewHolder(View itemView) {
             super(itemView);

@@ -32,17 +32,20 @@
             android:id="@+id/list_item_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:layout_toRightOf="@+id/list_item_folder_image"
             android:layout_weight="1"
-            android:background="@color/white"
-            android:enabled="false"
-            android:padding="4dp"
-            android:maxLines="1"
-            android:minHeight="32dp"
+            android:layout_toRightOf="@+id/list_item_folder_image"
             android:text="text"
+            android:layout_marginRight="10dp"
+            android:maxLines="1"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:clickable="true"
+            android:enabled="true"
             android:textColor="@color/black"
-            android:textCursorDrawable="@color/black" />
+            android:textCursorDrawable="@color/black"
+            android:background="@color/white"
+            android:minWidth="50dp"
+            android:minHeight="32dp"/>
 
         <ImageView
             android:id="@+id/list_item_arrow_image"

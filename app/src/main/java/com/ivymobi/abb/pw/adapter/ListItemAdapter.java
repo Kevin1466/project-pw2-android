@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.ivymobi.abb.pw.R;
 import com.ivymobi.abb.pw.beans.File;
+import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -71,6 +72,17 @@ public class ListItemAdapter extends BaseAdapter {
             viewHolder.nameTextView.setText(file.getTitle());
         }
 
+        String tag = file.getTag();
+
+
+        if (tag.equals("CN")) {
+            viewHolder.ivLanguage.setImageResource(R.mipmap.icon_chiness);
+        } else if (tag.equals("EN")) {
+            viewHolder.ivLanguage.setImageResource(R.mipmap.icon_english);
+        } else {
+            viewHolder.ivLanguage.setImageResource(R.mipmap.icon_chinese_english);
+        }
+
         if (!file.isDownload()) {
             viewHolder.ivDownloaded.setVisibility(View.GONE);
         } else {
@@ -105,13 +117,13 @@ public class ListItemAdapter extends BaseAdapter {
         return convertView;
     }
 
-    class ViewHolder {
+    public class ViewHolder {
         TextView nameTextView;
         ImageView itemImageView;
         ImageView ivDownloaded;
         ImageView ivLanguage;
         ProgressBar progressBar;
-        ProgressBar downloadProgressBar;
+        CircularProgressBar downloadProgressBar;
 
         public ViewHolder(View view) {
             nameTextView = (TextView) view.findViewById(R.id.list_item_text);
@@ -119,7 +131,7 @@ public class ListItemAdapter extends BaseAdapter {
             ivDownloaded = (ImageView) view.findViewById(R.id.iv_downloaded);
             ivLanguage = (ImageView) view.findViewById(R.id.iv_language);
             progressBar = (ProgressBar) view.findViewById(R.id.list_item_progress_bar);
-            downloadProgressBar = (ProgressBar) view.findViewById(R.id.list_item_download_progress);
+            downloadProgressBar = (CircularProgressBar) view.findViewById(R.id.list_item_download_progress);
         }
     }
 }

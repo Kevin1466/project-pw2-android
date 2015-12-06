@@ -4,9 +4,11 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.view.View;
 import android.widget.Toast;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
+import com.baoyz.swipemenulistview.SwipeMenuLayout;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.ivymobi.abb.pw.R;
 import com.ivymobi.abb.pw.activity.CollectionActivity_;
@@ -14,6 +16,7 @@ import com.ivymobi.abb.pw.beans.File;
 import com.ivymobi.abb.pw.fragment.ListItemFragment;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 import com.thin.downloadmanager.DefaultRetryPolicy;
 import com.thin.downloadmanager.DownloadRequest;
 import com.thin.downloadmanager.DownloadStatusListener;
@@ -53,7 +56,7 @@ public class OnSwipeMenuItemClickListener implements SwipeMenuListView.OnMenuIte
         switch (index) {
             case 0:
                 if (!file.isDownload()) {
-                    downloadFile(file);
+                    downloadFile(file, position);
                 }
 
                 break;
@@ -127,7 +130,12 @@ public class OnSwipeMenuItemClickListener implements SwipeMenuListView.OnMenuIte
         fragment.startActivityForResult(intent, 0);
     }
 
-    private void downloadFile(final File file) {
+    private void downloadFile(final File file, int position) {
+
+        final SwipeMenuLayout layout = (SwipeMenuLayout) fragment.listView.getChildAt(position);
+        final CircularProgressBar progressBar = (CircularProgressBar) layout.findViewById(R.id.list_item_download_progress);
+        progressBar.setVisibility(View.GONE);
+
         final AsyncHttpClient client = new AsyncHttpClient();
         client.get("http://yangbentong.com/api/7a94881a-df96-429d-9e01-dece4f46fee2/storage/" + file.getUuid(), new JsonHttpResponseHandler() {
             @Override
@@ -151,7 +159,8 @@ public class OnSwipeMenuItemClickListener implements SwipeMenuListView.OnMenuIte
                                     file.setLocalPath(fileName);
                                     file.save();
 
-                                    fragment.files = files;
+                                    progressBar.setVisibility(View.GONE);
+
                                     fragment.refreshData();
                                 }
 
@@ -162,6 +171,8 @@ public class OnSwipeMenuItemClickListener implements SwipeMenuListView.OnMenuIte
 
                                 @Override
                                 public void onProgress(int id, long totalBytes, long downlaodedBytes, int progress) {
+                                    progressBar.setVisibility(View.VISIBLE);
+                                    progressBar.setProgress(progress);
                                 }
                             });
 

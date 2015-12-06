@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +37,8 @@ import cz.msebera.android.httpclient.Header;
 @EFragment
 public class ListItemFragment extends Fragment {
     private View mView;
-    private SwipeMenuListView listView = null;
+    public SwipeMenuListView listView = null;
+    private ListItemAdapter listItemAdapter;
     public List<File> files;
     public Context context;
 
@@ -59,7 +59,20 @@ public class ListItemFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        SwipeMenuCreator creator = new SwipeMenuCreator() {
+        listItemAdapter = new ListItemAdapter(getContext(), files);
+        listView.setMenuCreator(swipeMenuCreator());
+        listView.setAdapter(listItemAdapter);
+        listView.setOnMenuItemClickListener(new OnSwipeMenuItemClickListener(this, files));
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                itemClicked(position);
+            }
+        });
+    }
+
+    private SwipeMenuCreator swipeMenuCreator() {
+        return new SwipeMenuCreator() {
 
             @Override
             public void create(SwipeMenu menu) {
@@ -100,16 +113,6 @@ public class ListItemFragment extends Fragment {
                 menu.addMenuItem(favoriteItem);
             }
         };
-
-        listView.setMenuCreator(creator);
-        listView.setAdapter(new ListItemAdapter(getContext(), files));
-        listView.setOnMenuItemClickListener(new OnSwipeMenuItemClickListener(this, files));
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                itemClicked(position);
-            }
-        });
     }
 
     @Override
@@ -151,7 +154,7 @@ public class ListItemFragment extends Fragment {
     }
 
     public void refreshData() {
-        listView.setAdapter(new ListItemAdapter(getContext(), files));
-        listView.invalidateViews();
+        listItemAdapter.notifyDataSetChanged();
+        listView.setMenuCreator(swipeMenuCreator());
     }
 }
