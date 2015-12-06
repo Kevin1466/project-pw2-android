@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.activeandroid.query.Select;
@@ -21,46 +23,67 @@ import com.ivymobi.abb.pw.beans.CollectionFile;
 import com.ivymobi.abb.pw.beans.File;
 import com.ivymobi.abb.pw.listener.OnFavoriteRecyclerListener;
 
+import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @EFragment
 public class FavoriteFragment extends Fragment implements OnFavoriteRecyclerListener {
-    private View mView;
-    private RecyclerView mRecyclerView = null;
+    protected View mView;
+    protected RecyclerView mRecyclerView = null;
+
+    @ViewById(R.id.add_button)
+    protected ImageView addButton;
+
+    @ViewById(R.id.edit_button)
+    protected ImageView editButton;
+
+    protected TextView mCompleteTV = null;
 
     protected ListFavoriteAdapter adapter = null;
-    protected long itemCount = 0;
+    protected List<Collection> collections;
+    protected List<Collection> collectionsToDelete;
+
+    protected boolean isEditMode = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_favorite, container, false);
 
         mRecyclerView = (RecyclerView) mView.findViewById(R.id.cloud_list_rv);
+        mCompleteTV = (TextView) mView.findViewById(R.id.complete_button);
+
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         return mView;
     }
 
+//    @Override
+//    public void onActivityCreated(Bundle savedInstanceState) {
+//        super.onActivityCreated(savedInstanceState);
+//        updateData();
+//    }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    @AfterViews
+    public void setEditMode() {
+        isEditMode = false;
+
+        collectionsToDelete = new ArrayList<>();
 
         updateData();
+
     }
 
     private void updateData() {
-        List<Collection> collections = new Select().from(Collection.class).execute();
+        collections = new Select().from(Collection.class).execute();
 
         adapter = new ListFavoriteAdapter(getActivity(), collections, FavoriteFragment.this);
 
         adapter.setHasStableIds(true);
-
-        itemCount = adapter.getItemCount();
 
         mRecyclerView.setAdapter(adapter);
     }
@@ -68,6 +91,9 @@ public class FavoriteFragment extends Fragment implements OnFavoriteRecyclerList
     @Override
     public void onItemRecyclerClicked(View v, Collection collection) {
 
+        if (isEditMode) {
+            return;
+        }
         List<CollectionFile> collectionFiles = CollectionFile.findByCollection(collection);
         List<File> files = new ArrayList<>();
         for (CollectionFile cf : collectionFiles) {
@@ -84,13 +110,32 @@ public class FavoriteFragment extends Fragment implements OnFavoriteRecyclerList
     }
 
     @Override
-    public void onDeleteImageClicked(View v, Collection collection) {
-        //TODO:delete item current click
-        Toast.makeText(this.getContext(),"delete"+ collection.getName(),Toast.LENGTH_LONG).show();
+    public void onDeleteImageClicked(View v, int position) {
+
+        for (int i = 0; i < adapter.getItemCount(); i++) {
+            RecyclerView.ViewHolder viewHolder = mRecyclerView.findViewHolderForItemId(i);
+            boolean flag = false;
+            if (position == i) {
+                flag = true;
+            }
+            adapter.deleteImageClicked(viewHolder, this.getContext(), flag);
+        }
+    }
+
+    @Override
+    public void onDeleteTvClicked(View v, Collection collection) {
+        collectionsToDelete.add(collection);
+        collections.remove(collection);
+        adapter.updateItems(collections);
+        adapter.notifyDataSetChanged();
+        mRecyclerView.scrollToPosition(0);
     }
 
     @Click
     public void addButtonClicked() {
+        if (isEditMode) {
+            return;
+        }
         LayoutInflater li = LayoutInflater.from(getContext());
         View promptsView = li.inflate(R.layout.prompts, null);
 
@@ -128,9 +173,31 @@ public class FavoriteFragment extends Fragment implements OnFavoriteRecyclerList
 
     @Click
     public void editButtonClicked() {
-        for (int i = 0; i < itemCount; i++) {
+        for (int i = 0; i < adapter.getItemCount(); i++) {
             RecyclerView.ViewHolder viewHolder = mRecyclerView.findViewHolderForItemId(i);
             adapter.SwitchToEditStyle(viewHolder, this.getContext());
         }
+        mCompleteTV.setVisibility(View.VISIBLE);
+        isEditMode = true;
+    }
+
+    @Click
+    public void completeButtonClicked() {
+        isEditMode = false;
+        for (int i = 0; i < adapter.getItemCount(); i++) {
+            RecyclerView.ViewHolder viewHolder = mRecyclerView.findViewHolderForItemId(i);
+            //恢复到非编辑模式
+            adapter.SwitchToNormalStyle(viewHolder, this.getContext());
+            //处理预重命名元素
+            adapter.saveNewName(viewHolder, this.getContext(), collections.get(i));
+        }
+        //处理预删除元素
+        for (Collection c : collectionsToDelete) {
+            for (File f:c.files()){
+                f.delete();
+            }
+            c.delete();
+        }
+        Toast.makeText(this.getContext(), "complete edit", Toast.LENGTH_SHORT).show();
     }
 }

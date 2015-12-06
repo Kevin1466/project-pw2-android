@@ -45,7 +45,20 @@
             <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/cloud_list_rv"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+            <TextView
+                android:id="@+id/complete_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:text="@string/complete"
+                android:textSize="20sp"
+                android:textAlignment="center"
+                android:padding="10dp"
+                android:background="@color/background_tab_pressed"
+                android:visibility="gone"
+                />
         </LinearLayout>
     </LinearLayout>
 </FrameLayout>

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.ivymobi.abb.pw.R;
 import com.ivymobi.abb.pw.beans.Collection;
@@ -34,7 +35,7 @@ public class ListFavoriteAdapter extends RecyclerView.Adapter<ListFavoriteAdapte
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, final int i) {
+    public void onBindViewHolder(final ViewHolder viewHolder, final int i) {
 
         viewHolder.nameTextView.setText(mData.get(i).getName());
 
@@ -48,7 +49,14 @@ public class ListFavoriteAdapter extends RecyclerView.Adapter<ListFavoriteAdapte
         viewHolder.deleteImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onDeleteImageClicked(v, mData.get(i));
+                mListener.onDeleteImageClicked(v, i);
+            }
+        });
+
+        viewHolder.deletebtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onDeleteTvClicked(v, mData.get(i));
             }
         });
     }
@@ -59,27 +67,35 @@ public class ListFavoriteAdapter extends RecyclerView.Adapter<ListFavoriteAdapte
     }
 
     @Override
-    public long getItemId(int position){
+    public long getItemId(int position) {
         return position;
+    }
+
+    public void updateItems(List<Collection> data) {
+        this.mData = data;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        EditText nameTextView;
-        ImageView deleteImageView;
-        ImageView arrowImageView;
+        public EditText nameTextView;
+        public ImageView deleteImageView;
+        public ImageView arrowImageView;
+        public TextView deletebtn;
 
         public ViewHolder(View itemView) {
             super(itemView);
             nameTextView = (EditText) itemView.findViewById(R.id.list_item_text);
             deleteImageView = (ImageView) itemView.findViewById(R.id.list_item_image);
             arrowImageView = (ImageView) itemView.findViewById(R.id.list_item_arrow_image);
+            deletebtn = (TextView) itemView.findViewById(R.id.delete_button);
         }
     }
 
-    public void SwitchToEditStyle(RecyclerView.ViewHolder holder, Context context){
+    public void SwitchToEditStyle(RecyclerView.ViewHolder holder, Context context) {
 
-        ViewHolder viewHolder = (ViewHolder)holder;
+        ViewHolder viewHolder = (ViewHolder) holder;
+
+        viewHolder.itemView.setClickable(false);
         viewHolder.deleteImageView.setVisibility(View.VISIBLE);
         viewHolder.arrowImageView.setVisibility(View.GONE);
 
@@ -88,5 +104,43 @@ public class ListFavoriteAdapter extends RecyclerView.Adapter<ListFavoriteAdapte
         Drawable drawable = ContextCompat.getDrawable(context, R.drawable.bg_edittext);
         viewHolder.nameTextView.setBackground(drawable);
 
+    }
+
+    public void SwitchToNormalStyle(RecyclerView.ViewHolder holder, Context context) {
+
+        ViewHolder viewHolder = (ViewHolder) holder;
+        viewHolder.itemView.setClickable(true);
+
+        viewHolder.deleteImageView.setVisibility(View.GONE);
+        viewHolder.arrowImageView.setVisibility(View.VISIBLE);
+
+        viewHolder.nameTextView.setEnabled(false);
+        viewHolder.nameTextView.setFocusableInTouchMode(false);
+        Drawable drawable = ContextCompat.getDrawable(context, R.color.white);
+        viewHolder.nameTextView.setBackground(drawable);
+
+        viewHolder.deletebtn.setVisibility(View.GONE);
+    }
+
+    public void deleteImageClicked(RecyclerView.ViewHolder holder, Context context, boolean flag) {
+        ViewHolder viewHolder = (ViewHolder) holder;
+        if (flag == false) {
+            viewHolder.deletebtn.setVisibility(View.GONE);
+            return;
+        }
+        int vi = viewHolder.deletebtn.getVisibility();
+        if (View.GONE == vi) {
+            viewHolder.deletebtn.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.deletebtn.setVisibility(View.GONE);
+        }
+    }
+
+    public void saveNewName(RecyclerView.ViewHolder holder,
+                            Context context, Collection collection) {
+        ViewHolder viewHolder = (ViewHolder) holder;
+        String newName = viewHolder.nameTextView.getEditableText().toString();
+        collection.setName(newName);
+        collection.save();
     }
 }

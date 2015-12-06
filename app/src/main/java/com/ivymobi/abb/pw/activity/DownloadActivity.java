@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TabHost;
 
@@ -25,7 +26,8 @@ public class DownloadActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setTitle(R.string.download);
-
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN
+                | WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         setContentView(R.layout.activity_download);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

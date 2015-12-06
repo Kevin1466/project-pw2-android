@@ -46,4 +46,6 @@
     <string name="weixin">Friends</string>
     <string name="new_group">New Group</string>
     <string name="groups">Groups</string>
+    <string name="delete">Delete</string>
+    <string name="complete">Complete</string>
 </resources>

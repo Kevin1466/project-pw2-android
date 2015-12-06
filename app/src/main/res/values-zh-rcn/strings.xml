@@ -43,4 +43,6 @@
     <string name="weixin">微信好友</string>
     <string name="new_group">新建分组</string>
     <string name="groups">选择分组</string>
+    <string name="delete">删除</string>
+    <string name="complete">完成</string>
 </resources>
