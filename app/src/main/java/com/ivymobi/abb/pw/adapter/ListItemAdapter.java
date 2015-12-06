@@ -111,6 +111,7 @@ public class ListItemAdapter extends BaseAdapter {
         ImageView ivDownloaded;
         ImageView ivLanguage;
         ProgressBar progressBar;
+        ProgressBar downloadProgressBar;
 
         public ViewHolder(View view) {
             nameTextView = (TextView) view.findViewById(R.id.list_item_text);
@@ -118,6 +119,7 @@ public class ListItemAdapter extends BaseAdapter {
             ivDownloaded = (ImageView) view.findViewById(R.id.iv_downloaded);
             ivLanguage = (ImageView) view.findViewById(R.id.iv_language);
             progressBar = (ProgressBar) view.findViewById(R.id.list_item_progress_bar);
+            downloadProgressBar = (ProgressBar) view.findViewById(R.id.list_item_download_progress);
         }
     }
 }

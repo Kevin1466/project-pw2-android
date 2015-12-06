@@ -42,7 +42,7 @@ public class FavoriteFragment extends Fragment implements OnFavoriteRecyclerList
     protected ImageView editButton;
 
     @ViewById(R.id.complete_button)
-    protected TextView completeTV;
+    protected ImageView completeTV;
 
     protected ListFavoriteAdapter adapter = null;
     protected List<Collection> collections;
@@ -135,6 +135,8 @@ public class FavoriteFragment extends Fragment implements OnFavoriteRecyclerList
         if (isEditMode) {
             return;
         }
+
+        addButton.setSelected(true);
         LayoutInflater li = LayoutInflater.from(getContext());
         View promptsView = li.inflate(R.layout.prompts, null);
 
@@ -153,12 +155,15 @@ public class FavoriteFragment extends Fragment implements OnFavoriteRecyclerList
                                 collection.setName(inputEditText.getText().toString());
                                 collection.save();
 
+                                addButton.setSelected(false);
+
                                 updateData();
                             }
                         })
                 .setNegativeButton(R.string.action_cancel,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
+                                addButton.setSelected(false);
                                 dialog.cancel();
                             }
                         });
@@ -178,12 +183,15 @@ public class FavoriteFragment extends Fragment implements OnFavoriteRecyclerList
         }
         completeTV.setVisibility(View.VISIBLE);
         isEditMode = true;
+
+        editButton.setSelected(true);
     }
 
     @Click
     public void completeButtonClicked() {
         completeTV.setVisibility(View.GONE);
         isEditMode = false;
+        editButton.setSelected(false);
         for (int i = 0; i < adapter.getItemCount(); i++) {
             RecyclerView.ViewHolder viewHolder = mRecyclerView.findViewHolderForItemId(i);
             //恢复到非编辑模式

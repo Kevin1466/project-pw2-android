@@ -31,7 +31,7 @@ public class ListFolderAdapter extends RecyclerView.Adapter<ListFolderAdapter.Vi
 
     @Override
     public ListFolderAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        return new ViewHolder(mInflater.inflate(R.layout.folder_list, viewGroup, false));
+        return new ViewHolder(mInflater.inflate(R.layout.cloud_folder_list, viewGroup, false));
     }
 
     @Override

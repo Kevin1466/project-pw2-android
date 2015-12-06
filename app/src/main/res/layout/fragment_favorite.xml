@@ -47,16 +47,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"/>
-            <TextView
+            <ImageView
                 android:id="@+id/complete_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="48dp"
-                android:text="@string/complete"
-                android:textSize="20sp"
-                android:textAlignment="center"
-                android:padding="10dp"
-                android:background="@color/background_tab_pressed"
+                android:height="44sp"
+                android:background="@mipmap/icon_done"
                 android:visibility="gone"
                 />
         </LinearLayout>
