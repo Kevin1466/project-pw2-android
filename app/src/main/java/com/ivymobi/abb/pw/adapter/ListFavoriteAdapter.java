@@ -42,6 +42,14 @@ public class ListFavoriteAdapter extends RecyclerView.Adapter<ListFavoriteAdapte
 
         viewHolder.nameTextView.setText(mData.get(i).getName());
 
+        viewHolder.nameTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!viewHolder.nameTextView.isFocusable()){
+                    mListener.onItemRecyclerClicked(v, mData.get(i));
+                }
+            }
+        });
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,7 +131,7 @@ public class ListFavoriteAdapter extends RecyclerView.Adapter<ListFavoriteAdapte
         viewHolder.deleteImageView.setVisibility(View.VISIBLE);
         viewHolder.arrowImageView.setVisibility(View.GONE);
 
-        viewHolder.nameTextView.setEnabled(true);
+        viewHolder.nameTextView.setFocusable(true);
         viewHolder.nameTextView.setFocusableInTouchMode(true);
         Drawable drawable = ContextCompat.getDrawable(context, R.drawable.bg_edittext);
         viewHolder.nameTextView.setBackground(drawable);
@@ -138,7 +146,7 @@ public class ListFavoriteAdapter extends RecyclerView.Adapter<ListFavoriteAdapte
         viewHolder.deleteImageView.setVisibility(View.GONE);
         viewHolder.arrowImageView.setVisibility(View.VISIBLE);
 
-        viewHolder.nameTextView.setEnabled(false);
+        viewHolder.nameTextView.setFocusable(false);
         viewHolder.nameTextView.setFocusableInTouchMode(false);
         Drawable drawable = ContextCompat.getDrawable(context, R.color.white);
         viewHolder.nameTextView.setBackground(drawable);
