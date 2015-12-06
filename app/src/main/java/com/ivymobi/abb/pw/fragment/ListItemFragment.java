@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -154,4 +153,6 @@ public class ListItemFragment extends Fragment {
         listView.setAdapter(new ListItemAdapter(getContext(), files));
         listView.invalidateViews();
     }
+
+
 }

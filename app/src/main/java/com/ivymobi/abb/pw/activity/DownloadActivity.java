@@ -2,6 +2,7 @@ package com.ivymobi.abb.pw.activity;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -15,11 +16,64 @@ import com.ivymobi.abb.pw.R;
 import com.ivymobi.abb.pw.fragment.CloudFragment_;
 import com.ivymobi.abb.pw.fragment.DownloadedFragment_;
 import com.ivymobi.abb.pw.fragment.FavoriteFragment_;
+import com.ivymobi.abb.pw.fragment.TabRootFragment;
 
 import org.androidannotations.annotations.EActivity;
 
 @EActivity
 public class DownloadActivity extends AppCompatActivity {
+
+    private FragmentTabHost mTabHost;
+
+    @Override
+    public void onBackPressed() {
+        if (!getCurrentFragment().popBackStack()) {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mTabHost = null;
+    }
+
+    private void initTabs() {
+
+        mTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
+        mTabHost.setup(this, getSupportFragmentManager(), R.id.content);
+
+        View tabView1 = createTabView(mTabHost.getContext(), 0);
+        View tabView2 = createTabView(mTabHost.getContext(), 1);
+        View tabView3 = createTabView(mTabHost.getContext(), 2);
+
+
+        addTab("tab1", tabView1, CloudFragment_.class);
+        addTab("tab2", tabView2, DownloadedFragment_.class);
+        addTab("tab3", tabView3, FavoriteFragment_.class);
+
+        mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+            @Override
+            public void onTabChanged(String tabId) {
+                getCurrentFragment().clearBackStack();
+            }
+        });
+
+    }
+
+    private void addTab(String tag, View indicator, Class<? extends Fragment> clazz) {
+
+        TabHost.TabSpec tabSpec = mTabHost.newTabSpec(tag).setIndicator(indicator);
+
+        Bundle args = new Bundle();
+        args.putString("root", clazz.getName());
+
+        mTabHost.addTab(tabSpec, TabRootFragment.class, args);
+    }
+
+    private TabRootFragment getCurrentFragment() {
+        return (TabRootFragment) getSupportFragmentManager().findFragmentById(R.id.content);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +87,8 @@ public class DownloadActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.mipmap.icon_home);
 
-        setupTabs();
+//        setupTabs();
+        initTabs();
     }
 
     @Override
@@ -43,27 +98,6 @@ public class DownloadActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private void setupTabs() {
-        FragmentTabHost tabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
-        tabHost.setup(this, getSupportFragmentManager(), R.id.content);
-
-        View tabView1 = createTabView(tabHost.getContext(), 0);
-        View tabView2 = createTabView(tabHost.getContext(), 1);
-        View tabView3 = createTabView(tabHost.getContext(), 2);
-
-        TabHost.TabSpec tab1 = tabHost.newTabSpec("tab1");
-        tab1.setIndicator(tabView1);
-        tabHost.addTab(tab1, CloudFragment_.class, null);
-
-        TabHost.TabSpec tab2 = tabHost.newTabSpec("tab2");
-        tab2.setIndicator(tabView2);
-        tabHost.addTab(tab2, DownloadedFragment_.class, null);
-
-        TabHost.TabSpec tab3 = tabHost.newTabSpec("tab3");
-        tab3.setIndicator(tabView3);
-        tabHost.addTab(tab3, FavoriteFragment_.class, null);
     }
 
     private static View createTabView(final Context context, final Integer position) {

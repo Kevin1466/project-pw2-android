@@ -99,13 +99,14 @@ public class FavoriteFragment extends Fragment implements OnFavoriteRecyclerList
             files.add(cf.file);
         }
 
-        ListItemFragment listItemFragment = new ListItemFragment();
+        ListItemFragment listItemFragment = ListItemFragment_.builder().build();
         listItemFragment.files = files;
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.container_framelayout, listItemFragment);
         transaction.addToBackStack(null);
         transaction.commit();
+
     }
 
     @Override
