@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +24,7 @@ public class ListFavoriteAdapter extends RecyclerView.Adapter<ListFavoriteAdapte
     private LayoutInflater mInflater;
     private List<Collection> mData;
     private OnFavoriteRecyclerListener mListener;
+    private List<ViewHolder> tempNameList;
 
     public ListFavoriteAdapter(Context context, List<Collection> data, OnFavoriteRecyclerListener listener) {
         mInflater = LayoutInflater.from(context);
@@ -46,6 +49,7 @@ public class ListFavoriteAdapter extends RecyclerView.Adapter<ListFavoriteAdapte
             }
         });
 
+
         viewHolder.deleteImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,10 +57,29 @@ public class ListFavoriteAdapter extends RecyclerView.Adapter<ListFavoriteAdapte
             }
         });
 
+
+
+        viewHolder.nameTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mData.get(i).setName(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         viewHolder.deletebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onDeleteTvClicked(v, mData.get(i));
+                mListener.onDeleteTvClicked(v, mData.get(i),
+                        viewHolder.nameTextView.getEditableText().toString());
             }
         });
     }
@@ -84,6 +107,7 @@ public class ListFavoriteAdapter extends RecyclerView.Adapter<ListFavoriteAdapte
 
         public ViewHolder(View itemView) {
             super(itemView);
+
             nameTextView = (EditText) itemView.findViewById(R.id.list_item_text);
             deleteImageView = (ImageView) itemView.findViewById(R.id.list_item_image);
             arrowImageView = (ImageView) itemView.findViewById(R.id.list_item_arrow_image);
@@ -122,7 +146,7 @@ public class ListFavoriteAdapter extends RecyclerView.Adapter<ListFavoriteAdapte
         viewHolder.deletebtn.setVisibility(View.GONE);
     }
 
-    public void deleteImageClicked(RecyclerView.ViewHolder holder, Context context, boolean flag) {
+    public void deleteImageClicked(RecyclerView.ViewHolder holder, boolean flag) {
         ViewHolder viewHolder = (ViewHolder) holder;
         if (flag == false) {
             viewHolder.deletebtn.setVisibility(View.GONE);
@@ -136,8 +160,7 @@ public class ListFavoriteAdapter extends RecyclerView.Adapter<ListFavoriteAdapte
         }
     }
 
-    public void saveNewName(RecyclerView.ViewHolder holder,
-                            Context context, Collection collection) {
+    public void saveNewName(RecyclerView.ViewHolder holder, Collection collection) {
         ViewHolder viewHolder = (ViewHolder) holder;
         String newName = viewHolder.nameTextView.getEditableText().toString();
         collection.setName(newName);

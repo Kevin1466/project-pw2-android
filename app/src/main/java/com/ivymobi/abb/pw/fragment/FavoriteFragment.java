@@ -117,12 +117,12 @@ public class FavoriteFragment extends Fragment implements OnFavoriteRecyclerList
             if (position == i) {
                 flag = true;
             }
-            adapter.deleteImageClicked(viewHolder, this.getContext(), flag);
+            adapter.deleteImageClicked(viewHolder, flag);
         }
     }
 
     @Override
-    public void onDeleteTvClicked(View v, Collection collection) {
+    public void onDeleteTvClicked(View v, Collection collection,String newName) {
         collectionsToDelete.add(collection);
         collections.remove(collection);
         adapter.updateItems(collections);
@@ -189,7 +189,7 @@ public class FavoriteFragment extends Fragment implements OnFavoriteRecyclerList
             //恢复到非编辑模式
             adapter.SwitchToNormalStyle(viewHolder, this.getContext());
             //处理预重命名元素
-            adapter.saveNewName(viewHolder, this.getContext(), collections.get(i));
+            adapter.saveNewName(viewHolder,collections.get(i));
         }
         //处理预删除元素,如果文件夹下含文件时,需要先删除关联关系。
         for (Collection c : collectionsToDelete) {
