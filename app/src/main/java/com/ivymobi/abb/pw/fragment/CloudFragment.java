@@ -1,22 +1,26 @@
 package com.ivymobi.abb.pw.fragment;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.ivymobi.abb.pw.R;
+import com.ivymobi.abb.pw.adapter.ListFolderAdapter;
 import com.ivymobi.abb.pw.beans.Catalog;
 import com.ivymobi.abb.pw.beans.File;
+import com.ivymobi.abb.pw.listener.OnFolderRecyclerListener;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
+import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.UiThread;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,29 +33,39 @@ import cz.msebera.android.httpclient.Header;
 import static java.lang.System.err;
 
 @EFragment
-public class CloudFragment extends Fragment {
+public class CloudFragment extends Fragment implements OnFolderRecyclerListener {
 
     private View mView;
-
     private HashMap<String, File> filesMap = new HashMap<>();
     private ProgressDialog pDialog;
+
+    public Catalog root;
+    private RecyclerView mRecyclerView = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         mView = inflater.inflate(R.layout.fragment_cloud, container, false);
 
-        getCatalog();
+        mRecyclerView = (RecyclerView) mView.findViewById(R.id.cloud_list_rv);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
 
         return mView;
     }
 
-    public void getCatalog() {
+    @AfterViews
+    protected void afterViews() {
         pDialog = new ProgressDialog(getActivity());
         pDialog.setIndeterminate(false);
         pDialog.setCancelable(false);
         pDialog.setMessage(getResources().getString(R.string.loading));
         pDialog.show();
+
+        getCatalog();
+    }
+
+    public void getCatalog() {
 
         final AsyncHttpClient client = new AsyncHttpClient();
         client.get("http://yangbentong.com/api/7a94881a-df96-429d-9e01-dece4f46fee2/storage?bucket=catalog", new JsonHttpResponseHandler() {
@@ -93,24 +107,7 @@ public class CloudFragment extends Fragment {
                     public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                         pDialog.dismiss();
 
-                        try {
-                            JSONObject list = response.getJSONObject(0);
-                            Catalog root = new Catalog();
-                            root.setName(list.getString("name"));
-
-                            ArrayList<Catalog> catalogList = fetchCatalog(list.getJSONArray("subs"));
-                            root.setChildren(catalogList);
-
-                            ListFolderFragment listFolderFragment = new ListFolderFragment();
-                            listFolderFragment.root = root;
-
-                            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                            transaction.replace(R.id.container_framelayout, listFolderFragment);
-                            transaction.commit();
-
-                        } catch (JSONException e) {
-                            err.println(e);
-                        }
+                        updateFragmentUI(response);
                     }
                 });
 
@@ -119,6 +116,21 @@ public class CloudFragment extends Fragment {
         });
     }
 
+    @UiThread
+    public void updateFragmentUI(JSONArray response){
+        try {
+            JSONObject list = response.getJSONObject(0);
+            root = new Catalog();
+            root.setName(list.getString("name"));
+
+            ArrayList<Catalog> catalogList = fetchCatalog(list.getJSONArray("subs"));
+            root.setChildren(catalogList);
+            mRecyclerView.setAdapter(new ListFolderAdapter(getActivity(), root, CloudFragment.this));
+
+        } catch (JSONException e) {
+            err.println(e);
+        }
+    }
     private ArrayList<Catalog> fetchCatalog(JSONArray jsonArray) throws JSONException {
 
         ArrayList<Catalog> catalogList = new ArrayList<>();
@@ -150,5 +162,29 @@ public class CloudFragment extends Fragment {
         }
 
         return catalogList;
+    }
+
+    @Override
+    public void onFolderRecyclerClicked(View v, int position) {
+
+        if (root.getChildren().get(position).hasFiles()) {
+            ListItemFragment listItemFragment = ListItemFragment_.builder().build();
+            listItemFragment.files = root.getChildren().get(position).getFiles();
+
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            transaction.replace(R.id.container_framelayout, listItemFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        } else {
+            ListFolderFragment cloudFragment = ListFolderFragment_.builder().build();
+            cloudFragment.root = root.getChildren().get(position);
+
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            transaction.replace(R.id.container_framelayout, cloudFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }
     }
 }

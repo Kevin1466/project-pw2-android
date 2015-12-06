@@ -40,7 +40,7 @@ public class ListFolderFragment extends Fragment implements OnFolderRecyclerList
     public void onFolderRecyclerClicked(View v, int position) {
 
         if (root.getChildren().get(position).hasFiles()) {
-            ListItemFragment listItemFragment = new ListItemFragment();
+            ListItemFragment listItemFragment = ListItemFragment_.builder().build();
             listItemFragment.files = root.getChildren().get(position).getFiles();
 
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -49,7 +49,7 @@ public class ListFolderFragment extends Fragment implements OnFolderRecyclerList
             transaction.addToBackStack(null);
             transaction.commit();
         } else {
-            ListFolderFragment cloudFragment = new ListFolderFragment();
+            ListFolderFragment cloudFragment = ListFolderFragment_.builder().build();
             cloudFragment.root = root.getChildren().get(position);
 
             FragmentTransaction transaction = getFragmentManager().beginTransaction();

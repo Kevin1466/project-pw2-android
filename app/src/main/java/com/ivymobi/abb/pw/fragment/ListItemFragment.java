@@ -157,4 +157,6 @@ public class ListItemFragment extends Fragment {
         listView.setAdapter(listItemAdapter);
         listItemAdapter.notifyDataSetChanged();
     }
+
+
 }

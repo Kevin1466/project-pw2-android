@@ -2,7 +2,6 @@ package com.ivymobi.abb.pw.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +10,7 @@ import android.view.ViewGroup;
 import com.ivymobi.abb.pw.R;
 import com.ivymobi.abb.pw.beans.File;
 
+import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
 
 import java.util.List;
@@ -20,6 +20,7 @@ import java.util.List;
 public class DownloadedFragment extends Fragment {
     private View mView;
     public List<File> files;
+    protected ListItemFragment listItemFragment;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -30,15 +31,26 @@ public class DownloadedFragment extends Fragment {
         return mView;
     }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+//    @Override
+//    public void onActivityCreated(Bundle savedInstanceState) {
+//        super.onActivityCreated(savedInstanceState);
+//
+//        ListItemFragment listItemFragment = new ListItemFragment();
+//        listItemFragment.files = files;
+//
+//        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//        transaction.replace(R.id.container_framelayout, listItemFragment);
+//        transaction.commit();
+//    }
 
-        ListItemFragment listItemFragment = new ListItemFragment();
+    @AfterViews
+    public void showDownloadedFragmentListItems(){
+        listItemFragment = ListItemFragment_.builder().build();
         listItemFragment.files = files;
 
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.container_framelayout, listItemFragment);
+        transaction.addToBackStack(null);
         transaction.commit();
     }
 }
