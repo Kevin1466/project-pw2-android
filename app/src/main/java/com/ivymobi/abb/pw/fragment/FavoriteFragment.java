@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.activeandroid.query.Select;
 import com.ivymobi.abb.pw.R;
@@ -42,7 +41,8 @@ public class FavoriteFragment extends Fragment implements OnFavoriteRecyclerList
     @ViewById(R.id.edit_button)
     protected ImageView editButton;
 
-    protected TextView mCompleteTV = null;
+    @ViewById(R.id.complete_button)
+    protected TextView completeTV;
 
     protected ListFavoriteAdapter adapter = null;
     protected List<Collection> collections;
@@ -55,7 +55,6 @@ public class FavoriteFragment extends Fragment implements OnFavoriteRecyclerList
         mView = inflater.inflate(R.layout.fragment_favorite, container, false);
 
         mRecyclerView = (RecyclerView) mView.findViewById(R.id.cloud_list_rv);
-        mCompleteTV = (TextView) mView.findViewById(R.id.complete_button);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -177,12 +176,13 @@ public class FavoriteFragment extends Fragment implements OnFavoriteRecyclerList
             RecyclerView.ViewHolder viewHolder = mRecyclerView.findViewHolderForItemId(i);
             adapter.SwitchToEditStyle(viewHolder, this.getContext());
         }
-        mCompleteTV.setVisibility(View.VISIBLE);
+        completeTV.setVisibility(View.VISIBLE);
         isEditMode = true;
     }
 
     @Click
     public void completeButtonClicked() {
+        completeTV.setVisibility(View.GONE);
         isEditMode = false;
         for (int i = 0; i < adapter.getItemCount(); i++) {
             RecyclerView.ViewHolder viewHolder = mRecyclerView.findViewHolderForItemId(i);
@@ -191,13 +191,14 @@ public class FavoriteFragment extends Fragment implements OnFavoriteRecyclerList
             //处理预重命名元素
             adapter.saveNewName(viewHolder, this.getContext(), collections.get(i));
         }
-        //处理预删除元素
+        //处理预删除元素,如果文件夹下含文件时,需要先删除关联关系。
         for (Collection c : collectionsToDelete) {
-            for (File f:c.files()){
+            List<CollectionFile> collectionFiles = CollectionFile.findByCollection(c);
+            for (CollectionFile f : collectionFiles) {
+                f.collection = null;
                 f.delete();
             }
             c.delete();
         }
-        Toast.makeText(this.getContext(), "complete edit", Toast.LENGTH_SHORT).show();
     }
 }
