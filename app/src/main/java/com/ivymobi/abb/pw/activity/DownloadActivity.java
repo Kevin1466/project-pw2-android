@@ -10,9 +10,9 @@ import android.support.v4.app.FragmentTabHost;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TabHost;
 
@@ -30,7 +30,7 @@ import java.util.Locale;
 @EActivity
 public class DownloadActivity extends AppCompatActivity {
 
-    private FragmentTabHost mTabHost;
+    protected FragmentTabHost mTabHost;
 
     @Override
     public void onBackPressed() {
@@ -68,7 +68,7 @@ public class DownloadActivity extends AppCompatActivity {
 
     }
 
-    private void addTab(String tag, View indicator, Class<? extends Fragment> clazz) {
+    protected void addTab(String tag, View indicator, Class<? extends Fragment> clazz) {
 
         TabHost.TabSpec tabSpec = mTabHost.newTabSpec(tag).setIndicator(indicator);
 
@@ -78,9 +78,14 @@ public class DownloadActivity extends AppCompatActivity {
         mTabHost.addTab(tabSpec, TabRootFragment.class, args);
     }
 
-    private TabRootFragment getCurrentFragment() {
+    protected TabRootFragment getCurrentFragment() {
         return (TabRootFragment) getSupportFragmentManager().findFragmentById(R.id.content);
     }
+
+//    @ViewById(R.id.download_toolbar)
+//    protected Toolbar download_toolbar;
+
+    protected boolean isInShareMode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,8 +95,7 @@ public class DownloadActivity extends AppCompatActivity {
         switchLanguage(PreferenceUtil.getString("language", "Chinese"));
 
         setTitle(R.string.download);
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN
-                | WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
         setContentView(R.layout.activity_download);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -102,12 +106,57 @@ public class DownloadActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_share, menu);
+
+        mShareIconMenuItem = menu.findItem(R.id.action_share_icon);
+        mCancelMenuItem = menu.findItem(R.id.action_cancel);
+        mShareMenuItem = menu.findItem(R.id.action_share);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    protected MenuItem mShareIconMenuItem;
+    protected MenuItem mCancelMenuItem;
+    protected MenuItem mShareMenuItem;
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
+        } else if (item.getItemId() == R.id.action_share_icon) {
+            isInShareMode = true;
+            invalidateOptionsMenu();
+        } else if (item.getItemId() == R.id.action_cancel) {
+            isInShareMode = false;
+            invalidateOptionsMenu();
+        } else if (item.getItemId() == R.id.action_share) {
+            invalidateOptionsMenu();
+            //TODO:complete the share operation
+            isInShareMode = false;
         }
+        return true;
+    }
 
-        return super.onOptionsItemSelected(item);
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        getSupportActionBar().setDisplayHomeAsUpEnabled(!isInShareMode);
+        mShareIconMenuItem.setVisible(!isInShareMode);
+        mCancelMenuItem.setVisible(isInShareMode);
+        mShareMenuItem.setVisible(isInShareMode);
+        updateTabState(isInShareMode);
+        return true;
+    }
+
+    protected void updateTabState(boolean isInShareMode){
+        if (isInShareMode){
+//            mTabHost.getTabWidget().getChildTabViewAt(0).setBackground(null);
+            //TODO:change the tabview background
+            mTabHost.getTabWidget().setEnabled(!isInShareMode);
+        }else {
+            //TODO:change the tabview background
+            mTabHost.getTabWidget().setEnabled(!isInShareMode);
+        }
     }
 
     private static View createTabView(final Context context, final Integer position) {

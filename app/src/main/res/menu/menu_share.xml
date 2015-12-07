@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activity.DownloadActivity_">
+    <item android:id="@+id/action_cancel"
+        android:title="@string/action_cancel"
+        android:orderInCategory="99"
+        app:showAsAction="ifRoom" />
+    <item android:id="@+id/action_share"
+        android:title="@string/action_share"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom" />
+    <item android:id="@+id/action_share_icon"
+        android:title="@string/action_share"
+        android:icon="@mipmap/icon_share"
+        android:orderInCategory="101"
+        app:showAsAction="ifRoom" />
+</menu>

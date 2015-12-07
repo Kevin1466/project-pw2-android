@@ -41,7 +41,8 @@
         <activity
             android:name=".activity.DownloadActivity_"
             android:label="@string/download"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name=".activity.SolutionActivity_"
             android:label="@string/solution"
