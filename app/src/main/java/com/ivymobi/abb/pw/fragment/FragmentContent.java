@@ -1,6 +1,7 @@
 package com.ivymobi.abb.pw.fragment;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,7 +18,9 @@ import com.ivymobi.abb.pw.activity.VideoActivity_;
 import com.ivymobi.abb.pw.app.MyApplication;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import org.androidannotations.annotations.EFragment;
 
@@ -133,7 +136,28 @@ public class FragmentContent extends Fragment implements View.OnTouchListener {
         Integer position = getArguments().getInt("position");
         imageView.setOnTouchListener(this);
 
-        DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).imageScaleType(ImageScaleType.NONE).build();
+        DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).imageScaleType(ImageScaleType.NONE_SAFE).build();
+        ImageLoadingListener imageLoadingListener = new ImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String imageUri, View view) {
+
+            }
+
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+            }
+
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+            }
+
+            @Override
+            public void onLoadingCancelled(String imageUri, View view) {
+
+            }
+        };
 
         String file = "icon_dlywjs@2x.png";
         String file2 = "icon_zgjs@2x.png";
@@ -146,14 +170,13 @@ public class FragmentContent extends Fragment implements View.OnTouchListener {
         switch (position) {
             case 1:
                 imageView.setImageResource(R.mipmap.dlywjs);
-
-                imageLoader.displayImage("http://ivymobi-storage.qiniudn.com/abbpw/Business/" + file, imageView, options);
+                imageLoader.displayImage("http://ivymobi-storage.qiniudn.com/abbpw/Business/" + file, imageView, options, imageLoadingListener);
 
                 break;
             default: // 0
                 imageView.setImageResource(R.mipmap.zgjs);
 
-                imageLoader.displayImage("http://ivymobi-storage.qiniudn.com/abbpw/Business/" + file2, imageView, options);
+                imageLoader.displayImage("http://ivymobi-storage.qiniudn.com/abbpw/Business/" + file2, imageView, options, imageLoadingListener);
                 break;
         }
 

@@ -1,5 +1,6 @@
 package com.ivymobi.abb.pw.fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -10,10 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
+import com.baoyz.swipemenulistview.SwipeMenuLayout;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.ivymobi.abb.pw.R;
 import com.ivymobi.abb.pw.activity.LocalPDFActivity_;
@@ -119,7 +123,33 @@ public class ListItemFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        refreshData();
+        System.out.println("ffffffffkkkkkkkkk22222222222");
+
+        // test
+        listView.setAdapter(listItemAdapter);
+        listItemAdapter.notifyDataSetChanged();
+
+        switch (resultCode) {
+            case Activity.RESULT_OK:
+                int position = data.getIntExtra("position", 0);
+                System.out.println("position:" + position);
+
+                //
+                final SwipeMenuLayout layout = (SwipeMenuLayout) listView.getChildAt(position);
+                LinearLayout linearLayout = (LinearLayout) layout.getMenuView().getChildAt(0);
+                final ImageView favoriteItem = (ImageView) linearLayout.getChildAt(0);
+
+                List<CollectionFile> collectionFiles = CollectionFile.findByFile(files.get(position));
+
+                if (collectionFiles != null && !collectionFiles.isEmpty()) {
+                    favoriteItem.setImageResource(R.mipmap.icon_heart);
+                } else {
+                    favoriteItem.setImageResource(R.mipmap.icon_heart_empty);
+                }
+
+                refreshData();
+                break;
+        }
     }
 
     private void itemClicked(int position) {
@@ -154,7 +184,7 @@ public class ListItemFragment extends Fragment {
     }
 
     public void refreshData() {
-        listView.setAdapter(listItemAdapter);
+//        listView.setAdapter(listItemAdapter);
         listItemAdapter.notifyDataSetChanged();
     }
 

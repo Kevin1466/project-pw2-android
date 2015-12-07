@@ -1,6 +1,7 @@
 package com.ivymobi.abb.pw.fragment;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -116,6 +117,14 @@ public class CloudFragment extends Fragment implements OnFolderRecyclerListener 
         });
     }
 
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        System.out.println("ffffffffkkkkkkkkk");
+    }
+
     @UiThread
     public void updateFragmentUI(JSONArray response){
         try {
@@ -173,7 +182,7 @@ public class CloudFragment extends Fragment implements OnFolderRecyclerListener 
 
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
             transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            transaction.replace(R.id.container_framelayout, listItemFragment);
+            transaction.replace(R.id.container_framelayout, listItemFragment, "LIST_ITEM_FRAGMENT");
             transaction.addToBackStack(null);
             transaction.commit();
         } else {

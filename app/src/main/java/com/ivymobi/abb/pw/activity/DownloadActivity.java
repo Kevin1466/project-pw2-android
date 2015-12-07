@@ -1,10 +1,14 @@
 package com.ivymobi.abb.pw.activity;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,8 +21,11 @@ import com.ivymobi.abb.pw.fragment.CloudFragment_;
 import com.ivymobi.abb.pw.fragment.DownloadedFragment_;
 import com.ivymobi.abb.pw.fragment.FavoriteFragment_;
 import com.ivymobi.abb.pw.fragment.TabRootFragment;
+import com.ivymobi.abb.pw.util.PreferenceUtil;
 
 import org.androidannotations.annotations.EActivity;
+
+import java.util.Locale;
 
 @EActivity
 public class DownloadActivity extends AppCompatActivity {
@@ -79,6 +86,9 @@ public class DownloadActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        PreferenceUtil.init(this);
+        switchLanguage(PreferenceUtil.getString("language", "Chinese"));
+
         setTitle(R.string.download);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN
                 | WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
@@ -117,5 +127,29 @@ public class DownloadActivity extends AppCompatActivity {
         }
 
         return view;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        System.out.println("getCurrentFragment():::::" + getCurrentFragment().getTag());
+
+        getCurrentFragment().onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void switchLanguage(String language) {
+
+        Resources resources = getResources();
+        Configuration config = resources.getConfiguration();
+        DisplayMetrics dm = resources.getDisplayMetrics();
+
+        if (language.equals("Chinese")) {
+            config.locale = Locale.SIMPLIFIED_CHINESE;
+        } else {
+            config.locale = Locale.ENGLISH;
+        }
+
+        resources.updateConfiguration(config, dm);
     }
 }

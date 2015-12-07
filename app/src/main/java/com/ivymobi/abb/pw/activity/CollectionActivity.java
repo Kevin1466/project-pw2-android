@@ -1,9 +1,15 @@
 package com.ivymobi.abb.pw.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.activeandroid.query.Select;
 import com.ivymobi.abb.pw.R;
@@ -24,16 +30,19 @@ public class CollectionActivity extends AppCompatActivity {
     private ListView listView;
     private ListViewAdapter adapter;
     private File file;
+    private Integer position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setTitle(getString(R.string.groups));
+
         setContentView(R.layout.activity_collection);
 
         Intent intent = getIntent();
         file = File.findByUuid(intent.getStringExtra("uuid"));
+        position = intent.getIntExtra("position", 0);
 
         setupList();
     }
@@ -59,6 +68,36 @@ public class CollectionActivity extends AppCompatActivity {
     }
 
     @Click
+    public void imageViewPlusClicked() {
+        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.new_group_line);
+        linearLayout.setVisibility(View.VISIBLE);
+    }
+
+    @Click
+    public void newGroupButtonClicked() {
+        TextView textView = (TextView) findViewById(R.id.new_group_name);
+
+        if (textView.getText().length() == 0) {
+            Toast.makeText(this, R.string.dialog_title_empty_group_name, Toast.LENGTH_SHORT).show();
+        } else {
+            Collection collection = new Collection();
+            collection.setName(textView.getText().toString());
+            collection.save();
+
+            textView.setText(null);
+            setupList();
+
+            LinearLayout linearLayout = (LinearLayout) findViewById(R.id.new_group_line);
+            linearLayout.setVisibility(View.GONE);
+
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (imm != null) {
+                imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
+            }
+        }
+    }
+
+    @Click
     public void buttonOkClicked() {
 
         // 已有处理
@@ -79,6 +118,7 @@ public class CollectionActivity extends AppCompatActivity {
 
         }
 
+        setResult(RESULT_OK, getIntent());
         finish();
     }
 }

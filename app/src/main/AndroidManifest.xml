@@ -67,11 +67,11 @@
         <activity android:name=".activity.LocalPDFActivity_" />
         <activity
             android:name=".activity.CollectionActivity_"
-            android:theme="@style/Theme.AppCompat.Dialog" />
+            android:theme="@style/Theme.Light.Dialog" />
 
         <meta-data
             android:name="UMENG_APPKEY"
-            android:value="5644114967e58ef4b00013ec"></meta-data>
+            android:value="5644114967e58ef4b00013ec" />
 
         <activity
             android:name=".wxapi.WXEntryActivity"

@@ -45,4 +45,5 @@
     <string name="groups">选择分组</string>
     <string name="delete">删除</string>
     <string name="complete">完成</string>
+    <string name="dialog_title_empty_group_name">新建分组名称不能为空！</string>
 </resources>

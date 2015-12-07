@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.activeandroid.query.Select;
 import com.ivymobi.abb.pw.R;
@@ -125,7 +125,7 @@ public class FavoriteFragment extends Fragment implements OnFavoriteRecyclerList
     }
 
     @Override
-    public void onDeleteTvClicked(View v, Collection collection,String newName) {
+    public void onDeleteTvClicked(View v, Collection collection, String newName) {
         collectionsToDelete.add(collection);
         collections.remove(collection);
         adapter.updateItems(collections);
@@ -151,21 +151,7 @@ public class FavoriteFragment extends Fragment implements OnFavoriteRecyclerList
 
         alertDialogBuilder
                 .setCancelable(false)
-                .setPositiveButton(R.string.action_ok,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                Collection collection = new Collection();
-                                collection.setName(inputEditText.getText().toString());
-                                collection.save();
-
-                                addButton.setSelected(false);
-
-                                updateData();
-
-                                InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                                imm.hideSoftInputFromWindow(inputEditText.getWindowToken(), 0) ;
-                            }
-                        })
+                .setPositiveButton(R.string.action_ok, null)
                 .setNegativeButton(R.string.action_cancel,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
@@ -174,11 +160,35 @@ public class FavoriteFragment extends Fragment implements OnFavoriteRecyclerList
                             }
                         });
 
-        // create alert dialog
-        AlertDialog alertDialog = alertDialogBuilder.create();
-
-        // show it
+        final AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
+
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (inputEditText.getText().length() == 0) {
+                    Toast.makeText(getContext(), R.string.dialog_title_empty_group_name, Toast.LENGTH_SHORT).show();
+                } else {
+
+                    InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    if (imm != null) {
+                        imm.hideSoftInputFromWindow(getActivity().getWindow().getDecorView().getWindowToken(), 0);
+                    }
+
+                    alertDialog.dismiss();
+
+                    Collection collection = new Collection();
+                    collection.setName(inputEditText.getText().toString());
+                    collection.save();
+
+                    addButton.setSelected(false);
+
+                    updateData();
+
+                }
+            }
+        });
     }
 
     @Click
@@ -203,7 +213,7 @@ public class FavoriteFragment extends Fragment implements OnFavoriteRecyclerList
             //恢复到非编辑模式
             adapter.SwitchToNormalStyle(viewHolder, this.getContext());
             //处理预重命名元素
-            adapter.saveNewName(viewHolder,collections.get(i));
+            adapter.saveNewName(viewHolder, collections.get(i));
         }
         //处理预删除元素,如果文件夹下含文件时,需要先删除关联关系。
         for (Collection c : collectionsToDelete) {

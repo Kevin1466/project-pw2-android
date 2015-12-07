@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
@@ -65,7 +67,7 @@ public class OnSwipeMenuItemClickListener implements SwipeMenuListView.OnMenuIte
                 break;
 
             case 2:
-                collectionFile(file);
+                collectionFile(file, position);
                 break;
         }
 
@@ -124,15 +126,19 @@ public class OnSwipeMenuItemClickListener implements SwipeMenuListView.OnMenuIte
         });
     }
 
-    private void collectionFile(final File file) {
+    private void collectionFile(final File file, final int position) {
         Intent intent = new Intent(fragment.getContext(), CollectionActivity_.class);
         intent.putExtra("uuid", file.getUuid());
-        fragment.startActivityForResult(intent, 0);
+        intent.putExtra("position", position);
+        fragment.startActivityForResult(intent, fragment.getActivity().RESULT_FIRST_USER);
     }
 
     private void downloadFile(final File file, int position) {
 
         final SwipeMenuLayout layout = (SwipeMenuLayout) fragment.listView.getChildAt(position);
+        LinearLayout linearLayout = (LinearLayout) layout.getMenuView().getChildAt(0);
+        final ImageView downloadImageView = (ImageView) linearLayout.getChildAt(0);
+
         final CircularProgressBar progressBar = (CircularProgressBar) layout.findViewById(R.id.list_item_download_progress);
         progressBar.setVisibility(View.GONE);
 
@@ -158,6 +164,8 @@ public class OnSwipeMenuItemClickListener implements SwipeMenuListView.OnMenuIte
 
                                     file.setLocalPath(fileName);
                                     file.save();
+
+                                    downloadImageView.setImageResource(R.mipmap.icon_download_gray);
 
                                     progressBar.setVisibility(View.GONE);
 
