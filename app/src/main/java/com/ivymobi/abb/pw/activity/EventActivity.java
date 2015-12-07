@@ -55,19 +55,27 @@ public class EventActivity extends AppCompatActivity implements View.OnTouchList
         final Rect rect = new Rect();
         v.getHitRect(rect);
 
+        float scale = getResources().getDisplayMetrics().density;
+
+        if (scale == 3.0) {
+            scale = 1.5f;
+        } else {
+            scale = 1.0f;
+        }
+
         if (locale == Locale.ENGLISH) {
 
             switch (event.getAction()) {
                 case MotionEvent.ACTION_UP:
-                    if (MyApplication.clickHit(imageView, event, 300, 400, 160, 260)) {
+                    if (MyApplication.clickHit(imageView, event, 300, 400, 160, 260, scale)) {
                         Intent intent = new Intent(this, VideoActivity_.class);
                         intent.putExtra("url", "http://ivymobi-storage.qiniudn.com/abbpw/Video/abb_pw_2014_en.mp4");
                         startActivity(intent);
-                    } else if (MyApplication.clickHit(imageView, event, 0, 358, 617, 667)) {
+                    } else if (MyApplication.clickHit(imageView, event, 0, 358, 617, 667, scale)) {
                         Uri uri = Uri.parse("http://new.abb.com/cn/power-world-2014/seminars-ppt-sharing");
                         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                         startActivity(intent);
-                    } else if (MyApplication.clickHit(imageView, event, 0, 352, 5299, 5541)) {
+                    } else if (MyApplication.clickHit(imageView, event, 0, 352, 5299, 5541, scale)) {
                         Intent intent = new Intent(this, VideoActivity_.class);
                         intent.putExtra("url", "http://ivymobi-storage.qiniudn.com/abbpw/Video/ABB_PW_2011_cn.mp4");
                         startActivity(intent);
@@ -79,15 +87,15 @@ public class EventActivity extends AppCompatActivity implements View.OnTouchList
 
             switch (event.getAction()) {
                 case MotionEvent.ACTION_UP:
-                    if (MyApplication.clickHit(imageView, event, 300, 400, 160, 260)) {
+                    if (MyApplication.clickHit(imageView, event, 300, 400, 160, 260, scale)) {
                         Intent intent = new Intent(this, VideoActivity_.class);
                         intent.putExtra("url", "http://ivymobi-storage.qiniudn.com/abbpw/Video/abb_pw_2014_en.mp4");
                         startActivity(intent);
-                    } else if (MyApplication.clickHit(imageView, event, 0, 248, 576, 626)) {
+                    } else if (MyApplication.clickHit(imageView, event, 0, 248, 576, 626, scale)) {
                         Uri uri = Uri.parse("http://new.abb.com/cn/power-world-2014/seminars-ppt-sharing");
                         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                         startActivity(intent);
-                    } else if (MyApplication.clickHit(imageView, event, 0, 352, 4826, 5068)) {
+                    } else if (MyApplication.clickHit(imageView, event, 0, 352, 4826, 5068, scale)) {
                         Intent intent = new Intent(this, VideoActivity_.class);
                         intent.putExtra("url", "http://ivymobi-storage.qiniudn.com/abbpw/Video/ABB_PW_2011_cn.mp4");
                         startActivity(intent);

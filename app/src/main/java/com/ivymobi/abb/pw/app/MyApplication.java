@@ -11,7 +11,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import java.io.File;
-import java.util.Locale;
 
 public class MyApplication extends Application {
     @Override
@@ -28,12 +27,12 @@ public class MyApplication extends Application {
         ImageLoader.getInstance().init(config);
     }
 
-    public static boolean clickHit(ImageView imageView, MotionEvent event, float minX, float maxX, float minY, float maxY) {
-        float widthScale = imageView.getDrawable().getIntrinsicWidth() / imageView.getWidth();
-        float heightScale = imageView.getDrawable().getIntrinsicHeight() / imageView.getHeight();
+    public static boolean clickHit(ImageView imageView, MotionEvent event, float minX, float maxX, float minY, float maxY, float scale) {
+        float widthScale = (imageView.getDrawable().getIntrinsicWidth() / scale) / (imageView.getWidth() / scale);
+        float heightScale = (imageView.getDrawable().getIntrinsicHeight() / scale) / (imageView.getHeight() / scale);
 
-        float x = event.getX();
-        float y = event.getY();
+        float x = event.getX() / scale;
+        float y = event.getY() / scale;
 
         minX *= widthScale;
         maxX *= widthScale;

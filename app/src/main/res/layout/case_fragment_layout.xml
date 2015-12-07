@@ -5,17 +5,17 @@
     android:orientation="vertical">
 
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/scrollView2">
+        android:layout_height="wrap_content">
 
         <ImageView
+            android:id="@+id/imageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/imageView"
-            android:src="@mipmap/cgal"
             android:layout_marginRight="12dp"
-            android:scaleType="fitXY" />
+            android:scaleType="fitXY"
+            android:src="@mipmap/cgal" />
     </ScrollView>
 
 </RelativeLayout>

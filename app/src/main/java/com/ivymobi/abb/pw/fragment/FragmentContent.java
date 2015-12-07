@@ -20,6 +20,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import org.androidannotations.annotations.EFragment;
@@ -57,7 +58,13 @@ public class FragmentContent extends Fragment implements View.OnTouchListener {
         locale = getContext().getResources().getConfiguration().locale;
         imageView = (ImageView) view.findViewById(R.id.imageView);
 
-        initView();
+        Integer position = getArguments().getInt("position");
+        imageView.setOnTouchListener(this);
+
+
+        loadView(position);
+
+        // initView();
     }
 
     @Override
@@ -67,28 +74,36 @@ public class FragmentContent extends Fragment implements View.OnTouchListener {
 
         Integer position = getArguments().getInt("position");
 
+        float scale = getContext().getResources().getDisplayMetrics().density;
+
+        if (scale == 3.0) {
+            scale = 1.5f;
+        } else {
+            scale = 1.0f;
+        }
+
         switch (event.getAction()) {
             case MotionEvent.ACTION_UP:
 
-                switch (position) {
+                switch (position) { // 1st image
                     case 0:
 
                         if (locale == Locale.ENGLISH) {
-                            if (MyApplication.clickHit(imageView, event, 0, 702, 0, 336)) {
+                            if (MyApplication.clickHit(imageView, event, 0, 702, 0, 336, scale)) {
                                 Intent intent = new Intent(getActivity(), VideoActivity_.class);
                                 intent.putExtra("url", "http://ivymobi-storage.qiniudn.com/abbpw/Video/ABB_Instruction.mp4");
                                 startActivity(intent);
-                            } else if (MyApplication.clickHit(imageView, event, 572, 702, 419, 469)) {
+                            } else if (MyApplication.clickHit(imageView, event, 572, 702, 419, 469, scale)) {
                                 Intent intent = new Intent(getActivity(), PDFActivity_.class);
                                 intent.putExtra("url", "http://ivymobi-storage.qiniudn.com/abbpw/PDF_file/abb_instruction/ABB%2bin%2bChina_EN_2014.pdf");
                                 startActivity(intent);
                             }
                         } else {
-                            if (MyApplication.clickHit(imageView, event, 0, 700, 0, 336)) {
+                            if (MyApplication.clickHit(imageView, event, 0, 700, 0, 336, scale)) { // 1st area
                                 Intent intent = new Intent(getActivity(), VideoActivity_.class);
                                 intent.putExtra("url", "http://ivymobi-storage.qiniudn.com/abbpw/Video/ABB_Instruction.mp4");
                                 startActivity(intent);
-                            } else if (MyApplication.clickHit(imageView, event, 572, 702, 390, 440)) {
+                            } else if (MyApplication.clickHit(imageView, event, 570, 700, 390, 440, scale)) { // 2nd area
                                 Intent intent = new Intent(getActivity(), PDFActivity_.class);
                                 intent.putExtra("url", "http://ivymobi-storage.qiniudn.com/abbpw/PDF_file/abb_instruction/ABB%2bin%2bChina_CN_2014.pdf");
                                 startActivity(intent);
@@ -97,24 +112,24 @@ public class FragmentContent extends Fragment implements View.OnTouchListener {
 
                         break;
 
-                    case 1:
+                    case 1: // 2nd image
 
                         if (locale == Locale.ENGLISH) {
-                            if (MyApplication.clickHit(imageView, event, 0, 700, 0, 336)) {
+                            if (MyApplication.clickHit(imageView, event, 0, 700, 0, 336, scale)) {
                                 Intent intent = new Intent(getActivity(), VideoActivity_.class);
                                 intent.putExtra("url", "http://ivymobi-storage.qiniudn.com/abbpw/Video/ABB_Power.mp4");
                                 startActivity(intent);
-                            } else if (MyApplication.clickHit(imageView, event, 572, 702, 419, 469)) {
+                            } else if (MyApplication.clickHit(imageView, event, 572, 702, 419, 469, scale)) {
                                 Intent intent = new Intent(getActivity(), PDFActivity_.class);
                                 intent.putExtra("url", "http://ivymobi-storage.qiniudn.com/abbpw/PDF_file/abb_power/ABB_power_en.pdf");
                                 startActivity(intent);
                             }
                         } else {
-                            if (MyApplication.clickHit(imageView, event, 0, 700, 0, 336)) {
+                            if (MyApplication.clickHit(imageView, event, 0, 700, 0, 336, scale)) {
                                 Intent intent = new Intent(getActivity(), VideoActivity_.class);
                                 intent.putExtra("url", "http://ivymobi-storage.qiniudn.com/abbpw/Video/ABB_Power.mp4");
                                 startActivity(intent);
-                            } else if (MyApplication.clickHit(imageView, event, 572, 702, 390, 440)) {
+                            } else if (MyApplication.clickHit(imageView, event, 572, 702, 390, 440, scale)) {
                                 Intent intent = new Intent(getActivity(), PDFActivity_.class);
                                 intent.putExtra("url", "http://ivymobi-storage.qiniudn.com/abbpw/PDF_file/abb_power/ABB_power_cn.pdf");
                                 startActivity(intent);
@@ -131,13 +146,21 @@ public class FragmentContent extends Fragment implements View.OnTouchListener {
         return true;
     }
 
-    private void initView() {
+    private void loadView(int position) {
+        if (position == 0) {
+            imageView.setImageResource(R.mipmap.zgjs);
+        } else {
+            imageView.setImageResource(R.mipmap.dlywjs);
+        }
+    }
 
-        Integer position = getArguments().getInt("position");
-        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-        imageView.setOnTouchListener(this);
+    private void initView(int position) {
 
-        DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).imageScaleType(ImageScaleType.NONE).build();
+        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                .cacheInMemory(true)
+                .imageScaleType(ImageScaleType.EXACTLY)
+                .displayer(new FadeInBitmapDisplayer(100))
+                .build();
         ImageLoadingListener imageLoadingListener = new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
@@ -151,6 +174,8 @@ public class FragmentContent extends Fragment implements View.OnTouchListener {
 
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                System.out.println("loadedImage.getWidth();" + loadedImage.getWidth());
+                System.out.println("loadedImage.getHeight();" + loadedImage.getHeight());
             }
 
             @Override
