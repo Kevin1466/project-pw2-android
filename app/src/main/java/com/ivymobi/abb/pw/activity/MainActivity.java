@@ -1,6 +1,5 @@
 package com.ivymobi.abb.pw.activity;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -11,11 +10,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.ivymobi.abb.pw.R;
 import com.ivymobi.abb.pw.util.PreferenceUtil;
+import com.umeng.update.UmengUpdateAgent;
 
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
@@ -72,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
                 videoView.start();
             }
         });
+
+        UmengUpdateAgent.update(this);
     }
 
     @Click
