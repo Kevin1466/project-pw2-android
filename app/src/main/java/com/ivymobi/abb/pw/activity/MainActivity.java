@@ -109,7 +109,6 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-
                 Intent intent = new Intent(this, SettingActivity_.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 
