@@ -134,9 +134,10 @@ public class FragmentContent extends Fragment implements View.OnTouchListener {
     private void initView() {
 
         Integer position = getArguments().getInt("position");
+        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
         imageView.setOnTouchListener(this);
 
-        DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).imageScaleType(ImageScaleType.NONE_SAFE).build();
+        DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).imageScaleType(ImageScaleType.NONE).build();
         ImageLoadingListener imageLoadingListener = new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
@@ -150,7 +151,6 @@ public class FragmentContent extends Fragment implements View.OnTouchListener {
 
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                imageView.setScaleType(ImageView.ScaleType.FIT_XY);
             }
 
             @Override
