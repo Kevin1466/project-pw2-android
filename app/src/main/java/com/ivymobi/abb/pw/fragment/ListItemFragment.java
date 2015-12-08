@@ -52,6 +52,8 @@ public class ListItemFragment extends Fragment {
 
     protected boolean isShareMode = false;
 
+    public static String FLAG = "LIST_ITEM_FRAGMENT";
+
     private View mView;
     public SwipeMenuListView listView = null;
     private ListItemAdapter listItemAdapter;
@@ -72,7 +74,7 @@ public class ListItemFragment extends Fragment {
     }
 
     @AfterInject
-    public void registerOttoBus(){
+    public void registerOttoBus() {
         bus.register(this);
     }
 
@@ -83,10 +85,10 @@ public class ListItemFragment extends Fragment {
     }
 
     @Subscribe
-    public void updateListItemFragment(UpdateShareModeEvent event){
+    public void updateListItemFragment(UpdateShareModeEvent event) {
         isShareMode = event.isShareMode;
         //TODO:
-        Toast.makeText(this.getContext(),"share mode is:"+isShareMode,Toast.LENGTH_SHORT).show();
+        Toast.makeText(this.getContext(), "share mode is:" + isShareMode, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -166,18 +168,21 @@ public class ListItemFragment extends Fragment {
 
                 //
                 final SwipeMenuLayout layout = (SwipeMenuLayout) listView.getChildAt(position);
-                LinearLayout linearLayout = (LinearLayout) layout.getMenuView().getChildAt(0);
-                final ImageView favoriteItem = (ImageView) linearLayout.getChildAt(0);
 
-                List<CollectionFile> collectionFiles = CollectionFile.findByFile(files.get(position));
+                if (layout != null) {
+                    LinearLayout linearLayout = (LinearLayout) layout.getMenuView().getChildAt(0);
+                    final ImageView favoriteItem = (ImageView) linearLayout.getChildAt(2);
 
-                if (collectionFiles != null && !collectionFiles.isEmpty()) {
-                    favoriteItem.setImageResource(R.mipmap.icon_heart);
-                } else {
-                    favoriteItem.setImageResource(R.mipmap.icon_heart_empty);
+                    List<CollectionFile> collectionFiles = CollectionFile.findByFile(files.get(position));
+
+                    if (collectionFiles != null && !collectionFiles.isEmpty()) {
+                        favoriteItem.setImageResource(R.mipmap.icon_heart);
+                    } else {
+                        favoriteItem.setImageResource(R.mipmap.icon_heart_empty);
+                    }
+
+                    refreshData();
                 }
-
-                refreshData();
                 break;
         }
     }

@@ -29,6 +29,7 @@ import com.squareup.otto.Produce;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EActivity;
 
+import java.util.List;
 import java.util.Locale;
 
 @EActivity
@@ -154,16 +155,16 @@ public class DownloadActivity extends AppCompatActivity {
     }
 
     @Produce
-    public UpdateShareModeEvent produceEvent(){
+    public UpdateShareModeEvent produceEvent() {
         return new UpdateShareModeEvent(isInShareMode);
     }
 
-    protected void updateTabState(boolean isInShareMode){
-        if (isInShareMode){
+    protected void updateTabState(boolean isInShareMode) {
+        if (isInShareMode) {
 //            mTabHost.getTabWidget().getChildTabViewAt(0).setBackground(null);
             //TODO:change the tabview background
             mTabHost.getTabWidget().setEnabled(!isInShareMode);
-        }else {
+        } else {
             //TODO:change the tabview background
             mTabHost.getTabWidget().setEnabled(!isInShareMode);
         }
@@ -194,7 +195,22 @@ public class DownloadActivity extends AppCompatActivity {
 
         System.out.println("getCurrentFragment():::::" + getCurrentFragment().getTag());
 
-        getCurrentFragment().onActivityResult(requestCode, resultCode, data);
+//        findListItemFragment(getCurrentFragment());
+    }
+
+    private Fragment findListItemFragment(Fragment fragment) {
+
+        List<Fragment> fragmentList = fragment.getChildFragmentManager().getFragments();
+
+        if (fragmentList != null) {
+            for (Fragment child : fragmentList) {
+
+                findListItemFragment(child);
+            }
+        }
+
+
+        return null;
     }
 
     private void switchLanguage(String language) {

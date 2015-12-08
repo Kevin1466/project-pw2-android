@@ -40,6 +40,8 @@ public class CloudFragment extends Fragment implements OnFolderRecyclerListener 
     private HashMap<String, File> filesMap = new HashMap<>();
     private ProgressDialog pDialog;
 
+    public static String FLAG = "CLOUD_FRAGMENT";
+
     public Catalog root;
     private RecyclerView mRecyclerView = null;
 
@@ -50,7 +52,6 @@ public class CloudFragment extends Fragment implements OnFolderRecyclerListener 
 
         mRecyclerView = (RecyclerView) mView.findViewById(R.id.cloud_list_rv);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
 
         return mView;
     }
@@ -126,7 +127,7 @@ public class CloudFragment extends Fragment implements OnFolderRecyclerListener 
     }
 
     @UiThread
-    public void updateFragmentUI(JSONArray response){
+    public void updateFragmentUI(JSONArray response) {
         try {
             JSONObject list = response.getJSONObject(0);
             root = new Catalog();
@@ -140,6 +141,7 @@ public class CloudFragment extends Fragment implements OnFolderRecyclerListener 
             err.println(e);
         }
     }
+
     private ArrayList<Catalog> fetchCatalog(JSONArray jsonArray) throws JSONException {
 
         ArrayList<Catalog> catalogList = new ArrayList<>();
@@ -182,7 +184,7 @@ public class CloudFragment extends Fragment implements OnFolderRecyclerListener 
 
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
             transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            transaction.replace(R.id.container_framelayout, listItemFragment, "LIST_ITEM_FRAGMENT");
+            transaction.replace(R.id.container_framelayout, listItemFragment, ListItemFragment.FLAG);
             transaction.addToBackStack(null);
             transaction.commit();
         } else {
@@ -191,7 +193,7 @@ public class CloudFragment extends Fragment implements OnFolderRecyclerListener 
 
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
             transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            transaction.replace(R.id.container_framelayout, cloudFragment);
+            transaction.replace(R.id.container_framelayout, cloudFragment, CloudFragment.FLAG);
             transaction.addToBackStack(null);
             transaction.commit();
         }

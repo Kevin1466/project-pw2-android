@@ -142,7 +142,7 @@ public class OnSwipeMenuItemClickListener implements SwipeMenuListView.OnMenuIte
         Intent intent = new Intent(fragment.getContext(), CollectionActivity_.class);
         intent.putExtra("uuid", file.getUuid());
         intent.putExtra("position", position);
-        fragment.startActivityForResult(intent, fragment.getActivity().RESULT_FIRST_USER);
+        fragment.startActivityForResult(intent, 1);
     }
 
     private void downloadFile(final File file, int position) {
