@@ -42,7 +42,6 @@ import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
 import com.umeng.socialize.controller.listener.SocializeListeners;
 
-import org.androidannotations.annotations.AfterInject;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EFragment;
@@ -90,15 +89,16 @@ public class ListItemFragment extends Fragment {
 
         return mView;
     }
-
-    @AfterInject
-    public void registerOttoBus() {
+    
+    @Override
+    public void onResume() {
+        super.onResume();
         bus.register(this);
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onPause() {
+        super.onPause();
         bus.unregister(this);
     }
 
