@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
@@ -29,6 +28,7 @@ import com.ivymobi.abb.pw.beans.CollectionFile;
 import com.ivymobi.abb.pw.beans.File;
 import com.ivymobi.abb.pw.listener.OnSwipeMenuItemClickListener;
 import com.ivymobi.abb.pw.listener.OttoBus;
+import com.ivymobi.abb.pw.listener.UpdateShareEvent;
 import com.ivymobi.abb.pw.listener.UpdateShareModeEvent;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -41,6 +41,7 @@ import org.androidannotations.annotations.EFragment;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
@@ -61,6 +62,8 @@ public class ListItemFragment extends Fragment {
     private ListItemAdapter listItemAdapter;
     public List<File> files;
     public Context context;
+
+    List<String> filesToShare;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -96,7 +99,13 @@ public class ListItemFragment extends Fragment {
 
         updateListItemStyle();
 
-        Toast.makeText(this.getContext(), "share mode is:" + isShareMode, Toast.LENGTH_SHORT).show();
+    }
+
+    @Subscribe
+    public void startShare(UpdateShareEvent event) {
+        filesToShare = listItemAdapter.getSelectedFilesToShare();
+        //TODO:执行分享操作，完成后将分析列表清空
+        listItemAdapter.initCheckedItems();
     }
 
     public void updateListItemStyle() {
@@ -109,6 +118,7 @@ public class ListItemFragment extends Fragment {
                     viewHolder.cbSelect.setVisibility(View.VISIBLE);
                 } else {
                     viewHolder.cbSelect.setChecked(false);
+                    listItemAdapter.initCheckedItems();
                     viewHolder.cbSelect.setVisibility(View.GONE);
                 }
             }
@@ -130,6 +140,7 @@ public class ListItemFragment extends Fragment {
                 }
             }
         });
+        filesToShare = new ArrayList<>();
     }
 
     private SwipeMenuCreator swipeMenuCreator() {

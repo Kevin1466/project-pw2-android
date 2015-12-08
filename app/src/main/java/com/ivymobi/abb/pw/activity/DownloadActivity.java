@@ -24,6 +24,7 @@ import com.ivymobi.abb.pw.fragment.FavoriteFragment_;
 import com.ivymobi.abb.pw.fragment.ListItemFragment;
 import com.ivymobi.abb.pw.fragment.TabRootFragment;
 import com.ivymobi.abb.pw.listener.OttoBus;
+import com.ivymobi.abb.pw.listener.UpdateShareEvent;
 import com.ivymobi.abb.pw.listener.UpdateShareModeEvent;
 import com.ivymobi.abb.pw.util.PreferenceUtil;
 import com.squareup.otto.Produce;
@@ -31,7 +32,6 @@ import com.squareup.otto.Produce;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EActivity;
 
-import java.util.List;
 import java.util.Locale;
 
 @EActivity
@@ -141,7 +141,8 @@ public class DownloadActivity extends AppCompatActivity {
         } else if (item.getItemId() == R.id.action_share) {
             isShareMode = false;
             invalidateOptionsMenu();
-            //TODO:complete the share operation
+            bus.post(produceShareEvent());
+
         }
         return true;
     }
@@ -155,15 +156,18 @@ public class DownloadActivity extends AppCompatActivity {
         updateTabState(isShareMode);
         ((MyApplication) getApplication()).setmData(
                 getResources().getString(R.string.share_mode), isShareMode);
-        bus.post(produceEvent());
+        bus.post(produceShareModeEvent());
         return true;
     }
 
     @Produce
-    public UpdateShareModeEvent produceEvent() {
+    public UpdateShareModeEvent produceShareModeEvent() {
         return new UpdateShareModeEvent(isShareMode);
     }
-
+    @Produce
+    public UpdateShareEvent produceShareEvent() {
+        return new UpdateShareEvent(true);
+    }
     protected void updateTabState(boolean isInShareMode) {
         if (isInShareMode) {
 //            mTabHost.getTabWidget().getChildTabViewAt(0).setBackground(null);

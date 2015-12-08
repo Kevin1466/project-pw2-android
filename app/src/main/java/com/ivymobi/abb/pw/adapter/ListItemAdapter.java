@@ -30,18 +30,33 @@ public class ListItemAdapter extends BaseAdapter {
     private Locale locale;
 
     protected List<Boolean> mChecked;
+
     protected List<View> views;
     protected boolean isShareMode = false;
 
-    public ListItemAdapter(Context context, List<File> files,boolean isShareMode) {
+    public ListItemAdapter(Context context, List<File> files, boolean isShareMode) {
         this.beans = files;
         this.context = context;
         this.locale = context.getResources().getConfiguration().locale;
         this.isShareMode = isShareMode;
 
         views = new ArrayList<>();
+        initCheckedItems();
+    }
+
+    public List<String> getSelectedFilesToShare() {
+        List<String> files = new ArrayList<>();
+        for (int i = 0; i < beans.size(); i++) {
+            if (mChecked.get(i) == true) {
+                files.add(beans.get(i).getUuid());
+            }
+        }
+        return files;
+    }
+
+    public void initCheckedItems(){
         mChecked = new ArrayList<>();
-        for (int i =0;i<beans.size();i++){
+        for (int i = 0; i < beans.size(); i++) {
             mChecked.add(false);
         }
     }
@@ -66,7 +81,7 @@ public class ListItemAdapter extends BaseAdapter {
         return position;
     }
 
-    public View getItemView(int position){
+    public View getItemView(int position) {
         return views.get(position);
     }
 
@@ -81,7 +96,7 @@ public class ListItemAdapter extends BaseAdapter {
             viewHolder.cbSelect.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mChecked.set(position,viewHolder.cbSelect.isChecked());
+                    mChecked.set(position, viewHolder.cbSelect.isChecked());
                 }
             });
             convertView.setTag(viewHolder);
@@ -89,9 +104,9 @@ public class ListItemAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        if (isShareMode){
+        if (isShareMode) {
             viewHolder.cbSelect.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             viewHolder.cbSelect.setVisibility(View.GONE);
         }
 
@@ -142,7 +157,7 @@ public class ListItemAdapter extends BaseAdapter {
 
             }
         });
-        views.add(position,convertView);
+        views.add(position, convertView);
         return convertView;
     }
 
