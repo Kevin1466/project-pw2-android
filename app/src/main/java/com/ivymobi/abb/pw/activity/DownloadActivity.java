@@ -20,6 +20,7 @@ import com.ivymobi.abb.pw.R;
 import com.ivymobi.abb.pw.fragment.CloudFragment_;
 import com.ivymobi.abb.pw.fragment.DownloadedFragment_;
 import com.ivymobi.abb.pw.fragment.FavoriteFragment_;
+import com.ivymobi.abb.pw.fragment.ListItemFragment;
 import com.ivymobi.abb.pw.fragment.TabRootFragment;
 import com.ivymobi.abb.pw.listener.OttoBus;
 import com.ivymobi.abb.pw.listener.UpdateShareModeEvent;
@@ -36,6 +37,7 @@ import java.util.Locale;
 public class DownloadActivity extends AppCompatActivity {
 
     protected FragmentTabHost mTabHost;
+    public static ListItemFragment listItemFragment = null;
 
     @Override
     public void onBackPressed() {
@@ -193,24 +195,9 @@ public class DownloadActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        System.out.println("getCurrentFragment():::::" + getCurrentFragment().getTag());
-
-//        findListItemFragment(getCurrentFragment());
-    }
-
-    private Fragment findListItemFragment(Fragment fragment) {
-
-        List<Fragment> fragmentList = fragment.getChildFragmentManager().getFragments();
-
-        if (fragmentList != null) {
-            for (Fragment child : fragmentList) {
-
-                findListItemFragment(child);
-            }
+        if (listItemFragment != null) {
+            listItemFragment.onActivityResult(requestCode, resultCode, data);
         }
-
-
-        return null;
     }
 
     private void switchLanguage(String language) {

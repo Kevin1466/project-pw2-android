@@ -21,6 +21,7 @@ import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuLayout;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.ivymobi.abb.pw.R;
+import com.ivymobi.abb.pw.activity.DownloadActivity;
 import com.ivymobi.abb.pw.activity.LocalPDFActivity_;
 import com.ivymobi.abb.pw.activity.PDFActivity_;
 import com.ivymobi.abb.pw.adapter.ListItemAdapter;
@@ -155,12 +156,6 @@ public class ListItemFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        System.out.println("ffffffffkkkkkkkkk22222222222");
-
-        // test
-        listView.setAdapter(listItemAdapter);
-        listItemAdapter.notifyDataSetChanged();
-
         switch (resultCode) {
             case Activity.RESULT_OK:
                 int position = data.getIntExtra("position", 0);
@@ -170,8 +165,8 @@ public class ListItemFragment extends Fragment {
                 final SwipeMenuLayout layout = (SwipeMenuLayout) listView.getChildAt(position);
 
                 if (layout != null) {
-                    LinearLayout linearLayout = (LinearLayout) layout.getMenuView().getChildAt(0);
-                    final ImageView favoriteItem = (ImageView) linearLayout.getChildAt(2);
+                    LinearLayout linearLayout = (LinearLayout) layout.getMenuView().getChildAt(2);
+                    final ImageView favoriteItem = (ImageView) linearLayout.getChildAt(0);
 
                     List<CollectionFile> collectionFiles = CollectionFile.findByFile(files.get(position));
 
@@ -185,6 +180,8 @@ public class ListItemFragment extends Fragment {
                 }
                 break;
         }
+
+        DownloadActivity.listItemFragment = null;
     }
 
     private void itemClicked(int position) {
