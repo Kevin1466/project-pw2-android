@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TabHost;
 
 import com.ivymobi.abb.pw.R;
+import com.ivymobi.abb.pw.app.MyApplication;
 import com.ivymobi.abb.pw.fragment.CloudFragment_;
 import com.ivymobi.abb.pw.fragment.DownloadedFragment_;
 import com.ivymobi.abb.pw.fragment.FavoriteFragment_;
@@ -89,7 +90,7 @@ public class DownloadActivity extends AppCompatActivity {
     @Bean
     protected OttoBus bus;
 
-    protected boolean isInShareMode = false;
+    protected boolean isShareMode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,41 +130,43 @@ public class DownloadActivity extends AppCompatActivity {
         if (item.getItemId() == android.R.id.home) {
             finish();
         } else if (item.getItemId() == R.id.action_share_icon) {
-            isInShareMode = true;
+            isShareMode = true;
             invalidateOptionsMenu();
         } else if (item.getItemId() == R.id.action_cancel) {
-            isInShareMode = false;
+            isShareMode = false;
             invalidateOptionsMenu();
         } else if (item.getItemId() == R.id.action_share) {
+            isShareMode = false;
             invalidateOptionsMenu();
             //TODO:complete the share operation
-            isInShareMode = false;
         }
         return true;
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        getSupportActionBar().setDisplayHomeAsUpEnabled(!isInShareMode);
-        mShareIconMenuItem.setVisible(!isInShareMode);
-        mCancelMenuItem.setVisible(isInShareMode);
-        mShareMenuItem.setVisible(isInShareMode);
-        updateTabState(isInShareMode);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(!isShareMode);
+        mShareIconMenuItem.setVisible(!isShareMode);
+        mCancelMenuItem.setVisible(isShareMode);
+        mShareMenuItem.setVisible(isShareMode);
+        updateTabState(isShareMode);
+        ((MyApplication) getApplication()).setmData(
+                getResources().getString(R.string.share_mode), isShareMode);
         bus.post(produceEvent());
         return true;
     }
 
     @Produce
-    public UpdateShareModeEvent produceEvent(){
-        return new UpdateShareModeEvent(isInShareMode);
+    public UpdateShareModeEvent produceEvent() {
+        return new UpdateShareModeEvent(isShareMode);
     }
 
-    protected void updateTabState(boolean isInShareMode){
-        if (isInShareMode){
+    protected void updateTabState(boolean isInShareMode) {
+        if (isInShareMode) {
 //            mTabHost.getTabWidget().getChildTabViewAt(0).setBackground(null);
             //TODO:change the tabview background
             mTabHost.getTabWidget().setEnabled(!isInShareMode);
-        }else {
+        } else {
             //TODO:change the tabview background
             mTabHost.getTabWidget().setEnabled(!isInShareMode);
         }

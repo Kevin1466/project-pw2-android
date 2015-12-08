@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.ivymobi.abb.pw.R;
 import com.ivymobi.abb.pw.adapter.ListFolderAdapter;
+import com.ivymobi.abb.pw.app.MyApplication;
 import com.ivymobi.abb.pw.beans.Catalog;
 import com.ivymobi.abb.pw.beans.File;
 import com.ivymobi.abb.pw.listener.OnFolderRecyclerListener;
@@ -179,6 +180,11 @@ public class CloudFragment extends Fragment implements OnFolderRecyclerListener 
         if (root.getChildren().get(position).hasFiles()) {
             ListItemFragment listItemFragment = ListItemFragment_.builder().build();
             listItemFragment.files = root.getChildren().get(position).getFiles();
+            Bundle args = new Bundle();
+            boolean isShareMode = (boolean)((MyApplication) getActivity().getApplication()).getmData(
+                    getResources().getString(R.string.share_mode));
+            args.putBoolean(getResources().getString(R.string.share_mode),isShareMode);
+            listItemFragment.setArguments(args);
 
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
             transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
@@ -196,4 +202,5 @@ public class CloudFragment extends Fragment implements OnFolderRecyclerListener 
             transaction.commit();
         }
     }
+
 }

@@ -61,6 +61,10 @@ public class ListItemFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        Bundle args = getArguments();
+        isShareMode = args.getBoolean(getResources().getString(R.string.share_mode));
+
         mView = inflater.inflate(R.layout.fragment_list_item, container, false);
 
         listView = (SwipeMenuListView) mView.findViewById(R.id.listView);
@@ -87,36 +91,27 @@ public class ListItemFragment extends Fragment {
     public void updateListItemFragment(UpdateShareModeEvent event) {
         isShareMode = event.isShareMode;
 
-//        updateListItemStyle();
+        updateListItemStyle();
 
-        setAdapter();
         Toast.makeText(this.getContext(), "share mode is:" + isShareMode, Toast.LENGTH_SHORT).show();
     }
 
-//    public void updateListItemStyle() {
-//        for (int i = 0; i < listItemAdapter.getCount(); i++) {
-//            Object obj = listView.findViewById(i).getTag();
-//            ListItemAdapter.ViewHolder viewHolder = (ListItemAdapter.ViewHolder) obj;
-//            if (viewHolder != null) {
-//
-//                if (isShareMode) {
-//                    viewHolder.cbSelect.setVisibility(View.VISIBLE);
-//                } else {
-//                    viewHolder.cbSelect.setVisibility(View.GONE);
-//                }
-//            }
-//        }
-//    }
+    public void updateListItemStyle() {
+        for (int i = 0; i < listItemAdapter.getCount(); i++) {
+            Object obj = listItemAdapter.getItemView(i).getTag();
+            ListItemAdapter.ViewHolder viewHolder = (ListItemAdapter.ViewHolder) obj;
+            if (viewHolder != null) {
 
-//    public void updateListItemClickResponse(int position) {
-//        Object obj = listView.findViewById(position).getTag();
-//        ListItemAdapter.ViewHolder viewHolder = (ListItemAdapter.ViewHolder) obj;
-//        if (viewHolder != null) {
-//
-//            boolean isChecked = viewHolder.cbSelect.isChecked();
-//            viewHolder.cbSelect.setChecked(!isChecked);
-//        }
-//    }
+                if (isShareMode) {
+                    viewHolder.cbSelect.setVisibility(View.VISIBLE);
+                } else {
+                    viewHolder.cbSelect.setChecked(false);
+                    viewHolder.cbSelect.setVisibility(View.GONE);
+                }
+            }
+        }
+    }
+
 
     @AfterViews
     public void setAdapter(){

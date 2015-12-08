@@ -30,6 +30,7 @@ public class ListItemAdapter extends BaseAdapter {
     private Locale locale;
 
     protected List<Boolean> mChecked;
+    protected List<View> views;
     protected boolean isShareMode = false;
 
     public ListItemAdapter(Context context, List<File> files,boolean isShareMode) {
@@ -38,6 +39,7 @@ public class ListItemAdapter extends BaseAdapter {
         this.locale = context.getResources().getConfiguration().locale;
         this.isShareMode = isShareMode;
 
+        views = new ArrayList<>();
         mChecked = new ArrayList<>();
         for (int i =0;i<beans.size();i++){
             mChecked.add(false);
@@ -63,6 +65,11 @@ public class ListItemAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return position;
     }
+
+    public View getItemView(int position){
+        return views.get(position);
+    }
+
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
@@ -135,7 +142,7 @@ public class ListItemAdapter extends BaseAdapter {
 
             }
         });
-
+        views.add(position,convertView);
         return convertView;
     }
 

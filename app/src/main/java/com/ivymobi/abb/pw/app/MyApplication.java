@@ -6,16 +6,30 @@ import android.widget.ImageView;
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Configuration;
 import com.activeandroid.app.Application;
+import com.ivymobi.abb.pw.R;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MyApplication extends Application {
+    private Map<String, Object> mData;
+
+    public Object getmData(String key) {
+        return mData.get(key);
+    }
+    public void setmData(String key,Object value){
+        mData.put(key,value);
+    }
     @Override
     public void onCreate() {
         super.onCreate();
+        mData = new HashMap<>();
+        boolean isShareMode = false;
+        mData.put(getResources().getString(R.string.share_mode),isShareMode);
 
         Configuration dbConfiguration = new Configuration.Builder(this).setDatabaseName("abb.db").create();
         ActiveAndroid.initialize(dbConfiguration);
