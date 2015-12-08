@@ -58,7 +58,8 @@ public class OnSwipeMenuItemClickListener implements SwipeMenuListView.OnMenuIte
 
         switch (index) {
             case 0:
-                if (!file.isDownload()) {
+                if (!file.isDownload() && !file.isDownloading()) {
+                    file.setDownloading(true);
                     downloadFile(file, position);
                 }
 
@@ -174,6 +175,7 @@ public class OnSwipeMenuItemClickListener implements SwipeMenuListView.OnMenuIte
                                     Toast.makeText(fragment.getContext(), R.string.download_success, Toast.LENGTH_SHORT).show();
 
                                     file.setLocalPath(fileName);
+                                    file.setDownloading(false);
                                     file.save();
 
                                     downloadImageView.setImageResource(R.mipmap.icon_download_gray);
