@@ -37,6 +37,7 @@ import com.loopj.android.http.SyncHttpClient;
 import com.squareup.otto.Subscribe;
 import com.umeng.socialize.bean.CustomPlatform;
 import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.bean.SocializeConfig;
 import com.umeng.socialize.bean.SocializeEntity;
 import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
@@ -123,13 +124,13 @@ public class ListItemFragment extends Fragment {
             client.get("http://yangbentong.com/api/7a94881a-df96-429d-9e01-dece4f46fee2/storage/" + uuid, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    File file = File.findByUuid(uuid);
                     try {
+                        File file = File.findByUuid(uuid);
                         file.setUrl(response.getString("url"));
+                        file.save();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    file.save();
                 }
             });
         }
@@ -145,6 +146,7 @@ public class ListItemFragment extends Fragment {
             }
         };
 
+        umSocialService.setConfig(SocializeConfig.getSocializeConfig());
         umSocialService.getConfig().addCustomPlatform(emailPlatform);
         umSocialService.getConfig().removePlatform(SHARE_MEDIA.SINA, SHARE_MEDIA.QZONE, SHARE_MEDIA.QQ, SHARE_MEDIA.TENCENT, SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE);
         umSocialService.openShare(getActivity(), false);
