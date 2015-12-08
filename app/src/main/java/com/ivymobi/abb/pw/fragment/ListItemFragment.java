@@ -34,6 +34,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.otto.Subscribe;
 
 import org.androidannotations.annotations.AfterInject;
+import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EFragment;
 import org.json.JSONException;
@@ -72,7 +73,7 @@ public class ListItemFragment extends Fragment {
     }
 
     @AfterInject
-    public void registerOttoBus(){
+    public void registerOttoBus() {
         bus.register(this);
     }
 
@@ -83,29 +84,77 @@ public class ListItemFragment extends Fragment {
     }
 
     @Subscribe
-    public void updateListItemFragment(UpdateShareModeEvent event){
+    public void updateListItemFragment(UpdateShareModeEvent event) {
         isShareMode = event.isShareMode;
-        //TODO:
-        Toast.makeText(this.getContext(),"share mode is:"+isShareMode,Toast.LENGTH_SHORT).show();
+
+//        updateListItemStyle();
+
+        setAdapter();
+        Toast.makeText(this.getContext(), "share mode is:" + isShareMode, Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+//    public void updateListItemStyle() {
+//        for (int i = 0; i < listItemAdapter.getCount(); i++) {
+//            Object obj = listView.findViewById(i).getTag();
+//            ListItemAdapter.ViewHolder viewHolder = (ListItemAdapter.ViewHolder) obj;
+//            if (viewHolder != null) {
+//
+//                if (isShareMode) {
+//                    viewHolder.cbSelect.setVisibility(View.VISIBLE);
+//                } else {
+//                    viewHolder.cbSelect.setVisibility(View.GONE);
+//                }
+//            }
+//        }
+//    }
 
-        listItemAdapter = new ListItemAdapter(getContext(), files);
+//    public void updateListItemClickResponse(int position) {
+//        Object obj = listView.findViewById(position).getTag();
+//        ListItemAdapter.ViewHolder viewHolder = (ListItemAdapter.ViewHolder) obj;
+//        if (viewHolder != null) {
+//
+//            boolean isChecked = viewHolder.cbSelect.isChecked();
+//            viewHolder.cbSelect.setChecked(!isChecked);
+//        }
+//    }
+
+    @AfterViews
+    public void setAdapter(){
+        listItemAdapter = new ListItemAdapter(getContext(), files,isShareMode);
         listView.setMenuCreator(swipeMenuCreator());
         listView.setAdapter(listItemAdapter);
         listView.setOnMenuItemClickListener(new OnSwipeMenuItemClickListener(this, files));
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                itemClicked(position);
+                if (!isShareMode) {
+                    itemClicked(position);
+                }
             }
         });
     }
 
-    private SwipeMenuCreator swipeMenuCreator() {
+//    @Override
+//    public void onActivityCreated(Bundle savedInstanceState) {
+//        super.onActivityCreated(savedInstanceState);
+//
+//        listItemAdapter = new ListItemAdapter(getContext(), files);
+//        listView.setMenuCreator(swipeMenuCreator());
+//        listView.setAdapter(listItemAdapter);
+//        listView.setOnMenuItemClickListener(new OnSwipeMenuItemClickListener(this, files));
+//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                if (isShareMode) {
+//                    updateListItemClickResponse(position);
+//                }else {
+//                    itemClicked(position);
+//                }
+//            }
+//        });
+//    }
+
+    protected SwipeMenuCreator swipeMenuCreator() {
         return new SwipeMenuCreator() {
 
             @Override
@@ -182,7 +231,7 @@ public class ListItemFragment extends Fragment {
         }
     }
 
-    private void itemClicked(int position) {
+    protected void itemClicked(int position) {
 
         File file = files.get(position);
 

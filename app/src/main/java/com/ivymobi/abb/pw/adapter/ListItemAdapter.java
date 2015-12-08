@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -17,6 +18,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -27,10 +29,19 @@ public class ListItemAdapter extends BaseAdapter {
     private ImageLoader imageLoader = ImageLoader.getInstance();
     private Locale locale;
 
-    public ListItemAdapter(Context context, List<File> files) {
+    protected List<Boolean> mChecked;
+    protected boolean isShareMode = false;
+
+    public ListItemAdapter(Context context, List<File> files,boolean isShareMode) {
         this.beans = files;
         this.context = context;
         this.locale = context.getResources().getConfiguration().locale;
+        this.isShareMode = isShareMode;
+
+        mChecked = new ArrayList<>();
+        for (int i =0;i<beans.size();i++){
+            mChecked.add(false);
+        }
     }
 
     @Override
@@ -55,15 +66,26 @@ public class ListItemAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        final ViewHolder viewHolder;
         File file = beans.get(position);
-
+        final ViewHolder viewHolder;
         if (convertView == null) {
             convertView = View.inflate(context, R.layout.item_list, null);
             viewHolder = new ViewHolder(convertView);
+            viewHolder.cbSelect.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mChecked.set(position,viewHolder.cbSelect.isChecked());
+                }
+            });
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
+        }
+
+        if (isShareMode){
+            viewHolder.cbSelect.setVisibility(View.VISIBLE);
+        }else {
+            viewHolder.cbSelect.setVisibility(View.GONE);
         }
 
         if (locale == Locale.ENGLISH) {
@@ -124,6 +146,7 @@ public class ListItemAdapter extends BaseAdapter {
         ImageView ivLanguage;
         ProgressBar progressBar;
         CircularProgressBar downloadProgressBar;
+        public CheckBox cbSelect;
 
         public ViewHolder(View view) {
             nameTextView = (TextView) view.findViewById(R.id.list_item_text);
@@ -132,6 +155,8 @@ public class ListItemAdapter extends BaseAdapter {
             ivLanguage = (ImageView) view.findViewById(R.id.iv_language);
             progressBar = (ProgressBar) view.findViewById(R.id.list_item_progress_bar);
             downloadProgressBar = (CircularProgressBar) view.findViewById(R.id.list_item_download_progress);
+            cbSelect = (CheckBox) view.findViewById(R.id.cb_checkbox);
         }
+
     }
 }

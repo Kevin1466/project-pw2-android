@@ -79,7 +79,18 @@
             </LinearLayout>
 
         </LinearLayout>
-
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <CheckBox
+                android:id="@+id/cb_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@drawable/umeng_update_button_check_selector"
+                android:visibility="gone"/>
+        </LinearLayout>
         <com.mikhaellopez.circularprogressbar.CircularProgressBar
             android:id="@+id/list_item_download_progress"
             android:layout_width="40dp"
