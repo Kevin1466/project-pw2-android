@@ -14,6 +14,7 @@ import com.baoyz.swipemenulistview.SwipeMenuLayout;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.ivymobi.abb.pw.R;
 import com.ivymobi.abb.pw.activity.CollectionActivity_;
+import com.ivymobi.abb.pw.activity.ShareActivity_;
 import com.ivymobi.abb.pw.beans.File;
 import com.ivymobi.abb.pw.fragment.ListItemFragment;
 import com.loopj.android.http.AsyncHttpClient;
@@ -30,12 +31,12 @@ import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
 import com.umeng.socialize.controller.listener.SocializeListeners;
 import com.umeng.socialize.media.UMWebPage;
-import com.umeng.socialize.sso.EmailHandler;
 import com.umeng.socialize.weixin.controller.UMWXHandler;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
@@ -82,6 +83,8 @@ public class OnSwipeMenuItemClickListener implements SwipeMenuListView.OnMenuIte
                 try {
 
                     final String fileUrl = response.getString("url");
+                    file.setUrl(fileUrl);
+                    file.save();
 
                     UMWXHandler wxHandler = new UMWXHandler(fragment.getContext(), "wx508bd5b1879c3b8e", "f0c9758ef8a2775f21c6e977aa06e5a3");
                     wxHandler.addToSocialSDK();
@@ -90,17 +93,11 @@ public class OnSwipeMenuItemClickListener implements SwipeMenuListView.OnMenuIte
                     wxCircleHandler.setToCircle(true);
                     wxCircleHandler.addToSocialSDK();
 
-                    EmailHandler emailHandler = new EmailHandler();
-                    emailHandler.addToSocialSDK();
-
                     wxHandler.mCustomPlatform.mIcon = R.mipmap.icon_wenxin;
                     wxHandler.mCustomPlatform.mShowWord = fragment.getResources().getString(R.string.weixin);
 
                     wxCircleHandler.mCustomPlatform.mIcon = R.mipmap.icon_friends;
                     wxCircleHandler.mCustomPlatform.mShowWord = fragment.getResources().getString(R.string.moments);
-
-                    emailHandler.mCustomPlatform.mIcon = R.mipmap.icon_email;
-                    emailHandler.mCustomPlatform.mShowWord = fragment.getResources().getString(R.string.email);
 
                     CustomPlatform customPlatform = new CustomPlatform("COPY_LINK", fragment.getResources().getString(R.string.copy_link), R.mipmap.icon_copy);
                     customPlatform.mClickListener = new SocializeListeners.OnSnsPlatformClickListener() {
@@ -112,9 +109,23 @@ public class OnSwipeMenuItemClickListener implements SwipeMenuListView.OnMenuIte
                         }
                     };
 
+                    CustomPlatform emailPlatform = new CustomPlatform("EMAIL", fragment.getResources().getString(R.string.email), R.mipmap.icon_email);
+                    emailPlatform.mClickListener = new SocializeListeners.OnSnsPlatformClickListener() {
+                        @Override
+                        public void onClick(Context context, SocializeEntity socializeEntity, SocializeListeners.SnsPostListener snsPostListener) {
+                            ArrayList<String> uuidList = new ArrayList<>();
+                            uuidList.add(file.getUuid());
+
+                            Intent intent = new Intent(fragment.getContext(), ShareActivity_.class);
+                            intent.putStringArrayListExtra("uuidList", uuidList);
+                            fragment.startActivity(intent);
+                        }
+                    };
+
                     umSocialService.getConfig().addCustomPlatform(customPlatform);
+                    umSocialService.getConfig().addCustomPlatform(emailPlatform);
                     umSocialService.getConfig().removePlatform(SHARE_MEDIA.SINA, SHARE_MEDIA.QZONE, SHARE_MEDIA.QQ, SHARE_MEDIA.TENCENT);
-                    umSocialService.getConfig().setPlatformOrder(SHARE_MEDIA.EMAIL.toString(), SHARE_MEDIA.WEIXIN.toString(), SHARE_MEDIA.WEIXIN_CIRCLE.toString(), customPlatform.mKeyword);
+                    umSocialService.getConfig().setPlatformOrder(emailPlatform.mKeyword, SHARE_MEDIA.WEIXIN.toString(), SHARE_MEDIA.WEIXIN_CIRCLE.toString(), customPlatform.mKeyword);
                     umSocialService.setShareContent(file.getTitle());
                     umSocialService.setShareMedia(new UMWebPage(fileUrl));
                     umSocialService.openShare(fragment.getActivity(), false);

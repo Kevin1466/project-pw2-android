@@ -36,6 +36,9 @@ public class File extends Model {
     @Column(name = "collection")
     private Collection collection;
 
+    @Column(name = "url")
+    private String url;
+
     public String getUuid() {
         return uuid;
     }
@@ -102,6 +105,14 @@ public class File extends Model {
 
     public void setLocalPath(String localPath) {
         this.localPath = localPath;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public Collection getCollectio() {

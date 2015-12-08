@@ -46,4 +46,11 @@
     <string name="delete">删除</string>
     <string name="complete">完成</string>
     <string name="dialog_title_empty_group_name">新建分组名称不能为空！</string>
+    <string name="label_share_email">请输入收件人邮箱</string>
+    <string name="label_share_content">内容</string>
+    <string name="email_subject">请查收文件 - 分享自ABB中国电力世界</string>
+    <string name="share_success">分享成功</string>
+    <string name="share_fail">分享失败</string>
+    <string name="warning_receiver">请输入收件人邮箱地址</string>
+    <string name="warning_content">请输入邮件内容</string>
 </resources>

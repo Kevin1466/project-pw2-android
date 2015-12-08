@@ -41,7 +41,7 @@
     <string name="buffering">Buffering...</string>
     <string name="copy_link">Copy URL</string>
     <string name="copy_success">Copy succeeded</string>
-    <string name="email">Friends</string>
+    <string name="email">Email</string>
     <string name="moments">Moments</string>
     <string name="weixin">Friends</string>
     <string name="new_group">New Group</string>
@@ -49,4 +49,11 @@
     <string name="delete">Delete</string>
     <string name="complete">Complete</string>
     <string name="dialog_title_empty_group_name">The new Groups name cannot be empty</string>
+    <string name="label_share_email">Please enter receiver email</string>
+    <string name="label_share_content">Content</string>
+    <string name="email_subject">You received a file list.(via ABB Power World China)</string>
+    <string name="share_success">Your file have been shared successfully</string>
+    <string name="share_fail">Your file share unsuccessful</string>
+    <string name="warning_receiver">Please setup an email account before sharing.</string>
+    <string name="warning_content">Please setup an content before sharing.</string>
 </resources>
