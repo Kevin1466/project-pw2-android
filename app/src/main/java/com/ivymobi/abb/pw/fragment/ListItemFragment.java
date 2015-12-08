@@ -23,6 +23,7 @@ import com.ivymobi.abb.pw.R;
 import com.ivymobi.abb.pw.activity.DownloadActivity;
 import com.ivymobi.abb.pw.activity.LocalPDFActivity_;
 import com.ivymobi.abb.pw.activity.PDFActivity_;
+import com.ivymobi.abb.pw.activity.ShareActivity_;
 import com.ivymobi.abb.pw.adapter.ListItemAdapter;
 import com.ivymobi.abb.pw.beans.CollectionFile;
 import com.ivymobi.abb.pw.beans.File;
@@ -32,7 +33,14 @@ import com.ivymobi.abb.pw.listener.UpdateShareEvent;
 import com.ivymobi.abb.pw.listener.UpdateShareModeEvent;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.SyncHttpClient;
 import com.squareup.otto.Subscribe;
+import com.umeng.socialize.bean.CustomPlatform;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.bean.SocializeEntity;
+import com.umeng.socialize.controller.UMServiceFactory;
+import com.umeng.socialize.controller.UMSocialService;
+import com.umeng.socialize.controller.listener.SocializeListeners;
 
 import org.androidannotations.annotations.AfterInject;
 import org.androidannotations.annotations.AfterViews;
@@ -62,6 +70,7 @@ public class ListItemFragment extends Fragment {
     private ListItemAdapter listItemAdapter;
     public List<File> files;
     public Context context;
+    UMSocialService umSocialService = UMServiceFactory.getUMSocialService("com.umeng.share");
 
     List<String> filesToShare;
 
@@ -104,7 +113,43 @@ public class ListItemFragment extends Fragment {
     @Subscribe
     public void startShare(UpdateShareEvent event) {
         filesToShare = listItemAdapter.getSelectedFilesToShare();
-        //TODO:执行分享操作，完成后将分析列表清空
+
+        if (filesToShare.size() == 0) {
+            return;
+        }
+
+        for (final String uuid : filesToShare) {
+            final SyncHttpClient client = new SyncHttpClient();
+            client.get("http://yangbentong.com/api/7a94881a-df96-429d-9e01-dece4f46fee2/storage/" + uuid, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    File file = File.findByUuid(uuid);
+                    try {
+                        file.setUrl(response.getString("url"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    file.save();
+                }
+            });
+        }
+
+        CustomPlatform emailPlatform = new CustomPlatform("EMAIL", getResources().getString(R.string.email), R.mipmap.icon_email);
+        emailPlatform.mClickListener = new SocializeListeners.OnSnsPlatformClickListener() {
+            @Override
+            public void onClick(Context context, SocializeEntity socializeEntity, SocializeListeners.SnsPostListener snsPostListener) {
+
+                Intent intent = new Intent(getContext(), ShareActivity_.class);
+                intent.putStringArrayListExtra("uuidList", new ArrayList<>(filesToShare));
+                startActivity(intent);
+            }
+        };
+
+        umSocialService.getConfig().addCustomPlatform(emailPlatform);
+        umSocialService.getConfig().removePlatform(SHARE_MEDIA.SINA, SHARE_MEDIA.QZONE, SHARE_MEDIA.QQ, SHARE_MEDIA.TENCENT, SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE);
+        umSocialService.openShare(getActivity(), false);
+
+        //完成后将分析列表清空
         listItemAdapter.initCheckedItems();
     }
 
@@ -127,8 +172,8 @@ public class ListItemFragment extends Fragment {
 
 
     @AfterViews
-    public void setAdapter(){
-        listItemAdapter = new ListItemAdapter(getContext(), files,isShareMode);
+    public void setAdapter() {
+        listItemAdapter = new ListItemAdapter(getContext(), files, isShareMode);
         listView.setMenuCreator(swipeMenuCreator());
         listView.setAdapter(listItemAdapter);
         listView.setOnMenuItemClickListener(new OnSwipeMenuItemClickListener(this, files));
