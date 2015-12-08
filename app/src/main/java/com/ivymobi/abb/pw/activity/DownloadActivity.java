@@ -21,8 +21,12 @@ import com.ivymobi.abb.pw.fragment.CloudFragment_;
 import com.ivymobi.abb.pw.fragment.DownloadedFragment_;
 import com.ivymobi.abb.pw.fragment.FavoriteFragment_;
 import com.ivymobi.abb.pw.fragment.TabRootFragment;
+import com.ivymobi.abb.pw.listener.OttoBus;
+import com.ivymobi.abb.pw.listener.UpdateShareModeEvent;
 import com.ivymobi.abb.pw.util.PreferenceUtil;
+import com.squareup.otto.Produce;
 
+import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EActivity;
 
 import java.util.Locale;
@@ -82,8 +86,8 @@ public class DownloadActivity extends AppCompatActivity {
         return (TabRootFragment) getSupportFragmentManager().findFragmentById(R.id.content);
     }
 
-//    @ViewById(R.id.download_toolbar)
-//    protected Toolbar download_toolbar;
+    @Bean
+    protected OttoBus bus;
 
     protected boolean isInShareMode = false;
 
@@ -145,7 +149,13 @@ public class DownloadActivity extends AppCompatActivity {
         mCancelMenuItem.setVisible(isInShareMode);
         mShareMenuItem.setVisible(isInShareMode);
         updateTabState(isInShareMode);
+        bus.post(produceEvent());
         return true;
+    }
+
+    @Produce
+    public UpdateShareModeEvent produceEvent(){
+        return new UpdateShareModeEvent(isInShareMode);
     }
 
     protected void updateTabState(boolean isInShareMode){

@@ -13,22 +13,20 @@ import com.ivymobi.abb.pw.beans.File;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
 
-import java.util.List;
-
 
 @EFragment
 public class DownloadedFragment extends Fragment {
-    private View mView;
-    public List<File> files;
-    protected ListItemFragment listItemFragment;
+//    private View mView;
+//    public List<File> files;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mView = inflater.inflate(R.layout.fragment_downloaded, container, false);
+//        mView = inflater.inflate(R.layout.fragment_downloaded, container, false);
 
-        files = File.getAllDownloadedFiles();
+//        files = File.getAllDownloadedFiles();
 
-        return mView;
+//        return mView;
+        return inflater.inflate(R.layout.fragment_downloaded, container, false);
     }
 
 //    @Override
@@ -45,8 +43,8 @@ public class DownloadedFragment extends Fragment {
 
     @AfterViews
     public void showDownloadedFragmentListItems(){
-        listItemFragment = ListItemFragment_.builder().build();
-        listItemFragment.files = files;
+        ListItemFragment listItemFragment = ListItemFragment_.builder().build();
+        listItemFragment.files = File.getAllDownloadedFiles();
 
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.container_framelayout, listItemFragment);

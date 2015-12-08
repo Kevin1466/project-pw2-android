@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
@@ -26,9 +27,14 @@ import com.ivymobi.abb.pw.adapter.ListItemAdapter;
 import com.ivymobi.abb.pw.beans.CollectionFile;
 import com.ivymobi.abb.pw.beans.File;
 import com.ivymobi.abb.pw.listener.OnSwipeMenuItemClickListener;
+import com.ivymobi.abb.pw.listener.OttoBus;
+import com.ivymobi.abb.pw.listener.UpdateShareModeEvent;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.squareup.otto.Subscribe;
 
+import org.androidannotations.annotations.AfterInject;
+import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EFragment;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,6 +46,12 @@ import cz.msebera.android.httpclient.Header;
 
 @EFragment
 public class ListItemFragment extends Fragment {
+
+    @Bean
+    protected OttoBus bus;
+
+    protected boolean isShareMode = false;
+
     private View mView;
     public SwipeMenuListView listView = null;
     private ListItemAdapter listItemAdapter;
@@ -57,6 +69,24 @@ public class ListItemFragment extends Fragment {
         }
 
         return mView;
+    }
+
+    @AfterInject
+    public void registerOttoBus(){
+        bus.register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        bus.unregister(this);
+    }
+
+    @Subscribe
+    public void updateListItemFragment(UpdateShareModeEvent event){
+        isShareMode = event.isShareMode;
+        //TODO:
+        Toast.makeText(this.getContext(),"share mode is:"+isShareMode,Toast.LENGTH_SHORT).show();
     }
 
     @Override
