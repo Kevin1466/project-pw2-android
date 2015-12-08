@@ -83,7 +83,7 @@ public class SettingActivity extends AppCompatActivity {
             }
         }
 
-        cacheSize.setText(String.format("%.2f MB", Float.parseFloat((size / 1024 / 1024) + "")));
+        cacheSize.setText(String.format("%.2f MB", (float) size / 1024 / 1024));
     }
 
     @Click

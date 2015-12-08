@@ -21,6 +21,7 @@ import com.ivymobi.abb.pw.app.MyApplication;
 import com.ivymobi.abb.pw.fragment.CloudFragment_;
 import com.ivymobi.abb.pw.fragment.DownloadedFragment_;
 import com.ivymobi.abb.pw.fragment.FavoriteFragment_;
+import com.ivymobi.abb.pw.fragment.ListItemFragment;
 import com.ivymobi.abb.pw.fragment.TabRootFragment;
 import com.ivymobi.abb.pw.listener.OttoBus;
 import com.ivymobi.abb.pw.listener.UpdateShareModeEvent;
@@ -30,12 +31,14 @@ import com.squareup.otto.Produce;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EActivity;
 
+import java.util.List;
 import java.util.Locale;
 
 @EActivity
 public class DownloadActivity extends AppCompatActivity {
 
     protected FragmentTabHost mTabHost;
+    public static ListItemFragment listItemFragment = null;
 
     @Override
     public void onBackPressed() {
@@ -195,9 +198,9 @@ public class DownloadActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        System.out.println("getCurrentFragment():::::" + getCurrentFragment().getTag());
-
-        getCurrentFragment().onActivityResult(requestCode, resultCode, data);
+        if (listItemFragment != null) {
+            listItemFragment.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     private void switchLanguage(String language) {

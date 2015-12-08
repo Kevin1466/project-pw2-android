@@ -21,6 +21,7 @@ import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuLayout;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.ivymobi.abb.pw.R;
+import com.ivymobi.abb.pw.activity.DownloadActivity;
 import com.ivymobi.abb.pw.activity.LocalPDFActivity_;
 import com.ivymobi.abb.pw.activity.PDFActivity_;
 import com.ivymobi.abb.pw.adapter.ListItemAdapter;
@@ -52,6 +53,8 @@ public class ListItemFragment extends Fragment {
     protected OttoBus bus;
 
     protected boolean isShareMode = false;
+
+    public static String FLAG = "LIST_ITEM_FRAGMENT";
 
     private View mView;
     public SwipeMenuListView listView = null;
@@ -129,27 +132,7 @@ public class ListItemFragment extends Fragment {
         });
     }
 
-//    @Override
-//    public void onActivityCreated(Bundle savedInstanceState) {
-//        super.onActivityCreated(savedInstanceState);
-//
-//        listItemAdapter = new ListItemAdapter(getContext(), files);
-//        listView.setMenuCreator(swipeMenuCreator());
-//        listView.setAdapter(listItemAdapter);
-//        listView.setOnMenuItemClickListener(new OnSwipeMenuItemClickListener(this, files));
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                if (isShareMode) {
-//                    updateListItemClickResponse(position);
-//                }else {
-//                    itemClicked(position);
-//                }
-//            }
-//        });
-//    }
-
-    protected SwipeMenuCreator swipeMenuCreator() {
+    private SwipeMenuCreator swipeMenuCreator() {
         return new SwipeMenuCreator() {
 
             @Override
@@ -197,12 +180,6 @@ public class ListItemFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        System.out.println("ffffffffkkkkkkkkk22222222222");
-
-        // test
-        listView.setAdapter(listItemAdapter);
-        listItemAdapter.notifyDataSetChanged();
-
         switch (resultCode) {
             case Activity.RESULT_OK:
                 int position = data.getIntExtra("position", 0);
@@ -210,20 +187,25 @@ public class ListItemFragment extends Fragment {
 
                 //
                 final SwipeMenuLayout layout = (SwipeMenuLayout) listView.getChildAt(position);
-                LinearLayout linearLayout = (LinearLayout) layout.getMenuView().getChildAt(0);
-                final ImageView favoriteItem = (ImageView) linearLayout.getChildAt(0);
 
-                List<CollectionFile> collectionFiles = CollectionFile.findByFile(files.get(position));
+                if (layout != null) {
+                    LinearLayout linearLayout = (LinearLayout) layout.getMenuView().getChildAt(2);
+                    final ImageView favoriteItem = (ImageView) linearLayout.getChildAt(0);
 
-                if (collectionFiles != null && !collectionFiles.isEmpty()) {
-                    favoriteItem.setImageResource(R.mipmap.icon_heart);
-                } else {
-                    favoriteItem.setImageResource(R.mipmap.icon_heart_empty);
+                    List<CollectionFile> collectionFiles = CollectionFile.findByFile(files.get(position));
+
+                    if (collectionFiles != null && !collectionFiles.isEmpty()) {
+                        favoriteItem.setImageResource(R.mipmap.icon_heart);
+                    } else {
+                        favoriteItem.setImageResource(R.mipmap.icon_heart_empty);
+                    }
+
+                    refreshData();
                 }
-
-                refreshData();
                 break;
         }
+
+        DownloadActivity.listItemFragment = null;
     }
 
     protected void itemClicked(int position) {

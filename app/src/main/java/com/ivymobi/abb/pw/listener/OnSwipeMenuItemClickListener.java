@@ -14,6 +14,7 @@ import com.baoyz.swipemenulistview.SwipeMenuLayout;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.ivymobi.abb.pw.R;
 import com.ivymobi.abb.pw.activity.CollectionActivity_;
+import com.ivymobi.abb.pw.activity.DownloadActivity;
 import com.ivymobi.abb.pw.activity.ShareActivity_;
 import com.ivymobi.abb.pw.beans.File;
 import com.ivymobi.abb.pw.fragment.ListItemFragment;
@@ -58,7 +59,8 @@ public class OnSwipeMenuItemClickListener implements SwipeMenuListView.OnMenuIte
 
         switch (index) {
             case 0:
-                if (!file.isDownload()) {
+                if (!file.isDownload() && !file.isDownloading()) {
+                    file.setDownloading(true);
                     downloadFile(file, position);
                 }
 
@@ -141,7 +143,10 @@ public class OnSwipeMenuItemClickListener implements SwipeMenuListView.OnMenuIte
         Intent intent = new Intent(fragment.getContext(), CollectionActivity_.class);
         intent.putExtra("uuid", file.getUuid());
         intent.putExtra("position", position);
-        fragment.startActivityForResult(intent, fragment.getActivity().RESULT_FIRST_USER);
+
+        DownloadActivity.listItemFragment = fragment;
+
+        fragment.startActivityForResult(intent, 1);
     }
 
     private void downloadFile(final File file, int position) {
@@ -174,6 +179,7 @@ public class OnSwipeMenuItemClickListener implements SwipeMenuListView.OnMenuIte
                                     Toast.makeText(fragment.getContext(), R.string.download_success, Toast.LENGTH_SHORT).show();
 
                                     file.setLocalPath(fileName);
+                                    file.setDownloading(false);
                                     file.save();
 
                                     downloadImageView.setImageResource(R.mipmap.icon_download_gray);

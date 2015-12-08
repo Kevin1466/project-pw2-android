@@ -105,7 +105,7 @@ public class FavoriteFragment extends Fragment implements OnFavoriteRecyclerList
         listItemFragment.files = files;
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.container_framelayout, listItemFragment);
+        transaction.replace(R.id.container_framelayout, listItemFragment, ListItemFragment.FLAG);
         transaction.addToBackStack(null);
         transaction.commit();
 

@@ -47,7 +47,7 @@ public class DownloadedFragment extends Fragment {
         listItemFragment.files = File.getAllDownloadedFiles();
 
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.replace(R.id.container_framelayout, listItemFragment);
+        transaction.replace(R.id.container_framelayout, listItemFragment, ListItemFragment.FLAG);
         transaction.addToBackStack(null);
         transaction.commit();
     }

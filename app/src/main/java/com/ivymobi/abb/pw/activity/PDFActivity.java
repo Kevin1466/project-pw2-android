@@ -21,6 +21,7 @@ import cz.msebera.android.httpclient.Header;
 public class PDFActivity extends AppCompatActivity {
 
     ProgressDialog pDialog;
+    PDFView pdfView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,12 @@ public class PDFActivity extends AppCompatActivity {
         pDialog.setMessage(getResources().getString(R.string.loading));
         pDialog.show();
 
+        Log.d("pdf", "url " + url);
+
+        loadPDF(url);
+    }
+
+    private void loadPDF(final String url) {
         AsyncHttpClient client = new AsyncHttpClient();
         client.get(url, new FileAsyncHttpResponseHandler(this) {
             @Override
@@ -49,16 +56,17 @@ public class PDFActivity extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, File file) {
 
                 pDialog.dismiss();
-                PDFView pdfView = (PDFView) findViewById(R.id.pdfview);
+
+                if (pdfView == null) {
+                    pdfView = (PDFView) findViewById(R.id.pdfview);
+                }
 
                 pdfView.fromFile(file)
                         .defaultPage(1)
-                        .showMinimap(false)
+                        .showMinimap(true)
                         .enableSwipe(true)
                         .load();
             }
         });
-
-
     }
 }

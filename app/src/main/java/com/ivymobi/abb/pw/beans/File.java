@@ -33,6 +33,9 @@ public class File extends Model {
     @Column(name = "localPath")
     private String localPath;
 
+    @Column(name = "downloading")
+    private Boolean downloading = false;
+
     @Column(name = "collection")
     private Collection collection;
 
@@ -121,6 +124,14 @@ public class File extends Model {
 
     public void setCollection(Collection collection) {
         this.collection = collection;
+    }
+
+    public Boolean isDownloading() {
+        return downloading;
+    }
+
+    public void setDownloading(Boolean downloading) {
+        this.downloading = downloading;
     }
 
     public static List<File> getAll(Collection collection) {
