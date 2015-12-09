@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ivymobi.abb.pw.R;
+import com.ivymobi.abb.pw.app.MyApplication;
 import com.ivymobi.abb.pw.beans.File;
 
 import org.androidannotations.annotations.AfterViews;
@@ -45,6 +46,12 @@ public class DownloadedFragment extends Fragment {
     public void showDownloadedFragmentListItems(){
         ListItemFragment listItemFragment = ListItemFragment_.builder().build();
         listItemFragment.files = File.getAllDownloadedFiles();
+
+        Bundle args = new Bundle();
+        boolean isShareMode = (boolean)((MyApplication) getActivity().getApplication()).getmData(
+                getResources().getString(R.string.share_mode));
+        args.putBoolean(getResources().getString(R.string.share_mode),isShareMode);
+        listItemFragment.setArguments(args);
 
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.container_framelayout, listItemFragment, ListItemFragment.FLAG);

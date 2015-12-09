@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.activeandroid.query.Select;
 import com.ivymobi.abb.pw.R;
 import com.ivymobi.abb.pw.adapter.ListFavoriteAdapter;
+import com.ivymobi.abb.pw.app.MyApplication;
 import com.ivymobi.abb.pw.beans.Collection;
 import com.ivymobi.abb.pw.beans.CollectionFile;
 import com.ivymobi.abb.pw.beans.File;
@@ -103,6 +104,12 @@ public class FavoriteFragment extends Fragment implements OnFavoriteRecyclerList
 
         ListItemFragment listItemFragment = ListItemFragment_.builder().build();
         listItemFragment.files = files;
+
+        Bundle args = new Bundle();
+        boolean isShareMode = (boolean)((MyApplication) getActivity().getApplication()).getmData(
+                getResources().getString(R.string.share_mode));
+        args.putBoolean(getResources().getString(R.string.share_mode),isShareMode);
+        listItemFragment.setArguments(args);
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.container_framelayout, listItemFragment, ListItemFragment.FLAG);
