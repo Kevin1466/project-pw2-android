@@ -19,7 +19,7 @@ import org.androidannotations.annotations.ViewById;
 import java.util.Locale;
 
 @EActivity
-public class EventActivity extends AppCompatActivity implements View.OnTouchListener {
+public class EventActivity extends BaseActivity implements View.OnTouchListener {
 
     @ViewById(R.id.hdhg)
     ImageView imageView;

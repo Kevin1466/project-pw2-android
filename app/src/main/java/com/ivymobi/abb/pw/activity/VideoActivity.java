@@ -15,7 +15,7 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
 @EActivity
-public class VideoActivity extends Activity {
+public class VideoActivity extends BaseActivity {
 
     @ViewById
     VideoView videoView;

@@ -24,7 +24,7 @@ import java.util.Locale;
 
 
 @EActivity
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     @ViewById
     VideoView videoView;

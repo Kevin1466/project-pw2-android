@@ -26,7 +26,7 @@ import java.util.List;
 import cz.msebera.android.httpclient.Header;
 
 @EActivity
-public class ShareActivity extends AppCompatActivity {
+public class ShareActivity extends BaseActivity {
 
     @ViewById
     EditText editTextReceiver;

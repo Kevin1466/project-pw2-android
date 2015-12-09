@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Locale;
 
 @EActivity
-public class SettingActivity extends AppCompatActivity {
+public class SettingActivity extends BaseActivity {
 
     @ViewById
     TextView currentVersion;

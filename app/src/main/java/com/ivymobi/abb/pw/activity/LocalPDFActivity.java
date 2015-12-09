@@ -12,7 +12,7 @@ import org.androidannotations.annotations.EActivity;
 import java.io.File;
 
 @EActivity
-public class LocalPDFActivity extends AppCompatActivity {
+public class LocalPDFActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

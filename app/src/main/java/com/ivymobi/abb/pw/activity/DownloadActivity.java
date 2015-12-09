@@ -36,7 +36,7 @@ import org.androidannotations.annotations.EActivity;
 import java.util.Locale;
 
 @EActivity
-public class DownloadActivity extends AppCompatActivity {
+public class DownloadActivity extends BaseActivity {
 
     protected FragmentTabHost mTabHost;
     public static ListItemFragment listItemFragment = null;

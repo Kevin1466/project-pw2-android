@@ -12,7 +12,7 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
 @EActivity
-public class WebActivity extends AppCompatActivity {
+public class WebActivity extends BaseActivity {
 
     @ViewById
     WebView webView;

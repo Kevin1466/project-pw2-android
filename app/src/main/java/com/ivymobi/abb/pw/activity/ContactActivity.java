@@ -12,7 +12,7 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 
 @EActivity
-public class ContactActivity extends AppCompatActivity {
+public class ContactActivity extends BaseActivity {
 
     @Click
     public void websiteButtonClicked() {

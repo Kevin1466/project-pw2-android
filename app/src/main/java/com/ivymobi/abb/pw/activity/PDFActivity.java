@@ -18,7 +18,7 @@ import java.io.File;
 import cz.msebera.android.httpclient.Header;
 
 @EActivity
-public class PDFActivity extends AppCompatActivity {
+public class PDFActivity extends BaseActivity {
 
     ProgressDialog pDialog;
     PDFView pdfView;

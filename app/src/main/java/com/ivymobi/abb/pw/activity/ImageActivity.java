@@ -11,7 +11,7 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
 @EActivity
-public class ImageActivity extends Activity {
+public class ImageActivity extends BaseActivity {
 
     @ViewById
     ImageView imageView;

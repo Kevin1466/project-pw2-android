@@ -12,7 +12,7 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
 @EActivity
-public class SettingMailSignActivity extends AppCompatActivity {
+public class SettingMailSignActivity extends BaseActivity {
 
     @ViewById
     EditText editText;

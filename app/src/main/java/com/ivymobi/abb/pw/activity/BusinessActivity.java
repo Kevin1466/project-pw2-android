@@ -22,7 +22,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import org.androidannotations.annotations.EActivity;
 
 @EActivity
-public class BusinessActivity extends AppCompatActivity {
+public class BusinessActivity extends BaseActivity {
 
     private DisplayMetrics dm;
     private PagerSlidingTabStrip tabs;

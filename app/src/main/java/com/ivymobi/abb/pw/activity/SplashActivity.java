@@ -7,7 +7,7 @@ import android.os.Bundle;
 
 import com.ivymobi.abb.pw.R;
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

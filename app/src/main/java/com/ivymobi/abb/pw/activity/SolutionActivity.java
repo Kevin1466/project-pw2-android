@@ -9,7 +9,7 @@ import com.ivymobi.abb.pw.R;
 import org.androidannotations.annotations.EActivity;
 
 @EActivity
-public class SolutionActivity extends AppCompatActivity {
+public class SolutionActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

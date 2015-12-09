@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @EActivity
-public class CollectionActivity extends AppCompatActivity {
+public class CollectionActivity extends BaseActivity {
 
     private ListView listView;
     private ListViewAdapter adapter;
