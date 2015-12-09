@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTabHost;
@@ -39,6 +40,7 @@ public class DownloadActivity extends AppCompatActivity {
 
     protected FragmentTabHost mTabHost;
     public static ListItemFragment listItemFragment = null;
+    View maskView = null;
 
     @Override
     public void onBackPressed() {
@@ -149,7 +151,7 @@ public class DownloadActivity extends AppCompatActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        getSupportActionBar().setDisplayHomeAsUpEnabled(!isShareMode);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(!isShareMode);
         mShareIconMenuItem.setVisible(!isShareMode);
         mCancelMenuItem.setVisible(isShareMode);
         mShareMenuItem.setVisible(isShareMode);
@@ -170,11 +172,22 @@ public class DownloadActivity extends AppCompatActivity {
     }
     protected void updateTabState(boolean isInShareMode) {
         if (isInShareMode) {
-//            mTabHost.getTabWidget().getChildTabViewAt(0).setBackground(null);
-            //TODO:change the tabview background
+
+            if (maskView == null)  {
+                maskView = new View(this);
+                maskView.setLayoutParams(new LinearLayout.LayoutParams(mTabHost.getWidth(), mTabHost.getTabWidget().getHeight()));
+                maskView.setBackgroundColor(Color.parseColor("#000000"));
+                maskView.setAlpha(0.8f);
+            }
+
+            mTabHost.addView(maskView);
+
             mTabHost.getTabWidget().setEnabled(!isInShareMode);
         } else {
-            //TODO:change the tabview background
+            if (maskView != null) {
+                mTabHost.removeView(maskView);
+            }
+
             mTabHost.getTabWidget().setEnabled(!isInShareMode);
         }
     }
