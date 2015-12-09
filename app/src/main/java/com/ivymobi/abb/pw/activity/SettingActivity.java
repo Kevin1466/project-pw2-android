@@ -58,7 +58,9 @@ public class SettingActivity extends AppCompatActivity {
 
     @Click
     public void actionMailSignClicked() {
-        startActivity(new Intent(this, SettingMailSignActivity_.class));
+        Intent intent = new Intent(this, SettingMailSignActivity_.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        startActivity(intent);
     }
 
     private void getCacheSize() {

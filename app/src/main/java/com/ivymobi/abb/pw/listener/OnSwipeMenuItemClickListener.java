@@ -90,6 +90,7 @@ public class OnSwipeMenuItemClickListener implements SwipeMenuListView.OnMenuIte
                     oks.disableSSOWhenAuthorize();
                     oks.addHiddenPlatform("Email");
                     oks.setTitle(file.getTitle());
+                    oks.setText(file.getTitle());
                     oks.setUrl(fileUrl);
                     oks.setShareContentCustomizeCallback(new ShareContentCustomizeCallback() {
                         @Override
