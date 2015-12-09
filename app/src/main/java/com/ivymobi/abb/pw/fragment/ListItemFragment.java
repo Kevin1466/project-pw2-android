@@ -25,7 +25,6 @@ import com.ivymobi.abb.pw.activity.LocalPDFActivity_;
 import com.ivymobi.abb.pw.activity.ShareActivity_;
 import com.ivymobi.abb.pw.activity.WebActivity_;
 import com.ivymobi.abb.pw.adapter.ListItemAdapter;
-import com.ivymobi.abb.pw.app.MyApplication;
 import com.ivymobi.abb.pw.beans.CollectionFile;
 import com.ivymobi.abb.pw.beans.File;
 import com.ivymobi.abb.pw.listener.OnSwipeMenuItemClickListener;
@@ -35,11 +34,6 @@ import com.ivymobi.abb.pw.listener.UpdateShareModeEvent;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.otto.Subscribe;
-import com.umeng.socialize.bean.CustomPlatform;
-import com.umeng.socialize.bean.SHARE_MEDIA;
-import com.umeng.socialize.bean.SocializeEntity;
-import com.umeng.socialize.controller.UMSocialService;
-import com.umeng.socialize.controller.listener.SocializeListeners;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
@@ -50,6 +44,11 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.onekeyshare.Email;
+import cn.sharesdk.onekeyshare.OnekeyShare;
+import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
 import cz.msebera.android.httpclient.Header;
 
 
@@ -132,22 +131,24 @@ public class ListItemFragment extends Fragment {
             });
         }
 
-        CustomPlatform emailPlatform = new CustomPlatform("EMAIL", getResources().getString(R.string.email), R.mipmap.icon_email);
-        emailPlatform.mClickListener = new SocializeListeners.OnSnsPlatformClickListener() {
+        ShareSDK.initSDK(getContext());
+        OnekeyShare oks = new OnekeyShare();
+        oks.addHiddenPlatform("Wechat");
+        oks.addHiddenPlatform("Email");
+        oks.addHiddenPlatform("Copy");
+        oks.addHiddenPlatform("WechatMoments");
+        oks.disableSSOWhenAuthorize();
+        oks.setShareContentCustomizeCallback(new ShareContentCustomizeCallback() {
             @Override
-            public void onClick(Context context, SocializeEntity socializeEntity, SocializeListeners.SnsPostListener snsPostListener) {
-
-                Intent intent = new Intent(getContext(), ShareActivity_.class);
-                intent.putStringArrayListExtra("uuidList", new ArrayList<>(filesToShare));
-                startActivity(intent);
+            public void onShare(Platform platform, Platform.ShareParams paramsToShare) {
+                if (platform.getName().equals(Email.NAME)) {
+                    Intent intent = new Intent(getContext(), ShareActivity_.class);
+                    intent.putStringArrayListExtra("uuidList", new ArrayList<>(filesToShare));
+                    startActivity(intent);
+                }
             }
-        };
-
-        UMSocialService umSocialService = MyApplication.umSocialService;
-
-        umSocialService.getConfig().removePlatform(SHARE_MEDIA.SINA, SHARE_MEDIA.QZONE, SHARE_MEDIA.QQ, SHARE_MEDIA.TENCENT, SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE);
-        umSocialService.getConfig().addCustomPlatform(emailPlatform);
-        umSocialService.openShare(getActivity(), false);
+        });
+        oks.show(getContext());
 
         //完成后将分析列表清空
         listItemAdapter.initCheckedItems();

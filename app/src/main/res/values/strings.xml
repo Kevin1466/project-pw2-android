@@ -40,8 +40,10 @@
     <string name="loading">Loading...</string>
     <string name="buffering">Buffering...</string>
     <string name="copy_link">Copy URL</string>
+    <string name="copy">Copy URL</string>
     <string name="copy_success">Copy succeeded</string>
     <string name="email">Email</string>
+    <string name="cemail">Email</string>
     <string name="moments">Moments</string>
     <string name="weixin">Friends</string>
     <string name="new_group">New Group</string>

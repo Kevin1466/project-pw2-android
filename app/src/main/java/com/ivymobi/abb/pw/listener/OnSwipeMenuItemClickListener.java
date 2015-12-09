@@ -16,7 +16,6 @@ import com.ivymobi.abb.pw.R;
 import com.ivymobi.abb.pw.activity.CollectionActivity_;
 import com.ivymobi.abb.pw.activity.DownloadActivity;
 import com.ivymobi.abb.pw.activity.ShareActivity_;
-import com.ivymobi.abb.pw.app.MyApplication;
 import com.ivymobi.abb.pw.beans.File;
 import com.ivymobi.abb.pw.fragment.ListItemFragment;
 import com.loopj.android.http.AsyncHttpClient;
@@ -26,13 +25,6 @@ import com.thin.downloadmanager.DefaultRetryPolicy;
 import com.thin.downloadmanager.DownloadRequest;
 import com.thin.downloadmanager.DownloadStatusListener;
 import com.thin.downloadmanager.ThinDownloadManager;
-import com.umeng.socialize.bean.CustomPlatform;
-import com.umeng.socialize.bean.SHARE_MEDIA;
-import com.umeng.socialize.bean.SocializeEntity;
-import com.umeng.socialize.controller.UMSocialService;
-import com.umeng.socialize.controller.listener.SocializeListeners;
-import com.umeng.socialize.media.UMWebPage;
-import com.umeng.socialize.weixin.controller.UMWXHandler;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,6 +32,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.onekeyshare.Copy;
+import cn.sharesdk.onekeyshare.Email;
+import cn.sharesdk.onekeyshare.OnekeyShare;
+import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
 import cz.msebera.android.httpclient.Header;
 
 
@@ -87,59 +85,30 @@ public class OnSwipeMenuItemClickListener implements SwipeMenuListView.OnMenuIte
                     file.setUrl(fileUrl);
                     file.save();
 
-                    UMSocialService umSocialService = MyApplication.umSocialService;
-
-
-                    UMWXHandler wxHandler = new UMWXHandler(fragment.getContext(), "wx508bd5b1879c3b8e", "f0c9758ef8a2775f21c6e977aa06e5a3");
-                    wxHandler.addToSocialSDK();
-
-                    UMWXHandler wxCircleHandler = new UMWXHandler(fragment.getContext(), "wx508bd5b1879c3b8e", "f0c9758ef8a2775f21c6e977aa06e5a3");
-                    wxCircleHandler.setToCircle(true);
-                    wxCircleHandler.addToSocialSDK();
-
-                    wxHandler.mCustomPlatform.mIcon = R.mipmap.icon_wenxin;
-                    wxHandler.mCustomPlatform.mShowWord = fragment.getResources().getString(R.string.weixin);
-
-                    wxCircleHandler.mCustomPlatform.mIcon = R.mipmap.icon_friends;
-                    wxCircleHandler.mCustomPlatform.mShowWord = fragment.getResources().getString(R.string.moments);
-
-                    CustomPlatform copyPlatform = new CustomPlatform("COPY_LINK", fragment.getResources().getString(R.string.copy_link), R.mipmap.icon_copy);
-                    copyPlatform.mClickListener = new SocializeListeners.OnSnsPlatformClickListener() {
+                    ShareSDK.initSDK(fragment.getContext());
+                    OnekeyShare oks = new OnekeyShare();
+                    oks.disableSSOWhenAuthorize();
+                    oks.addHiddenPlatform("Email");
+                    oks.setTitle(file.getTitle());
+                    oks.setUrl(fileUrl);
+                    oks.setShareContentCustomizeCallback(new ShareContentCustomizeCallback() {
                         @Override
-                        public void onClick(Context context, SocializeEntity socializeEntity, SocializeListeners.SnsPostListener snsPostListener) {
-                            ClipboardManager cmb = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                            cmb.setText(fileUrl);
-                            Toast.makeText(fragment.getContext(), R.string.copy_success, Toast.LENGTH_SHORT).show();
+                        public void onShare(Platform platform, Platform.ShareParams paramsToShare) {
+                            if (platform.getName().equals(Email.NAME)) {
+                                ArrayList<String> uuidList = new ArrayList<>();
+                                uuidList.add(file.getUuid());
+
+                                Intent intent = new Intent(fragment.getContext(), ShareActivity_.class);
+                                intent.putStringArrayListExtra("uuidList", uuidList);
+                                fragment.startActivity(intent);
+                            } else if (platform.getName().equals(Copy.NAME)) {
+                                ClipboardManager cmb = (ClipboardManager) fragment.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                                cmb.setText(fileUrl);
+                                Toast.makeText(fragment.getContext(), R.string.copy_success, Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    };
-
-                    CustomPlatform emailPlatform = new CustomPlatform("EMAIL", fragment.getResources().getString(R.string.email), R.mipmap.icon_email);
-                    emailPlatform.mClickListener = new SocializeListeners.OnSnsPlatformClickListener() {
-                        @Override
-                        public void onClick(Context context, SocializeEntity socializeEntity, SocializeListeners.SnsPostListener snsPostListener) {
-                            ArrayList<String> uuidList = new ArrayList<>();
-                            uuidList.add(file.getUuid());
-
-                            Intent intent = new Intent(fragment.getContext(), ShareActivity_.class);
-                            intent.putStringArrayListExtra("uuidList", uuidList);
-                            fragment.startActivity(intent);
-                        }
-                    };
-
-                    for (CustomPlatform customPlatform : umSocialService.getConfig().getCustomPlatforms()) {
-                        System.out.println("customPlatform.mPlatform: " + customPlatform.mPlatform);
-                        System.out.println("customPlatform.mKeyword: " + customPlatform.mKeyword);
-                    }
-
-
-                    umSocialService.getConfig().removePlatform(SHARE_MEDIA.SINA, SHARE_MEDIA.QZONE, SHARE_MEDIA.QQ, SHARE_MEDIA.TENCENT);
-                    umSocialService.getConfig().addCustomPlatform(copyPlatform);
-                    umSocialService.getConfig().addCustomPlatform(emailPlatform);
-                    umSocialService.getConfig().setPlatformOrder(emailPlatform.mKeyword, SHARE_MEDIA.WEIXIN.toString(), SHARE_MEDIA.WEIXIN_CIRCLE.toString(), copyPlatform.mKeyword);
-                    umSocialService.setShareContent(file.getTitle());
-                    umSocialService.setShareMedia(new UMWebPage(fileUrl));
-
-                    umSocialService.openShare(fragment.getActivity(), false);
+                    });
+                    oks.show(fragment.getContext());
 
                 } catch (JSONException e) {
                     e.printStackTrace();
