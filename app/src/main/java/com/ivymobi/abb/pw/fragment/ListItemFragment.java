@@ -22,9 +22,10 @@ import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.ivymobi.abb.pw.R;
 import com.ivymobi.abb.pw.activity.DownloadActivity;
 import com.ivymobi.abb.pw.activity.LocalPDFActivity_;
-import com.ivymobi.abb.pw.activity.PDFActivity_;
 import com.ivymobi.abb.pw.activity.ShareActivity_;
+import com.ivymobi.abb.pw.activity.WebActivity_;
 import com.ivymobi.abb.pw.adapter.ListItemAdapter;
+import com.ivymobi.abb.pw.app.MyApplication;
 import com.ivymobi.abb.pw.beans.CollectionFile;
 import com.ivymobi.abb.pw.beans.File;
 import com.ivymobi.abb.pw.listener.OnSwipeMenuItemClickListener;
@@ -33,13 +34,10 @@ import com.ivymobi.abb.pw.listener.UpdateShareEvent;
 import com.ivymobi.abb.pw.listener.UpdateShareModeEvent;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.SyncHttpClient;
 import com.squareup.otto.Subscribe;
 import com.umeng.socialize.bean.CustomPlatform;
 import com.umeng.socialize.bean.SHARE_MEDIA;
-import com.umeng.socialize.bean.SocializeConfig;
 import com.umeng.socialize.bean.SocializeEntity;
-import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
 import com.umeng.socialize.controller.listener.SocializeListeners;
 
@@ -70,7 +68,6 @@ public class ListItemFragment extends Fragment {
     private ListItemAdapter listItemAdapter;
     public List<File> files;
     public Context context;
-    UMSocialService umSocialService = UMServiceFactory.getUMSocialService("com.umeng.share");
 
     List<String> filesToShare;
 
@@ -90,7 +87,7 @@ public class ListItemFragment extends Fragment {
 
         return mView;
     }
-    
+
     @Override
     public void onResume() {
         super.onResume();
@@ -120,7 +117,7 @@ public class ListItemFragment extends Fragment {
         }
 
         for (final String uuid : filesToShare) {
-            final SyncHttpClient client = new SyncHttpClient();
+            final AsyncHttpClient client = new AsyncHttpClient();
             client.get("http://yangbentong.com/api/7a94881a-df96-429d-9e01-dece4f46fee2/storage/" + uuid, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -146,9 +143,10 @@ public class ListItemFragment extends Fragment {
             }
         };
 
-        umSocialService.setConfig(SocializeConfig.getSocializeConfig());
-        umSocialService.getConfig().addCustomPlatform(emailPlatform);
+        UMSocialService umSocialService = MyApplication.umSocialService;
+
         umSocialService.getConfig().removePlatform(SHARE_MEDIA.SINA, SHARE_MEDIA.QZONE, SHARE_MEDIA.QQ, SHARE_MEDIA.TENCENT, SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE);
+        umSocialService.getConfig().addCustomPlatform(emailPlatform);
         umSocialService.openShare(getActivity(), false);
 
         //完成后将分析列表清空
@@ -268,27 +266,33 @@ public class ListItemFragment extends Fragment {
 
     protected void itemClicked(int position) {
 
-        File file = files.get(position);
+        final File file = files.get(position);
 
         if (file.getLocalPath() == null) {
-            final AsyncHttpClient client = new AsyncHttpClient();
-            client.get("http://yangbentong.com/api/7a94881a-df96-429d-9e01-dece4f46fee2/storage/" + file.getUuid(), new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    try {
+//            final AsyncHttpClient client = new AsyncHttpClient();
+//            client.get("http://yangbentong.com/api/7a94881a-df96-429d-9e01-dece4f46fee2/storage/" + file.getUuid(), new JsonHttpResponseHandler() {
+//                @Override
+//                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+//                    try {
 
-                        String fileUrl = response.getString("url");
+//                        String fileUrl = response.getString("url");
 
-                        Intent intent = new Intent(getActivity(), PDFActivity_.class);
-                        intent.putExtra("url", fileUrl);
+//                        Intent intent = new Intent(getActivity(), PDFActivity_.class);
+//                        intent.putExtra("url", fileUrl);
+//
+//                        startActivity(intent);
 
-                        startActivity(intent);
+            String url = String.format("http://yangbentong.com/api/7a94881a-df96-429d-9e01-dece4f46fee2/storage/%s/webview", file.getUuid());
+            Intent intent = new Intent(getActivity(), WebActivity_.class);
+            intent.putExtra("url", url);
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
+            startActivity(intent);
+
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            });
         } else {
             Intent intent = new Intent(getActivity(), LocalPDFActivity_.class);
             intent.putExtra("fileName", file.getLocalPath());

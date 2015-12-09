@@ -60,7 +60,7 @@ public class ShareActivity extends AppCompatActivity {
         for (File file : fileList) {
             stringBuffer.append(String.format("文件名：%s", file.getTitle()));
             stringBuffer.append("<br/><br/>");
-            stringBuffer.append(String.format("文件大小：%dMB", file.getSize() / 1024 / 1024));
+            stringBuffer.append(String.format("%.2f MB", (float) file.getSize() / 1024 / 1024));
             stringBuffer.append("<br/><br/>");
             stringBuffer.append(String.format("<a href=\"%s\">下载链接</a>", file.getUrl()));
             stringBuffer.append("<br/><br/>");
@@ -105,7 +105,6 @@ public class ShareActivity extends AppCompatActivity {
         requestParams.put("rcpt", editTextReceiver.getText());
         requestParams.put("type", "custom");
         requestParams.put("lang", "zh-CN");
-        requestParams.put("data", "zh-CN");
         requestParams.put("data", String.format("{\"subject\":\"%s\",\"content\": \"%s\"}", getString(R.string.email_subject), Html.toHtml(editTextContent.getText()).replaceAll("\n", "").replaceAll("\"", "")));
 
         client.post("http://www.yangbentong.com/api/7a94881a-df96-429d-9e01-dece4f46fee2/share/email", requestParams, new JsonHttpResponseHandler() {

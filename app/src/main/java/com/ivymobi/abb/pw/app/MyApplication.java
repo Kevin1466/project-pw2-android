@@ -10,12 +10,17 @@ import com.ivymobi.abb.pw.R;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.umeng.socialize.controller.UMServiceFactory;
+import com.umeng.socialize.controller.UMSocialService;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
 public class MyApplication extends Application {
+    public static UMSocialService umSocialService = UMServiceFactory.getUMSocialService("com.umeng.share");
+    public static Boolean umSocialServiceInit = false;
+
     private Map<String, Object> mData;
 
     public Object getmData(String key) {

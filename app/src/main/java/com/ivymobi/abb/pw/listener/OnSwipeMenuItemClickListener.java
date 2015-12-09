@@ -16,6 +16,7 @@ import com.ivymobi.abb.pw.R;
 import com.ivymobi.abb.pw.activity.CollectionActivity_;
 import com.ivymobi.abb.pw.activity.DownloadActivity;
 import com.ivymobi.abb.pw.activity.ShareActivity_;
+import com.ivymobi.abb.pw.app.MyApplication;
 import com.ivymobi.abb.pw.beans.File;
 import com.ivymobi.abb.pw.fragment.ListItemFragment;
 import com.loopj.android.http.AsyncHttpClient;
@@ -28,7 +29,6 @@ import com.thin.downloadmanager.ThinDownloadManager;
 import com.umeng.socialize.bean.CustomPlatform;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.bean.SocializeEntity;
-import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
 import com.umeng.socialize.controller.listener.SocializeListeners;
 import com.umeng.socialize.media.UMWebPage;
@@ -46,7 +46,6 @@ import cz.msebera.android.httpclient.Header;
 public class OnSwipeMenuItemClickListener implements SwipeMenuListView.OnMenuItemClickListener {
     List<File> files;
     ListItemFragment fragment;
-    UMSocialService umSocialService = UMServiceFactory.getUMSocialService("com.umeng.share");
 
     public OnSwipeMenuItemClickListener(ListItemFragment fragment, List<File> files) {
         this.files = files;
@@ -88,6 +87,9 @@ public class OnSwipeMenuItemClickListener implements SwipeMenuListView.OnMenuIte
                     file.setUrl(fileUrl);
                     file.save();
 
+                    UMSocialService umSocialService = MyApplication.umSocialService;
+
+
                     UMWXHandler wxHandler = new UMWXHandler(fragment.getContext(), "wx508bd5b1879c3b8e", "f0c9758ef8a2775f21c6e977aa06e5a3");
                     wxHandler.addToSocialSDK();
 
@@ -101,8 +103,8 @@ public class OnSwipeMenuItemClickListener implements SwipeMenuListView.OnMenuIte
                     wxCircleHandler.mCustomPlatform.mIcon = R.mipmap.icon_friends;
                     wxCircleHandler.mCustomPlatform.mShowWord = fragment.getResources().getString(R.string.moments);
 
-                    CustomPlatform customPlatform = new CustomPlatform("COPY_LINK", fragment.getResources().getString(R.string.copy_link), R.mipmap.icon_copy);
-                    customPlatform.mClickListener = new SocializeListeners.OnSnsPlatformClickListener() {
+                    CustomPlatform copyPlatform = new CustomPlatform("COPY_LINK", fragment.getResources().getString(R.string.copy_link), R.mipmap.icon_copy);
+                    copyPlatform.mClickListener = new SocializeListeners.OnSnsPlatformClickListener() {
                         @Override
                         public void onClick(Context context, SocializeEntity socializeEntity, SocializeListeners.SnsPostListener snsPostListener) {
                             ClipboardManager cmb = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
@@ -124,12 +126,19 @@ public class OnSwipeMenuItemClickListener implements SwipeMenuListView.OnMenuIte
                         }
                     };
 
-                    umSocialService.getConfig().addCustomPlatform(customPlatform);
-                    umSocialService.getConfig().addCustomPlatform(emailPlatform);
+                    for (CustomPlatform customPlatform : umSocialService.getConfig().getCustomPlatforms()) {
+                        System.out.println("customPlatform.mPlatform: " + customPlatform.mPlatform);
+                        System.out.println("customPlatform.mKeyword: " + customPlatform.mKeyword);
+                    }
+
+
                     umSocialService.getConfig().removePlatform(SHARE_MEDIA.SINA, SHARE_MEDIA.QZONE, SHARE_MEDIA.QQ, SHARE_MEDIA.TENCENT);
-                    umSocialService.getConfig().setPlatformOrder(emailPlatform.mKeyword, SHARE_MEDIA.WEIXIN.toString(), SHARE_MEDIA.WEIXIN_CIRCLE.toString(), customPlatform.mKeyword);
+                    umSocialService.getConfig().addCustomPlatform(copyPlatform);
+                    umSocialService.getConfig().addCustomPlatform(emailPlatform);
+                    umSocialService.getConfig().setPlatformOrder(emailPlatform.mKeyword, SHARE_MEDIA.WEIXIN.toString(), SHARE_MEDIA.WEIXIN_CIRCLE.toString(), copyPlatform.mKeyword);
                     umSocialService.setShareContent(file.getTitle());
                     umSocialService.setShareMedia(new UMWebPage(fileUrl));
+
                     umSocialService.openShare(fragment.getActivity(), false);
 
                 } catch (JSONException e) {
@@ -176,7 +185,6 @@ public class OnSwipeMenuItemClickListener implements SwipeMenuListView.OnMenuIte
 
                                 @Override
                                 public void onDownloadComplete(int id) {
-                                    Toast.makeText(fragment.getContext(), R.string.download_success, Toast.LENGTH_SHORT).show();
 
                                     file.setLocalPath(fileName);
                                     file.setDownloading(false);
@@ -186,6 +194,7 @@ public class OnSwipeMenuItemClickListener implements SwipeMenuListView.OnMenuIte
 
                                     progressBar.setVisibility(View.GONE);
 
+//                                    Toast.makeText(fragment.getContext(), R.string.download_success, Toast.LENGTH_SHORT).show();
                                     fragment.refreshData();
                                 }
 
