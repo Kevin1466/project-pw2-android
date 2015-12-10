@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.activeandroid.query.Select;
 import com.ivymobi.abb.pw.R;
 import com.ivymobi.abb.pw.adapter.ListViewAdapter;
+import com.ivymobi.abb.pw.analytics.Analytics;
 import com.ivymobi.abb.pw.beans.Collection;
 import com.ivymobi.abb.pw.beans.CollectionFile;
 import com.ivymobi.abb.pw.beans.File;
@@ -103,6 +104,8 @@ public class CollectionActivity extends BaseActivity {
         // 已有处理
         List<CollectionFile> collectionFiles = CollectionFile.findByFile(file);
         for (CollectionFile cf : collectionFiles) {
+            Analytics.log(this, "user_action", "fav_file", cf.file.getUuid(), "1");
+
             cf.delete();
         }
 
@@ -114,6 +117,8 @@ public class CollectionActivity extends BaseActivity {
                 newCollectionFile.collection = collection;
                 newCollectionFile.file = file;
                 newCollectionFile.save();
+
+                Analytics.log(this, "user_action", "fav_file", file.getUuid(), "1");
             }
 
         }

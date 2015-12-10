@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.ivymobi.abb.pw.R;
+import com.ivymobi.abb.pw.analytics.Analytics;
 import com.ivymobi.abb.pw.beans.File;
 import com.ivymobi.abb.pw.util.PreferenceUtil;
 import com.loopj.android.http.AsyncHttpClient;
@@ -81,6 +82,8 @@ public class ShareActivity extends BaseActivity {
         }
 
         editTextContent.setText(Html.fromHtml(stringBuffer.toString()));
+
+        Analytics.log(this, "user_action", "share_app", "by_email", "1");
     }
 
     @Click
@@ -113,8 +116,11 @@ public class ShareActivity extends BaseActivity {
                 try {
                     if (response.getString("status").equals("ok")) {
                         Toast.makeText(getBaseContext(), R.string.share_success, Toast.LENGTH_SHORT).show();
+
+                        Analytics.log(getBaseContext(), "user_action", "share_app", "by_email_success", editTextReceiver.getText().toString());
                     } else {
                         Toast.makeText(getBaseContext(), R.string.share_fail, Toast.LENGTH_SHORT).show();
+                        Analytics.log(getBaseContext(), "user_action", "share_app", "by_email_fail", editTextReceiver.getText().toString());
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

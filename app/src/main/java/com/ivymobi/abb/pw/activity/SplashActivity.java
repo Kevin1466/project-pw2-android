@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.ivymobi.abb.pw.R;
+import com.ivymobi.abb.pw.analytics.Analytics;
+import com.umeng.analytics.MobclickAgent;
 
 public class SplashActivity extends BaseActivity {
 
@@ -23,5 +25,11 @@ public class SplashActivity extends BaseActivity {
                 SplashActivity.this.finish();
             }
         }, 3000);
+    }
+
+    public void onResume() {
+        super.onResume();
+
+        Analytics.log(this, "app", "launched");
     }
 }

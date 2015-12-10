@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.ivymobi.abb.pw.R;
+import com.ivymobi.abb.pw.analytics.Analytics;
 import com.joanzapata.pdfview.PDFView;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
@@ -41,6 +42,8 @@ public class PDFActivity extends BaseActivity {
         Log.d("pdf", "url " + url);
 
         loadPDF(url);
+
+        Analytics.log(this, "user_action", "open_file", url, "1");
     }
 
     private void loadPDF(final String url) {

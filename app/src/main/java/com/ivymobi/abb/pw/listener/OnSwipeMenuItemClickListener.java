@@ -16,6 +16,7 @@ import com.ivymobi.abb.pw.R;
 import com.ivymobi.abb.pw.activity.CollectionActivity_;
 import com.ivymobi.abb.pw.activity.DownloadActivity;
 import com.ivymobi.abb.pw.activity.ShareActivity_;
+import com.ivymobi.abb.pw.analytics.Analytics;
 import com.ivymobi.abb.pw.beans.File;
 import com.ivymobi.abb.pw.fragment.ListItemFragment;
 import com.loopj.android.http.AsyncHttpClient;
@@ -38,6 +39,8 @@ import cn.sharesdk.onekeyshare.Copy;
 import cn.sharesdk.onekeyshare.Email;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
+import cn.sharesdk.wechat.friends.Wechat;
+import cn.sharesdk.wechat.moments.WechatMoments;
 import cz.msebera.android.httpclient.Header;
 
 
@@ -106,6 +109,10 @@ public class OnSwipeMenuItemClickListener implements SwipeMenuListView.OnMenuIte
                                 ClipboardManager cmb = (ClipboardManager) fragment.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
                                 cmb.setText(fileUrl);
                                 Toast.makeText(fragment.getContext(), R.string.copy_success, Toast.LENGTH_SHORT).show();
+                            } else if (platform.getName().equals(Wechat.NAME)) {
+                                Analytics.log(fragment.getContext(), "user_action", "share_app", "by_wechat_friend", "1");
+                            } else if (platform.getName().equals(WechatMoments.NAME)) {
+                                Analytics.log(fragment.getContext(), "user_action", "share_app", "by_wechat_moment", "1");
                             }
                         }
                     });
@@ -129,6 +136,8 @@ public class OnSwipeMenuItemClickListener implements SwipeMenuListView.OnMenuIte
     }
 
     private void downloadFile(final File file, int position) {
+
+        Analytics.log(fragment.getContext(), "user_action", "download_file_started", file.getUuid(), "1");
 
         final SwipeMenuLayout layout = (SwipeMenuLayout) fragment.listView.getChildAt(position);
         LinearLayout linearLayout = (LinearLayout) layout.getMenuView().getChildAt(0);
@@ -163,6 +172,8 @@ public class OnSwipeMenuItemClickListener implements SwipeMenuListView.OnMenuIte
                                     downloadImageView.setImageResource(R.mipmap.icon_download_gray);
 
                                     progressBar.setVisibility(View.GONE);
+
+                                    Analytics.log(fragment.getContext(), "user_action", "download_file_finished", file.getUuid(), "1");
 
 //                                    Toast.makeText(fragment.getContext(), R.string.download_success, Toast.LENGTH_SHORT).show();
                                     fragment.refreshData();
