@@ -123,8 +123,6 @@ public class CloudFragment extends Fragment implements OnFolderRecyclerListener 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        System.out.println("ffffffffkkkkkkkkk");
     }
 
     @UiThread
@@ -189,7 +187,7 @@ public class CloudFragment extends Fragment implements OnFolderRecyclerListener 
             listItemFragment.setArguments(args);
 
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
             transaction.replace(R.id.container_framelayout, listItemFragment, ListItemFragment.FLAG);
             transaction.addToBackStack(null);
             transaction.commit();
@@ -198,7 +196,7 @@ public class CloudFragment extends Fragment implements OnFolderRecyclerListener 
             cloudFragment.root = root.getChildren().get(position);
 
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
             transaction.replace(R.id.container_framelayout, cloudFragment, CloudFragment.FLAG);
             transaction.addToBackStack(null);
             transaction.commit();

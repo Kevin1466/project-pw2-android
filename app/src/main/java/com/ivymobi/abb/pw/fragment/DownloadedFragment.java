@@ -54,6 +54,7 @@ public class DownloadedFragment extends Fragment {
         listItemFragment.setArguments(args);
 
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+//        transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
         transaction.replace(R.id.container_framelayout, listItemFragment, ListItemFragment.FLAG);
         transaction.addToBackStack(null);
         transaction.commit();

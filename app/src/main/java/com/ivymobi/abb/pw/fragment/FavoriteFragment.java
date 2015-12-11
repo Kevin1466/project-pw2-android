@@ -112,6 +112,7 @@ public class FavoriteFragment extends Fragment implements OnFavoriteRecyclerList
         listItemFragment.setArguments(args);
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
         transaction.replace(R.id.container_framelayout, listItemFragment, ListItemFragment.FLAG);
         transaction.addToBackStack(null);
         transaction.commit();

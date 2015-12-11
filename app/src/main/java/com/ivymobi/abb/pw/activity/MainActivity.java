@@ -110,7 +110,7 @@ public class MainActivity extends BaseActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 Intent intent = new Intent(this, SettingActivity_.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 
                 startActivity(intent);
 

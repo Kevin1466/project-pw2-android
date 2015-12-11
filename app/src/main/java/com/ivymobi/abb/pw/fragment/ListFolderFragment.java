@@ -52,7 +52,7 @@ public class ListFolderFragment extends Fragment implements OnFolderRecyclerList
             listItemFragment.setArguments(args);
 
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
             transaction.replace(R.id.container_framelayout, listItemFragment);
             transaction.addToBackStack(null);
             transaction.commit();
@@ -61,7 +61,7 @@ public class ListFolderFragment extends Fragment implements OnFolderRecyclerList
             cloudFragment.root = root.getChildren().get(position);
 
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
             transaction.replace(R.id.container_framelayout, cloudFragment);
             transaction.addToBackStack(null);
             transaction.commit();
