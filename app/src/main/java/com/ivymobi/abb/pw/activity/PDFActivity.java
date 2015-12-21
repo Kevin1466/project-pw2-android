@@ -12,6 +12,7 @@ import com.joanzapata.pdfview.PDFView;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
 
+import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 
 import java.io.File;
@@ -33,17 +34,20 @@ public class PDFActivity extends BaseActivity {
         Intent intent = getIntent();
         final String url = intent.getStringExtra("url");
 
-        pDialog = new ProgressDialog(PDFActivity.this);
-        pDialog.setIndeterminate(false);
-        pDialog.setCancelable(false);
-        pDialog.setMessage(getResources().getString(R.string.loading));
-        pDialog.show();
-
         Log.d("pdf", "url " + url);
 
         loadPDF(url);
 
         Analytics.log(this, "user_action", "open_file", url, "1");
+    }
+
+    @AfterViews
+    public void showDialog() {
+        pDialog = new ProgressDialog(PDFActivity.this);
+        pDialog.setIndeterminate(false);
+        pDialog.setCancelable(false);
+        pDialog.setMessage(getResources().getString(R.string.loading));
+        pDialog.show();
     }
 
     private void loadPDF(final String url) {

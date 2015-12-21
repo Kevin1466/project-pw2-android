@@ -55,4 +55,5 @@
     <string name="share_fail">分享失败</string>
     <string name="warning_receiver">请输入收件人邮箱地址</string>
     <string name="warning_content">请输入邮件内容</string>
+    <string name="action_search">搜索</string>
 </resources>

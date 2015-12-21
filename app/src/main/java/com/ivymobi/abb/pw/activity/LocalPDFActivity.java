@@ -3,6 +3,7 @@ package com.ivymobi.abb.pw.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.ivymobi.abb.pw.R;
 import com.joanzapata.pdfview.PDFView;
@@ -24,6 +25,8 @@ public class LocalPDFActivity extends BaseActivity {
         Intent intent = getIntent();
         String fileName = intent.getStringExtra("fileName");
         String fullPath = getExternalCacheDir().toString() + "/" + fileName;
+
+        Log.d("pdf", "url " + fullPath);
 
         PDFView pdfView = (PDFView) findViewById(R.id.pdfview);
 

@@ -37,8 +37,8 @@ public class ListItemAdapter extends BaseAdapter {
     public ListItemAdapter(Context context, List<File> files, boolean isShareMode) {
         this.beans = files;
         this.context = context;
-        this.locale = context.getResources().getConfiguration().locale;
         this.isShareMode = isShareMode;
+        this.locale = context.getResources().getConfiguration().locale;
 
         views = new ArrayList<>();
         initCheckedItems();

@@ -59,6 +59,7 @@ public class ListItemFragment extends Fragment {
     protected OttoBus bus;
 
     protected boolean isShareMode = false;
+    protected boolean canDeleted = false;
 
     public static String FLAG = "LIST_ITEM_FRAGMENT";
 
@@ -75,6 +76,7 @@ public class ListItemFragment extends Fragment {
 
         Bundle args = getArguments();
         isShareMode = args.getBoolean(getResources().getString(R.string.share_mode));
+        canDeleted = args.getBoolean("canDeleted");
 
         mView = inflater.inflate(R.layout.fragment_list_item, container, false);
 
@@ -174,7 +176,7 @@ public class ListItemFragment extends Fragment {
 
     @AfterViews
     public void setAdapter() {
-        listItemAdapter = new ListItemAdapter(getContext(), files, isShareMode);
+        listItemAdapter = new ListItemAdapter(getActivity(), files, isShareMode);
         listView.setMenuCreator(swipeMenuCreator());
         listView.setAdapter(listItemAdapter);
         listView.setOnMenuItemClickListener(new OnSwipeMenuItemClickListener(this, files));
@@ -207,7 +209,13 @@ public class ListItemFragment extends Fragment {
                 downloadItem.setWidth(120);
 
                 if (file != null && file.isDownload()) {
-                    downloadItem.setIcon(R.mipmap.icon_download_gray);
+
+                    if (canDeleted) {
+                        downloadItem.setIcon(R.mipmap.icon_download_gray); // Todo: change icon
+                    } else {
+                        downloadItem.setIcon(R.mipmap.icon_download_gray);
+                    }
+
                 } else {
                     downloadItem.setIcon(R.mipmap.icon_download_blue);
                 }
@@ -242,7 +250,6 @@ public class ListItemFragment extends Fragment {
                 int position = data.getIntExtra("position", 0);
                 System.out.println("position:" + position);
 
-                //
                 final SwipeMenuLayout layout = (SwipeMenuLayout) listView.getChildAt(position);
 
                 if (layout != null) {
@@ -270,30 +277,12 @@ public class ListItemFragment extends Fragment {
         final File file = files.get(position);
 
         if (file.getLocalPath() == null) {
-//            final AsyncHttpClient client = new AsyncHttpClient();
-//            client.get("http://yangbentong.com/api/7a94881a-df96-429d-9e01-dece4f46fee2/storage/" + file.getUuid(), new JsonHttpResponseHandler() {
-//                @Override
-//                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-//                    try {
-
-//                        String fileUrl = response.getString("url");
-
-//                        Intent intent = new Intent(getActivity(), PDFActivity_.class);
-//                        intent.putExtra("url", fileUrl);
-//
-//                        startActivity(intent);
-
             String url = String.format("http://yangbentong.com/api/7a94881a-df96-429d-9e01-dece4f46fee2/storage/%s/webview", file.getUuid());
             Intent intent = new Intent(getActivity(), WebActivity_.class);
             intent.putExtra("url", url);
 
             startActivity(intent);
 
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            });
         } else {
             Intent intent = new Intent(getActivity(), LocalPDFActivity_.class);
             intent.putExtra("fileName", file.getLocalPath());
@@ -306,6 +295,4 @@ public class ListItemFragment extends Fragment {
 //        listView.setAdapter(listItemAdapter);
         listItemAdapter.notifyDataSetChanged();
     }
-
-
 }

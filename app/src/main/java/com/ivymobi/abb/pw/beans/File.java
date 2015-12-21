@@ -5,6 +5,7 @@ import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Table(name = "Files")
@@ -147,6 +148,20 @@ public class File extends Model {
                 .from(File.class)
                 .where("localPath is not null")
                 .orderBy("Id ASC")
+                .execute();
+    }
+
+    public static List<File> getFilesByKeywords(String keywords) {
+        if (keywords.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        return new Select()
+                .from(File.class)
+                .where("title like ?", "%" + keywords + "%")
+                .or("enTitle like ?", "%" + keywords + "%")
+                .orderBy("Id ASC")
+                .limit(50)
                 .execute();
     }
 

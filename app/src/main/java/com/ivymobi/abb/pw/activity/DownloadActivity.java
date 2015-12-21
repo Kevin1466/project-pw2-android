@@ -122,6 +122,7 @@ public class DownloadActivity extends BaseActivity {
         mShareIconMenuItem = menu.findItem(R.id.action_share_icon);
         mCancelMenuItem = menu.findItem(R.id.action_cancel);
         mShareMenuItem = menu.findItem(R.id.action_share);
+        mSearchMenuItem = menu.findItem(R.id.action_search);
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -129,6 +130,7 @@ public class DownloadActivity extends BaseActivity {
     protected MenuItem mShareIconMenuItem;
     protected MenuItem mCancelMenuItem;
     protected MenuItem mShareMenuItem;
+    protected MenuItem mSearchMenuItem;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -144,7 +146,8 @@ public class DownloadActivity extends BaseActivity {
             isShareMode = false;
             invalidateOptionsMenu();
             bus.post(produceShareEvent());
-
+        } else if (item.getItemId() == R.id.action_search) {
+            startActivity(new Intent(this, SearchActivity_.class));
         }
         return true;
     }
@@ -155,6 +158,7 @@ public class DownloadActivity extends BaseActivity {
         mShareIconMenuItem.setVisible(!isShareMode);
         mCancelMenuItem.setVisible(isShareMode);
         mShareMenuItem.setVisible(isShareMode);
+        mSearchMenuItem.setVisible(!isShareMode);
         updateTabState(isShareMode);
         ((MyApplication) getApplication()).setmData(
                 getResources().getString(R.string.share_mode), isShareMode);

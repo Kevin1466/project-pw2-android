@@ -4,6 +4,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -47,10 +48,13 @@ import cz.msebera.android.httpclient.Header;
 public class OnSwipeMenuItemClickListener implements SwipeMenuListView.OnMenuItemClickListener {
     List<File> files;
     ListItemFragment fragment;
+    protected boolean canDeleted = false;
 
     public OnSwipeMenuItemClickListener(ListItemFragment fragment, List<File> files) {
         this.files = files;
         this.fragment = fragment;
+        Bundle args = fragment.getArguments();
+        canDeleted = args.getBoolean("canDeleted");
     }
 
     @Override
@@ -62,6 +66,15 @@ public class OnSwipeMenuItemClickListener implements SwipeMenuListView.OnMenuIte
                 if (!file.isDownload() && !file.isDownloading()) {
                     file.setDownloading(true);
                     downloadFile(file, position);
+                }
+
+                if (canDeleted) {
+                    file.setLocalPath(null);
+                    file.save();
+
+                    files.remove(file);
+
+                    fragment.refreshData();
                 }
 
                 break;
@@ -79,7 +92,7 @@ public class OnSwipeMenuItemClickListener implements SwipeMenuListView.OnMenuIte
 
     private void shareFile(final File file) {
         final AsyncHttpClient client = new AsyncHttpClient();
-        client.get("http://yangbentong.com/api/7a94881a-df96-429d-9e01-dece4f46fee2/storage/" + file.getUuid(), new JsonHttpResponseHandler() {
+        client.get("https://yangbentong.com/api/7a94881a-df96-429d-9e01-dece4f46fee2/storage/" + file.getUuid(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
@@ -147,7 +160,7 @@ public class OnSwipeMenuItemClickListener implements SwipeMenuListView.OnMenuIte
         progressBar.setVisibility(View.GONE);
 
         final AsyncHttpClient client = new AsyncHttpClient();
-        client.get("http://yangbentong.com/api/7a94881a-df96-429d-9e01-dece4f46fee2/storage/" + file.getUuid(), new JsonHttpResponseHandler() {
+        client.get("https://yangbentong.com/api/7a94881a-df96-429d-9e01-dece4f46fee2/storage/" + file.getUuid(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
@@ -175,7 +188,6 @@ public class OnSwipeMenuItemClickListener implements SwipeMenuListView.OnMenuIte
 
                                     Analytics.log(fragment.getContext(), "user_action", "download_file_finished", file.getUuid(), "1");
 
-//                                    Toast.makeText(fragment.getContext(), R.string.download_success, Toast.LENGTH_SHORT).show();
                                     fragment.refreshData();
                                 }
 
