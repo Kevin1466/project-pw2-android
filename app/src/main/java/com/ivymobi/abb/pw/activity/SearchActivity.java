@@ -10,7 +10,6 @@ import com.ivymobi.abb.pw.beans.File;
 import com.ivymobi.abb.pw.fragment.ListItemFragment;
 import com.ivymobi.abb.pw.fragment.ListItemFragment_;
 
-import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
@@ -22,7 +21,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
     @ViewById
     SearchView searchView;
 
-    static ListItemFragment listItemFragment;
+    ListItemFragment listItemFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +29,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
         setContentView(R.layout.activity_search);
 
         setupSearchView();
+        showSearchViews();
     }
 
     private void setupSearchView() {
@@ -37,33 +37,38 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
         searchView.setOnQueryTextListener(this);
     }
 
-    @AfterViews
-    public void showSearchResults() {
-        if (listItemFragment == null) {
-            listItemFragment = ListItemFragment_.builder().build();
-            listItemFragment.files = new ArrayList<>();
+    private void showSearchViews() {
+        listItemFragment = ListItemFragment_.builder().build();
+        listItemFragment.files = new ArrayList<>();
 
-            Bundle args = new Bundle();
-            args.putBoolean(getResources().getString(R.string.share_mode), false);
-            listItemFragment.setArguments(args);
+        Bundle args = new Bundle();
+        args.putBoolean(getResources().getString(R.string.share_mode), false);
+        listItemFragment.setArguments(args);
 
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.container_framelayout, listItemFragment, ListItemFragment.FLAG);
-            transaction.commit();
-        }
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.container_framelayout, listItemFragment, ListItemFragment.FLAG);
+        transaction.commit();
     }
 
     @Override
     public boolean onQueryTextSubmit(String query) {
+        showSearchResults(query);
+
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
 
-        listItemFragment.files = File.getFilesByKeywords(newText);
-        listItemFragment.setAdapter();
+        showSearchResults(newText);
 
         return false;
+    }
+
+    private void showSearchResults(String query) {
+        System.out.println("show search results");
+
+        listItemFragment.files = File.getFilesByKeywords(query);
+        listItemFragment.setAdapter();
     }
 }

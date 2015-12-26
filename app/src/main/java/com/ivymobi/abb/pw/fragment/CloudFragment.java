@@ -1,12 +1,14 @@
 package com.ivymobi.abb.pw.fragment;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +42,7 @@ public class CloudFragment extends Fragment implements OnFolderRecyclerListener 
     private View mView;
     private HashMap<String, File> filesMap = new HashMap<>();
     private ProgressDialog pDialog;
+    final AsyncHttpClient client = new AsyncHttpClient();
 
     public static String FLAG = "CLOUD_FRAGMENT";
 
@@ -63,6 +66,19 @@ public class CloudFragment extends Fragment implements OnFolderRecyclerListener 
         pDialog.setIndeterminate(false);
         pDialog.setCancelable(false);
         pDialog.setMessage(getResources().getString(R.string.loading));
+        pDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
+                    pDialog.dismiss();
+
+                    client.cancelAllRequests(true);
+                    getActivity().finish();
+                }
+
+                return false;
+            }
+        });
         pDialog.show();
 
         getCatalog();
@@ -70,7 +86,6 @@ public class CloudFragment extends Fragment implements OnFolderRecyclerListener 
 
     public void getCatalog() {
 
-        final AsyncHttpClient client = new AsyncHttpClient();
         client.get("http://yangbentong.com/api/7a94881a-df96-429d-9e01-dece4f46fee2/storage?bucket=catalog", new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
@@ -136,7 +151,7 @@ public class CloudFragment extends Fragment implements OnFolderRecyclerListener 
             root.setChildren(catalogList);
             mRecyclerView.setAdapter(new ListFolderAdapter(getActivity(), root, CloudFragment.this));
 
-        } catch (JSONException e) {
+        } catch (Exception e) {
             err.println(e);
         }
     }

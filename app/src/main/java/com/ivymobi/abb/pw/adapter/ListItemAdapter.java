@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.ivymobi.abb.pw.R;
+import com.ivymobi.abb.pw.app.MyApplication;
 import com.ivymobi.abb.pw.beans.File;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -29,7 +30,7 @@ public class ListItemAdapter extends BaseAdapter {
     private ImageLoader imageLoader = ImageLoader.getInstance();
     private Locale locale;
 
-    protected List<Boolean> mChecked;
+//    protected List<Boolean> mChecked = new ArrayList<>();
 
     protected List<View> views;
     protected boolean isShareMode = false;
@@ -38,27 +39,32 @@ public class ListItemAdapter extends BaseAdapter {
         this.beans = files;
         this.context = context;
         this.isShareMode = isShareMode;
-        this.locale = context.getResources().getConfiguration().locale;
+
+        if (context != null) {
+            this.locale = context.getResources().getConfiguration().locale;
+        }
 
         views = new ArrayList<>();
         initCheckedItems();
     }
 
     public List<String> getSelectedFilesToShare() {
+//        return MyApplication.mChecked;
+
         List<String> files = new ArrayList<>();
-        for (int i = 0; i < beans.size(); i++) {
-            if (mChecked.get(i) == true) {
-                files.add(beans.get(i).getUuid());
-            }
+        for (File file : MyApplication.mChecked) {
+//            if (MyApplication.mChecked.get(i) == true) {
+                files.add(file.getUuid());
+//            }
         }
         return files;
     }
 
     public void initCheckedItems(){
-        mChecked = new ArrayList<>();
-        for (int i = 0; i < beans.size(); i++) {
-            mChecked.add(false);
-        }
+//        mChecked = new ArrayList<>();
+//        for (int i = 0; i < beans.size(); i++) {
+//            MyApplication.mChecked.add(false);
+//        }
     }
 
     @Override
@@ -88,15 +94,23 @@ public class ListItemAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        File file = beans.get(position);
+        final File file = beans.get(position);
         final ViewHolder viewHolder;
         if (convertView == null) {
             convertView = View.inflate(context, R.layout.item_list, null);
             viewHolder = new ViewHolder(convertView);
+            viewHolder.cbSelect.setChecked(MyApplication.mChecked.contains(file));
             viewHolder.cbSelect.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mChecked.set(position, viewHolder.cbSelect.isChecked());
+
+                    if (viewHolder.cbSelect.isChecked()) {
+                        MyApplication.mChecked.add(file);
+                    } else {
+                        MyApplication.mChecked.remove(file);
+                    }
+
+//                    MyApplication.mChecked.set(position, viewHolder.cbSelect.isChecked());
                 }
             });
             convertView.setTag(viewHolder);

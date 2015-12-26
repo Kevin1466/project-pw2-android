@@ -211,7 +211,7 @@ public class ListItemFragment extends Fragment {
                 if (file != null && file.isDownload()) {
 
                     if (canDeleted) {
-                        downloadItem.setIcon(R.mipmap.icon_download_gray); // Todo: change icon
+                        downloadItem.setIcon(R.mipmap.icon_bin);
                     } else {
                         downloadItem.setIcon(R.mipmap.icon_download_gray);
                     }
@@ -248,7 +248,6 @@ public class ListItemFragment extends Fragment {
         switch (resultCode) {
             case Activity.RESULT_OK:
                 int position = data.getIntExtra("position", 0);
-                System.out.println("position:" + position);
 
                 final SwipeMenuLayout layout = (SwipeMenuLayout) listView.getChildAt(position);
 
@@ -290,6 +289,7 @@ public class ListItemFragment extends Fragment {
             startActivity(intent);
         }
     }
+
 
     public void refreshData() {
 //        listView.setAdapter(listItemAdapter);

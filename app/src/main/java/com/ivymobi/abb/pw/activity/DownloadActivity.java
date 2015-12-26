@@ -147,7 +147,9 @@ public class DownloadActivity extends BaseActivity {
             invalidateOptionsMenu();
             bus.post(produceShareEvent());
         } else if (item.getItemId() == R.id.action_search) {
-            startActivity(new Intent(this, SearchActivity_.class));
+            Intent intent = new Intent(this, SearchActivity_.class);
+
+            startActivity(intent);
         }
         return true;
     }
@@ -188,6 +190,9 @@ public class DownloadActivity extends BaseActivity {
 
             mTabHost.getTabWidget().setEnabled(!isInShareMode);
         } else {
+
+            MyApplication.mChecked.clear();
+
             if (maskView != null) {
                 mTabHost.removeView(maskView);
             }

@@ -12,11 +12,12 @@
         app:showAsAction="ifRoom" />
     <item android:id="@+id/action_search"
         android:title="@string/action_search"
-        android:orderInCategory="100"
+        android:orderInCategory="101"
+        android:icon="@mipmap/icon_catalog_search"
         app:showAsAction="ifRoom" />
     <item android:id="@+id/action_share_icon"
         android:title="@string/action_share"
         android:icon="@mipmap/icon_share"
-        android:orderInCategory="101"
+        android:orderInCategory="102"
         app:showAsAction="ifRoom" />
 </menu>

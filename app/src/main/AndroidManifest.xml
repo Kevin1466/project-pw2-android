@@ -137,6 +137,7 @@
             android:theme="@style/Theme.Light.Dialog" />
         <activity
             android:name=".activity.SearchActivity_"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
     </application>
 

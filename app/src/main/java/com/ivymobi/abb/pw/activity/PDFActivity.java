@@ -1,10 +1,12 @@
 package com.ivymobi.abb.pw.activity;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 
 import com.ivymobi.abb.pw.R;
 import com.ivymobi.abb.pw.analytics.Analytics;
@@ -24,6 +26,7 @@ public class PDFActivity extends BaseActivity {
 
     ProgressDialog pDialog;
     PDFView pdfView;
+    AsyncHttpClient client = new AsyncHttpClient();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,11 +50,23 @@ public class PDFActivity extends BaseActivity {
         pDialog.setIndeterminate(false);
         pDialog.setCancelable(false);
         pDialog.setMessage(getResources().getString(R.string.loading));
+        pDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
+                    pDialog.dismiss();
+
+                    client.cancelAllRequests(true);
+                    finish();
+                }
+
+                return false;
+            }
+        });
         pDialog.show();
     }
 
     private void loadPDF(final String url) {
-        AsyncHttpClient client = new AsyncHttpClient();
         client.get(url, new FileAsyncHttpResponseHandler(this) {
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, File file) {

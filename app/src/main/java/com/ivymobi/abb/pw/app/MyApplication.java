@@ -14,7 +14,9 @@ import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MyApplication extends Application {
@@ -29,6 +31,9 @@ public class MyApplication extends Application {
     public void setmData(String key,Object value){
         mData.put(key,value);
     }
+    public static List<com.ivymobi.abb.pw.beans.File> mChecked = new ArrayList<>();
+
+
     @Override
     public void onCreate() {
         super.onCreate();
