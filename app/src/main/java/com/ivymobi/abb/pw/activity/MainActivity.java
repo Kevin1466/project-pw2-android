@@ -78,6 +78,15 @@ public class MainActivity extends BaseActivity {
         UmengUpdateAgent.update(this);
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
+        if (!MyApplication.isNetworkAvailable(this)) {
+            Toast.makeText(this, R.string.network_unavailable, Toast.LENGTH_SHORT).show();
+        }
+    }
+
     @AfterViews
     public void checkNetwork() {
         if (!MyApplication.isNetworkAvailable(this)) {
