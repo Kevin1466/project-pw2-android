@@ -60,4 +60,5 @@
     <string name="warning_content">Please setup an content before sharing.</string>
     <string name="share_mode">SHARE_MODE</string>
     <string name="action_search">Search</string>
+    <string name="network_unavailable">Network Unavailable</string>
 </resources>

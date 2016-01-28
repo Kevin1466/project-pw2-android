@@ -10,12 +10,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.ivymobi.abb.pw.R;
+import com.ivymobi.abb.pw.app.MyApplication;
 import com.ivymobi.abb.pw.util.PreferenceUtil;
 import com.umeng.update.UmengUpdateAgent;
 
+import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
@@ -73,6 +76,13 @@ public class MainActivity extends BaseActivity {
         });
 
         UmengUpdateAgent.update(this);
+    }
+
+    @AfterViews
+    public void checkNetwork() {
+        if (!MyApplication.isNetworkAvailable(this)) {
+            Toast.makeText(this, R.string.network_unavailable, Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Click
