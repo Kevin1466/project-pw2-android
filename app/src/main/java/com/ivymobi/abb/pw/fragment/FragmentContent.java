@@ -76,8 +76,8 @@ public class FragmentContent extends Fragment implements View.OnTouchListener {
 
         float scale = getContext().getResources().getDisplayMetrics().density;
 
-        if (scale == 3.0) {
-            scale = 1.5f;
+        if (scale > 2) {
+            scale /= 2;
         } else {
             scale = 1.0f;
         }

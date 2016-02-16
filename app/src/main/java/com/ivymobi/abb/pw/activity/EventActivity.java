@@ -57,8 +57,8 @@ public class EventActivity extends BaseActivity implements View.OnTouchListener 
 
         float scale = getResources().getDisplayMetrics().density;
 
-        if (scale == 3.0) {
-            scale = 1.5f;
+        if (scale > 2) {
+            scale /= 2;
         } else {
             scale = 1.0f;
         }

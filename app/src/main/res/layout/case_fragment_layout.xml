@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="12dp"
             android:maxHeight="100000dp"
-            android:scaleType="fitXY"
+            android:scaleType="centerInside"
             android:src="@mipmap/cgal" />
     </ScrollView>
 

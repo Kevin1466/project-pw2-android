@@ -23,7 +23,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="12dp"
-                android:scaleType="fitXY"
+                android:scaleType="centerInside"
                 android:src="@mipmap/hdhg" />
         </LinearLayout>
     </ScrollView>
