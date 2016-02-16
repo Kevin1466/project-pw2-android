@@ -67,6 +67,10 @@ public class MyApplication extends Application {
         minY *= heightScale;
         maxY *= heightScale;
 
+        System.out.println(x);
+        System.out.println(y);
+        System.out.println(x > minX && x < maxX && y > minY && y < maxY);
+
         return x > minX && x < maxX && y > minY && y < maxY;
     }
 

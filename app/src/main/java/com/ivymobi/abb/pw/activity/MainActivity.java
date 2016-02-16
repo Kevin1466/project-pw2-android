@@ -9,7 +9,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.VideoView;
 
@@ -50,6 +52,9 @@ public class MainActivity extends BaseActivity {
     @ViewById
     ImageView downloadImageView;
 
+    @ViewById
+    LinearLayout iconLine;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +79,14 @@ public class MainActivity extends BaseActivity {
                 videoView.start();
             }
         });
+
+        float scale = getResources().getDisplayMetrics().density;
+
+        if (scale == 2.75) { // xiaomi note
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) iconLine.getLayoutParams();
+            layoutParams.setMargins(layoutParams.getMarginEnd(), layoutParams.getMarginEnd(), layoutParams.getMarginEnd(), 30);
+            iconLine.setLayoutParams(layoutParams);
+        }
 
         UmengUpdateAgent.update(this);
     }
