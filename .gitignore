@@ -9,7 +9,6 @@
 /.idea
 /app/build
 /app/app.iml
-/app/libs
 # Built application files
 *.apk
 *.ap_
