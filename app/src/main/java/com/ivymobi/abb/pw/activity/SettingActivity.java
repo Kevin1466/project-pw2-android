@@ -179,6 +179,7 @@ public class SettingActivity extends BaseActivity {
         }
 
         resources.updateConfiguration(config, dm);
+
         PreferenceUtil.commitString("language", language);
 
         finish();

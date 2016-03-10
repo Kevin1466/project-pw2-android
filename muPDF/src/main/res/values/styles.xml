@@ -1,0 +1,19 @@
+<resources>
+
+    <!--<style name="AppTheme" parent="@android:style/Theme.NoTitleBar.Fullscreen">-->
+        <!--&lt;!&ndash;<item name="android:windowBackground">@drawable/tiled_background</item>&ndash;&gt;-->
+    <!--</style>-->
+
+    <style name="AppTheme" parent="@android:style/Theme.NoTitleBar.Fullscreen">
+        <!--<item name="android:windowBackground">@drawable/tiled_background</item>-->
+    </style>
+
+    <style name="mystyle" parent="android:Theme">
+        <item name="android:windowTitleSize">50dp</item>
+        <item name="android:windowTitleBackgroundStyle">@style/CustomizedWindowTitleBackgroundColor</item>
+    </style>
+
+    <style name="CustomizedWindowTitleBackgroundColor">
+        <item name="android:background">@android:color/white</item>
+    </style>
+</resources>

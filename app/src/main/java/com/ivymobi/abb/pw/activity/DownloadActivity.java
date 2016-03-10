@@ -101,8 +101,9 @@ public class DownloadActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         PreferenceUtil.init(this);
-        switchLanguage(PreferenceUtil.getString("language", "Chinese"));
+//        switchLanguage(PreferenceUtil.getString("language", "Chinese"));
 
         setTitle(R.string.download);
 
@@ -114,6 +115,7 @@ public class DownloadActivity extends BaseActivity {
 //        setupTabs();
         initTabs();
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -201,9 +203,10 @@ public class DownloadActivity extends BaseActivity {
         }
     }
 
-    private static View createTabView(final Context context, final Integer position) {
+    private View createTabView(final Context context, final Integer position) {
         View view = LayoutInflater.from(context).inflate(R.layout.tabs_bg, null);
         LinearLayout tabsLayout = (LinearLayout) view.findViewById(R.id.tabsLayout);
+
 
         switch (position) {
             case 0:
@@ -220,14 +223,14 @@ public class DownloadActivity extends BaseActivity {
         return view;
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (listItemFragment != null) {
-            listItemFragment.onActivityResult(requestCode, resultCode, data);
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//        if (listItemFragment != null) {
+//            listItemFragment.onActivityResult(requestCode, resultCode, data);
+//        }
+//    }
 
     private void switchLanguage(String language) {
 
@@ -236,9 +239,13 @@ public class DownloadActivity extends BaseActivity {
         DisplayMetrics dm = resources.getDisplayMetrics();
 
         if (language.equals("Chinese")) {
+
             config.locale = Locale.SIMPLIFIED_CHINESE;
+
         } else {
-            config.locale = Locale.ENGLISH;
+
+            config.setLocale(Locale.ENGLISH);
+
         }
 
         resources.updateConfiguration(config, dm);

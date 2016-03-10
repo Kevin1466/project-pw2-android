@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.artifex.mupdfdemo.MuPDFActivity;
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
@@ -31,6 +33,7 @@ import com.ivymobi.abb.pw.listener.OnSwipeMenuItemClickListener;
 import com.ivymobi.abb.pw.listener.OttoBus;
 import com.ivymobi.abb.pw.listener.UpdateShareEvent;
 import com.ivymobi.abb.pw.listener.UpdateShareModeEvent;
+import com.ivymobi.ui.Constants;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.otto.Subscribe;
@@ -283,10 +286,20 @@ public class ListItemFragment extends Fragment {
             startActivity(intent);
 
         } else {
-            Intent intent = new Intent(getActivity(), LocalPDFActivity_.class);
-            intent.putExtra("fileName", file.getLocalPath());
 
+            String fullPath = getActivity().getExternalCacheDir().toString() + "/" + file.getLocalPath();
+            Uri uri = Uri.parse(fullPath);
+            Intent intent = new Intent(getActivity(), MuPDFActivity.class);
+            intent.setAction(Intent.ACTION_VIEW);
+//            intent.putExtra(Constants.Extra.TITLE, title);
+            intent.setData(uri);
             startActivity(intent);
+
+
+//            Intent intent = new Intent(getActivity(), LocalPDFActivity_.class);
+//            intent.putExtra("fileName", file.getLocalPath());
+//
+//            startActivity(intent);
         }
     }
 

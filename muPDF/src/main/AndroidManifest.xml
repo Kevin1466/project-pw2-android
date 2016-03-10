@@ -1,0 +1,17 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.artifex.mupdfdemo">
+    <uses-sdk android:minSdkVersion="14" />
+    <application
+        android:allowBackup="true"
+        android:theme="@style/AppTheme">
+
+        <activity
+            android:name="com.artifex.mupdfdemo.MuPDFActivity"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"
+            >
+        </activity>
+
+    </application>
+
+</manifest>
