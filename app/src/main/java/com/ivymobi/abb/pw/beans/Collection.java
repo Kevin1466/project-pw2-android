@@ -7,6 +7,7 @@ import com.activeandroid.annotation.Table;
 
 import java.util.List;
 
+// 文件集合表？
 @Table(name = "collections")
 public class Collection extends Model {
 

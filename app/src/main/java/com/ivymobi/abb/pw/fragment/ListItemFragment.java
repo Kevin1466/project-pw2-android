@@ -23,7 +23,6 @@ import com.baoyz.swipemenulistview.SwipeMenuLayout;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.ivymobi.abb.pw.R;
 import com.ivymobi.abb.pw.activity.DownloadActivity;
-import com.ivymobi.abb.pw.activity.LocalPDFActivity_;
 import com.ivymobi.abb.pw.activity.ShareActivity_;
 import com.ivymobi.abb.pw.activity.WebActivity_;
 import com.ivymobi.abb.pw.adapter.ListItemAdapter;
@@ -33,7 +32,6 @@ import com.ivymobi.abb.pw.listener.OnSwipeMenuItemClickListener;
 import com.ivymobi.abb.pw.listener.OttoBus;
 import com.ivymobi.abb.pw.listener.UpdateShareEvent;
 import com.ivymobi.abb.pw.listener.UpdateShareModeEvent;
-import com.ivymobi.ui.Constants;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.otto.Subscribe;
@@ -53,7 +51,6 @@ import cn.sharesdk.onekeyshare.Email;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
 import cz.msebera.android.httpclient.Header;
-
 
 @EFragment
 public class ListItemFragment extends Fragment {

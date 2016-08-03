@@ -53,6 +53,7 @@ public class MyApplication extends Application {
                 .diskCacheSize(50 * 1024 * 1024)
                 .build();
         ImageLoader.getInstance().init(config);
+
     }
 
     public static boolean clickHit(ImageView imageView, MotionEvent event, float minX, float maxX, float minY, float maxY, float scale) {

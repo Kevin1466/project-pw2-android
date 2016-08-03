@@ -4,8 +4,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/local_enterprise_lv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </android.support.v7.widget.RecyclerView>
 
-    <ScrollView
+    <!--<ScrollView
         android:id="@+id/scrollView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -180,7 +185,7 @@
                     android:src="@mipmap/abb_jwjs_bdqy_zy_6" />
             </LinearLayout>
 
-            <!-- 3 -->
+            &lt;!&ndash; 3 &ndash;&gt;
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -364,7 +369,7 @@
             </LinearLayout>
 
         </LinearLayout>
-    </ScrollView>
+    </ScrollView>-->
 
 
 </RelativeLayout>

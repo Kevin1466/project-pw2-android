@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTabHost;
-import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -42,24 +41,30 @@ public class DownloadActivity extends BaseActivity {
     public static ListItemFragment listItemFragment = null;
     View maskView = null;
 
+    public static boolean isFirst = true;
+
     @Override
     public void onBackPressed() {
+//        getCurrentFragment().clearBackStack();
+//        super.onBackPressed();
         if (!getCurrentFragment().popBackStack()) {
             super.onBackPressed();
         }
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mTabHost.clearAllTabs();
         mTabHost = null;
     }
 
     private void initTabs() {
 
         mTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
-        mTabHost.setup(this, getSupportFragmentManager(), R.id.content);
 
+        mTabHost.setup(this, getSupportFragmentManager(), R.id.content);
         View tabView1 = createTabView(mTabHost.getContext(), 0);
         View tabView2 = createTabView(mTabHost.getContext(), 1);
         View tabView3 = createTabView(mTabHost.getContext(), 2);
@@ -86,6 +91,7 @@ public class DownloadActivity extends BaseActivity {
         args.putString("root", clazz.getName());
 
         mTabHost.addTab(tabSpec, TabRootFragment.class, args);
+
     }
 
     protected TabRootFragment getCurrentFragment() {
@@ -101,9 +107,8 @@ public class DownloadActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         PreferenceUtil.init(this);
-//        switchLanguage(PreferenceUtil.getString("language", "Chinese"));
+        switchLanguage(PreferenceUtil.getString("language", "Chinese"));
 
         setTitle(R.string.download);
 
@@ -207,7 +212,6 @@ public class DownloadActivity extends BaseActivity {
         View view = LayoutInflater.from(context).inflate(R.layout.tabs_bg, null);
         LinearLayout tabsLayout = (LinearLayout) view.findViewById(R.id.tabsLayout);
 
-
         switch (position) {
             case 0:
                 tabsLayout.setBackgroundResource(R.drawable.tab_bg_1);
@@ -223,14 +227,14 @@ public class DownloadActivity extends BaseActivity {
         return view;
     }
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        if (listItemFragment != null) {
-//            listItemFragment.onActivityResult(requestCode, resultCode, data);
-//        }
-//    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (listItemFragment != null) {
+            listItemFragment.onActivityResult(requestCode, resultCode, data);
+        }
+    }
 
     private void switchLanguage(String language) {
 

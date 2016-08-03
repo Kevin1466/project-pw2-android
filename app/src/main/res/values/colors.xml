@@ -6,5 +6,6 @@
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
     <color name="cell_border">#dadada</color>
+    <color name="background_update_flag">#FFD2123D</color>
     <color name="background_tab_pressed">#6633B5E5</color>
 </resources>

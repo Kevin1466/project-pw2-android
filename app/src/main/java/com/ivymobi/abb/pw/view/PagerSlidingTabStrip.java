@@ -3,9 +3,12 @@ package com.ivymobi.abb.pw.view;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -14,15 +17,17 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ivymobi.abb.pw.R;
+import com.ivymobi.abb.pw.network.CachedFileEnum;
+import com.ivymobi.abb.pw.util.PreferenceUtil;
 import com.nineoldandroids.view.ViewHelper;
 
 import java.util.ArrayList;
@@ -34,7 +39,7 @@ import java.util.Map;
 public class PagerSlidingTabStrip extends HorizontalScrollView {
 
     public interface IconTabProvider {
-        public int getPageIconResId(int position);
+        int getPageIconResId(int position);
     }
 
     // @formatter:off
@@ -187,7 +192,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         for (int i = 0; i < tabCount; i++) {
 
             if (pager.getAdapter() instanceof IconTabProvider) {
-                addIconTab(i, ((IconTabProvider) pager.getAdapter()).getPageIconResId(i));
+                //addIconTab(i, ((IconTabProvider) pager.getAdapter()).getPageIconResId(i));
             } else {
                 addTextTab(i, pager.getAdapter().getPageTitle(i).toString());
             }
@@ -210,8 +215,6 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
                 updateTabStyles();
             }
         });
-
-
     }
 
     private void setTabSelectedState(int index, int tabCount) {
@@ -262,14 +265,18 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         addTab(position, tab, tab2);
     }
 
-    private void addIconTab(final int position, int resId) {
+    private void addCustomTab(final int position, int resId) {
+
+    }
+
+    /*private void addIconTab(final int position, int resId) {
 
         ImageButton tab = new ImageButton(getContext());
         tab.setImageResource(resId);
 
         addTab(position, tab, null);
 
-    }
+    }*/
 
     private void addTab(final int position, View tab, View tab2) {
 
@@ -283,7 +290,6 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         });
 
         tab.setPadding(tabPadding, 0, tabPadding, 0);
-
         tab2.setFocusable(true);
         tab2.setOnClickListener(new OnClickListener() {
             @Override
@@ -309,8 +315,6 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         map.put("selected", tab2);
 
         tabViews.add(position, map);
-
-
     }
 
     private void updateTabStyles() {
@@ -327,6 +331,13 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
                     tab.setTextSize(TypedValue.COMPLEX_UNIT_PX, tabTextSize);
                     tab.setTypeface(tabTypeface, tabTypefaceStyle);
+                    // // FIXME: 2016/7/28 此处耦合了内容更新的逻辑
+                    if ((j == 0 && PreferenceUtil.getBoolean(CachedFileEnum.BUSINESS_ABB_INTRO.getNameUpdate(), false))
+                            || j == 1 && PreferenceUtil.getBoolean(CachedFileEnum.BUSINESS_ABB_POWER_INTRO.getNameUpdate(), false)
+                            || j == 2 && PreferenceUtil.getBoolean(CachedFileEnum.BUSINESS_LOCAL.getNameUpdate(), false)
+                            || j == 3 && PreferenceUtil.getBoolean(CachedFileEnum.BUSINESS_CASE.getNameUpdate(), false)) {
+                        tab.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, getDrawable(R.layout.layout_reddot), null);
+                    }
 
                     if (j == 0) {
                         tab.setTextColor(tabTextColor);
@@ -367,6 +378,29 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * 小红点布局
+     * @param resId 布局资源
+     * @return
+     */
+    private Drawable getDrawable(int resId) {
+        // 如果有更新
+        if (true) {
+            View viewHelper = LayoutInflater.from(context).inflate(resId, null);
+            int height = 60;
+            int width = 26;
+            viewHelper.measure(View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
+                    View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY));
+            viewHelper.layout(0, 0, width, height);
+            viewHelper.buildDrawingCache();
+            Bitmap bitmap = viewHelper.getDrawingCache();
+            Drawable drawable = new BitmapDrawable(getResources(), bitmap);
+            return drawable;
+        } else {
+            return null;
         }
     }
 

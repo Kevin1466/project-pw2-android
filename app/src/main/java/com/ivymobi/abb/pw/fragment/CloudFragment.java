@@ -19,6 +19,9 @@ import com.ivymobi.abb.pw.app.MyApplication;
 import com.ivymobi.abb.pw.beans.Catalog;
 import com.ivymobi.abb.pw.beans.File;
 import com.ivymobi.abb.pw.listener.OnFolderRecyclerListener;
+import com.ivymobi.abb.pw.network.CachedFileEnum;
+import com.ivymobi.abb.pw.network.response.DocumentListResponse;
+import com.ivymobi.abb.pw.util.SerializationUtil;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -31,6 +34,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -47,10 +51,15 @@ public class CloudFragment extends Fragment implements OnFolderRecyclerListener 
     public static String FLAG = "CLOUD_FRAGMENT";
 
     public Catalog root;
+    private DocumentListResponse documentListResponse;
     private RecyclerView mRecyclerView = null;
+    private static final String URL_DOC_CN = "https://yangbentong.com/api/v2/712cb1d07f2a4651a9f7de14c987b3c1/entries/documents_list_cn?type=all&sort=weight";
+    private static final String URL_DOC_EN = "https://yangbentong.com/api/v2/712cb1d07f2a4651a9f7de14c987b3c1/entries/documents_list_en?type=all&sort=weight";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+
 
         mView = inflater.inflate(R.layout.fragment_cloud, container, false);
 
@@ -81,12 +90,21 @@ public class CloudFragment extends Fragment implements OnFolderRecyclerListener 
         });
         pDialog.show();
 
-        getCatalog();
+        getItems();
     }
 
-    public void getCatalog() {
+    public void getItems() {
+        documentListResponse = SerializationUtil.getObject(getActivity(), CachedFileEnum.DOCUMENT_CENTER.getNameEtag());
+        List<DocumentListResponse.Items> itemsList = documentListResponse.getItems();
+        if (itemsList != null && itemsList.size() > 0) {
+            for (int i = 0; i < itemsList.size(); i++) {
 
-        client.get("http://yangbentong.com/api/7a94881a-df96-429d-9e01-dece4f46fee2/storage?bucket=catalog", new JsonHttpResponseHandler() {
+            }
+            updateFragmentUI();
+            getItems();
+        }
+
+        client.get(URL_DOC_CN, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 try {
@@ -120,7 +138,7 @@ public class CloudFragment extends Fragment implements OnFolderRecyclerListener 
                 }
 
                 // request catalog
-                client.get("http://yangbentong.com/api/7a94881a-df96-429d-9e01-dece4f46fee2/category?bucket=catalog", new JsonHttpResponseHandler() {
+                client.get(URL_DOC_CN, new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                         pDialog.dismiss();
@@ -134,10 +152,14 @@ public class CloudFragment extends Fragment implements OnFolderRecyclerListener 
         });
     }
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @UiThread
+    public void updateFragmentUI() {
+
     }
 
     @UiThread

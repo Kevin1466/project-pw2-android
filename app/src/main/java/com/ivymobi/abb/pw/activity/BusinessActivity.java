@@ -15,9 +15,10 @@ import com.ivymobi.abb.pw.R;
 import com.ivymobi.abb.pw.fragment.CaseFragmentContent;
 import com.ivymobi.abb.pw.fragment.FragmentContent;
 import com.ivymobi.abb.pw.fragment.LocalFragmentContent;
+import com.ivymobi.abb.pw.network.CachedFileEnum;
+import com.ivymobi.abb.pw.util.PreferenceUtil;
 import com.ivymobi.abb.pw.view.MyJazzyViewPager;
 import com.ivymobi.abb.pw.view.PagerSlidingTabStrip;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.androidannotations.annotations.EActivity;
 
@@ -49,8 +50,6 @@ public class BusinessActivity extends BaseActivity {
         tabs.setFadeEnabled(true);
         pager.setCurrentItem(0);
     }
-
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -105,12 +104,20 @@ public class BusinessActivity extends BaseActivity {
         public Fragment getItem(int position) {
             Bundle b = new Bundle();
             b.putInt("position", position);
-
             switch (position) {
+                case 0:
+                case 1:
+                    if (position == 0) PreferenceUtil.commitBoolean(CachedFileEnum.BUSINESS_ABB_INTRO.getNameRead(), false);
+                    if (position == 1) PreferenceUtil.commitBoolean(CachedFileEnum.BUSINESS_ABB_POWER_INTRO.getNameRead(), false);
+                    return FragmentContent.getInstance(b);
                 case 2:
+                    // 标记“本地企业介绍”为“已读”
+                    PreferenceUtil.commitBoolean(CachedFileEnum.BUSINESS_LOCAL.getNameRead(), false);
                     return LocalFragmentContent.getInstance(b);
 
                 case 3:
+                    // 标记“成功案例”为“已读”
+                    PreferenceUtil.commitBoolean(CachedFileEnum.BUSINESS_CASE.getNameRead(), false);
                     return CaseFragmentContent.getInstance(b);
 
                 default:
@@ -118,5 +125,6 @@ public class BusinessActivity extends BaseActivity {
 
             }
         }
+
     }
 }

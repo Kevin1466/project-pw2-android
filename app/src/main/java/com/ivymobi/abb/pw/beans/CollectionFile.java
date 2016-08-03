@@ -8,6 +8,7 @@ import com.activeandroid.query.Select;
 
 import java.util.List;
 
+// 文件夹和文件表
 @Table(name = "collections_files")
 public class CollectionFile extends Model {
 

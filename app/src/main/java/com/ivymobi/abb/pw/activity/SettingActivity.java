@@ -185,7 +185,6 @@ public class SettingActivity extends BaseActivity {
         finish();
 
         Intent intent = new Intent(this, SettingActivity_.class);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(intent);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
@@ -201,6 +200,13 @@ public class SettingActivity extends BaseActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+//    @Override
+//    public void onBackPressed() {
+//        super.onBackPressed();
+//        finish();
+//        back();
+//    }
+
 
     private void back() {
         Intent intent = new Intent(this, MainActivity_.class);
